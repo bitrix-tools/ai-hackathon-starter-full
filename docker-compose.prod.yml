@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      args:
+        NODE_ENV: production
+    command: npm start
+
+  backend:
+    environment:
+      NODE_ENV: production
+    command: prod-command-placeholder

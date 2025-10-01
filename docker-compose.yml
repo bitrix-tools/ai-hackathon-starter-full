@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: ${DB_NAME:-appdb}
+      POSTGRES_USER: ${DB_USER:-appuser}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-apppass}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - app-network
+
+  # Frontend - Nuxt3
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      NUXT_PUBLIC_API_URL: ${API_URL:-http://backend:3000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    profiles: ["frontend"]
+
+  # Backend
+  backend:
+    build:
+      context: ./backend/${BACKEND_TYPE:-node}
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-appdb}
+      DB_USER: ${DB_USER:-appuser}
+      DB_PASSWORD: ${DB_PASSWORD:-apppass}
+      NODE_ENV: ${NODE_ENV:-development}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    volumes:
+      - ./backend/${BACKEND_TYPE:-node}:/app
+      - /app/node_modules
+    networks:
+      - app-network
+    profiles: ["backend"]
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

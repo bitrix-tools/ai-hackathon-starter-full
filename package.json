@@ -1,0 +1,12 @@
+{
+  "name": "@bitrix24/ai-hackathon-starter-full",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
