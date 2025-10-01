@@ -41,3 +41,27 @@ make prod
 ```bash
 make down
 ```
+## API endpoints that must be present in the backends:
+```text
+GET /api/health - Health check
+GET /api/users - Get all users
+POST /api/users - Create user
+```
+
+The frontend automatically adapts to any of the three backends and provides a consistent interface for working with the application.
+
+### PHP Backend Testing
+After launching, check the endpoints:
+
+bash
+```# Health check
+curl http://localhost:3000/api/health
+
+# Get all users
+curl http://localhost:3000/api/users
+
+# Create user
+curl -X POST http://localhost:3000/api/users \
+-H "Content-Type: application/json" \
+-d '{"name":"John Doe","email":"john@example.com"}'
+```
