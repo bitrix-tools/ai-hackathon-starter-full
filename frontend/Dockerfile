@@ -1,23 +1,28 @@
 # Dev stage
-FROM node:18-alpine as dev
+FROM node:20-slim AS dev
+RUN apt-get update && apt-get install -y openssl
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
+RUN corepack enable
+COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY . ./
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD ["pnpm", "run", "dev"]
 
 # Build stage
-FROM node:18-alpine as build
+FROM node:20-alpine AS builder
+RUN apk add --no-cache openssl
 WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-RUN npm run build
+RUN corepack enable
+COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY . ./
+RUN pnpm run build
 
 # Production stage
-FROM nginx:alpine as production
-COPY --from=build /app/dist /usr/share/nginx/html
-COPY infrastructure/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+FROM node:20-alpine AS production
+WORKDIR /app
+COPY --from=builder /app/.output ./
+COPY --from=builder /app/package*.json ./
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["node", "/app/server/index.mjs"]

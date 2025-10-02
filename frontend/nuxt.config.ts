@@ -1,12 +1,18 @@
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  ssr: false, // SPA mode для простоты
+  modules: ['@pinia/nuxt'],
+  // @todo fix this
+  ssr: false,
+  devtools: { enabled: false },
   runtimeConfig: {
+    /**
+     * @memo this will be overwritten from .env or Docker_*
+     * @see https://nuxt.com/docs/guide/going-further/runtime-config#example
+     */
     public: {
-      apiUrl: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:8000'
+      apiUrl: ''
     }
   },
-  modules: ['@pinia/nuxt'],
+  compatibilityDate: '2025-07-16',
   app: {
     head: {
       title: 'Multi-Backend Starter',

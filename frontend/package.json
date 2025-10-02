@@ -2,11 +2,11 @@
   "name": "nuxt-frontend",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "postinstall": "nuxt prepare",
     "dev": "nuxt dev",
+    "build": "nuxt build",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "start": "node .output/server/index.mjs"
+    "preview": "nuxt preview"
   },
   "dependencies": {
     "nuxt": "^4.1.2",

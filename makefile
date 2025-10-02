@@ -1,4 +1,4 @@
-.PHONY: init-network init-nginxproxy dev prod dev-php dev-python dev-node prod-php prod-python prod-node status down down-all logs clean
+.PHONY: init-network init-nginxproxy prod dev-front dev-php dev-python dev-node prod-php prod-python prod-node status ps down down-all logs logs-nginxproxy clean
 
 # Init
 init-network:
@@ -7,24 +7,25 @@ init-network:
 
 init-nginxproxy:
 	@echo "Starting nginx proxy"
-	docker compose -f docker compose.server.yml up -d
+	docker compose -f docker-compose.server.yml up -d
 
 # Development
-dev:
-	@echo "Starting dev php,worker"
-	COMPOSE_PROFILES=php,worker docker compose up --build
+dev-front:
+	@echo "Starting frontend"
+	COMPOSE_PROFILES= docker compose --env-file .env up frontend --build
 
 dev-php:
 	@echo "Starting dev php,worker"
-	COMPOSE_PROFILES=php,worker docker compose up --build
+	COMPOSE_PROFILES=php docker compose up --build
 
+# todo restore this: COMPOSE_PROFILES=php,worker docker compose up --build -d
 dev-python:
 	@echo "Starting dev python,worker"
-	COMPOSE_PROFILES=python,worker docker compose up --build
+	COMPOSE_PROFILES=python,worker docker compose up --build -d
 
 dev-node:
 	@echo "Starting dev node,worker"
-	COMPOSE_PROFILES=node,worker docker compose up --build
+	COMPOSE_PROFILES=node,worker docker compose up --build -d
 
 # Production
 prod:
@@ -47,15 +48,21 @@ prod-node:
 status:
 	docker stats
 
+ps:
+	watch -n 2 docker ps
+
 down:
 	docker compose down
 
 down-all:
 	docker compose down
-	docker compose -f docker compose.server.yml down
+	docker compose -f docker-compose.server.yml down
 
 logs:
 	docker compose logs -f
+
+logs-nginxproxy:
+	docker compose logs -f docker-compose.server.yml
 
 clean:
 	docker compose down -v

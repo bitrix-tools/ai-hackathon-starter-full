@@ -3,9 +3,14 @@ services:
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile
       target: ${FRONTEND_TARGET:-dev}
+    env_file: .env
     environment:
-      NUXT_PUBLIC_API_URL: "http://api:8000"
+#      NUXT_PUBLIC_API_URL: "http://api.${VIRTUAL_HOST}"
+      NUXT_PUBLIC_API_URL: "http://${VIRTUAL_HOST}:8000"
+    expose:
+      - '3000'
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -56,11 +61,17 @@ services:
       context: ./backends/php
       dockerfile: api/Dockerfile
     container_name: api
+    env_file: .env
     environment:
-      - DB_HOST=database
-      - RABBITMQ_HOST=rabbitmq
-      - NODE_ENV=${NODE_ENV:-development}
+      VIRTUAL_PORT: 8000
+#      VIRTUAL_HOST: "api.${VIRTUAL_HOST}"
+#      LETSENCRYPT_HOST: "api.${LETSENCRYPT_HOST}"
+      DB_HOST: database
+      RABBITMQ_HOST: rabbitmq
+      NODE_ENV: ${NODE_ENV:-development}
     ports:
+      # @todo fix this
+      # - "443:8000"
       - "8000:8000"
     volumes:
       - ./backends/php/api:/var/www/api
@@ -68,7 +79,7 @@ services:
       - ./logs/php:/var/log/php
     depends_on:
       - database
-      - rabbitmq
+#      - rabbitmq
     networks:
       - internal-net
 
@@ -131,7 +142,7 @@ services:
       - ./logs/php-worker:/var/log/php
     depends_on:
       - database
-      - rabbitmq
+#      - rabbitmq
     networks:
       - internal-net
 
@@ -154,24 +165,24 @@ services:
 #    networks:
 #      - internal-net
 
-  worker_node:
-    profiles: ["node", "worker"]
-    build:
-      context: ./backends/node
-      dockerfile: worker/Dockerfile
-    container_name: worker_node
-    environment:
-      - DB_HOST=database
-      - RABBITMQ_HOST=rabbitmq
-    volumes:
-      - ./backends/node/worker:/var/www/worker
-      - ./backends/node/shared:/var/www/shared
-      - ./logs/node-worker:/var/log/node
-    depends_on:
-      - database
-      - rabbitmq
-    networks:
-      - internal-net
+#  worker_node:
+#    profiles: ["node", "worker"]
+#    build:
+#      context: ./backends/node
+#      dockerfile: worker/Dockerfile
+#    container_name: worker_node
+#    environment:
+#      - DB_HOST=database
+#      - RABBITMQ_HOST=rabbitmq
+#    volumes:
+#      - ./backends/node/worker:/var/www/worker
+#      - ./backends/node/shared:/var/www/shared
+#      - ./logs/node-worker:/var/log/node
+#    depends_on:
+#      - database
+#      - rabbitmq
+#    networks:
+#      - internal-net
 
 networks:
   proxy-net:

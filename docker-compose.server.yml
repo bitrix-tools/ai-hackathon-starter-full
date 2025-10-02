@@ -21,25 +21,25 @@ services:
       - proxy-net
     restart: always
 
-  letsencrypt:
-    image: nginxproxy/acme-companion
-    container_name: letsencrypt
-    deploy:
-      resources:
-        limits:
-          cpus: '0.3'
-          memory: 256M
-    volumes_from:
-      - server
-    volumes:
-      - certs:/etc/nginx/certs:rw
-      - acme:/etc/acme.sh
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    depends_on:
-      - server
-    networks:
-      - proxy-net
-    restart: always
+#  letsencrypt:
+#    image: nginxproxy/acme-companion
+#    container_name: letsencrypt
+#    deploy:
+#      resources:
+#        limits:
+#          cpus: '0.3'
+#          memory: 256M
+#    volumes_from:
+#      - server
+#    volumes:
+#      - certs:/etc/nginx/certs:rw
+#      - acme:/etc/acme.sh
+#      - /var/run/docker.sock:/var/run/docker.sock:ro
+#    depends_on:
+#      - server
+#    networks:
+#      - proxy-net
+#    restart: always
 
 volumes:
   conf:
