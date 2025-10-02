@@ -1,8 +1,25 @@
 version: '3.8'
 
 services:
+  # (~) Frontend - always runs
+  frontend:
+    build:
+      context: ./frontend
+      target: ${FRONTEND_TARGET:-dev}
+    environment:
+      NUXT_PUBLIC_API_URL: "http://api:8000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - internal-net
+      - proxy-net
+    depends_on:
+      - api
+
+  # (~) Database
   database:
-    image: postgres:15
+    image: postgres:17-alpine
     environment:
       POSTGRES_DB: ${DB_NAME:-appdb}
       POSTGRES_USER: ${DB_USER:-appuser}
@@ -11,51 +28,162 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./infrastructure/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./logs/postgres:/var/log/postgresql
     networks:
-      - app-network
+      - internal-net
 
-  # Frontend - Nuxt3
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+  # (~) RabbitMQ for asynchronous tasks
+  rabbitmq:
+    image: rabbitmq:4.1.0-management-alpine
+    profiles: ["rabbitmq"]
     environment:
-      NUXT_PUBLIC_API_URL: ${API_URL:-http://backend:3000}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS:-guest}
+      VIRTUAL_PORT: 15672
+      VIRTUAL_HOST: "rbt.${VIRTUAL_HOST}"
+      LETSENCRYPT_HOST: "rbt.${LETSENCRYPT_HOST}"
     ports:
-      - "3000:3000"
-    depends_on:
-      - backend
+      - "5672:5672"   # AMQP need sync with RABBITMQ_NODE_PORT
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./logs/rabbitmq:/var/log/rabbitmq
     networks:
-      - app-network
-    profiles: ["frontend"]
+      - internal-net
+      - proxy-net
 
-  # Backend
-  backend:
+  # (~) API servers (selected via profile)
+  api_php:
+    profiles: ["php"]
     build:
-      context: ./backend/${BACKEND_TYPE:-node}
-      dockerfile: Dockerfile
+      context: ./backends/php
+      dockerfile: api/Dockerfile
+    container_name: api
     environment:
-      DB_HOST: database
-      DB_PORT: 5432
-      DB_NAME: ${DB_NAME:-appdb}
-      DB_USER: ${DB_USER:-appuser}
-      DB_PASSWORD: ${DB_PASSWORD:-apppass}
-      NODE_ENV: ${NODE_ENV:-development}
+      - DB_HOST=database
+      - RABBITMQ_HOST=rabbitmq
+      - NODE_ENV=${NODE_ENV:-development}
     ports:
-      - "3000:3000"
+      - "8000:8000"
+    volumes:
+      - ./backends/php/api:/var/www/api
+      - ./backends/php/shared:/var/www/shared
+      - ./logs/php:/var/log/php
     depends_on:
       - database
-    volumes:
-      - ./backend/${BACKEND_TYPE:-node}:/app
-      - /app/node_modules
+      - rabbitmq
     networks:
-      - app-network
-    profiles: ["backend"]
+      - internal-net
+
+  api_python:
+    profiles: ["python"]
+    build:
+      context: ./backends/python
+      dockerfile: api/Dockerfile
+    container_name: api
+    environment:
+      - DB_HOST=database
+      - RABBITMQ_HOST=rabbitmq
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backends/python/api:var/www/api
+      - ./backends/python/shared:/var/www/shared
+      - ./logs/python:/var/log/python
+    depends_on:
+      - database
+      - rabbitmq
+    networks:
+      - internal-net
+
+  api_node:
+    profiles: ["node"]
+    build:
+      context: ./backends/node
+      dockerfile: api/Dockerfile
+    container_name: api
+    environment:
+      - DB_HOST=database
+      - RABBITMQ_HOST=rabbitmq
+      - NODE_ENV=${NODE_ENV:-development}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backends/node/api:/var/www/api
+      - ./backends/node/shared:/var/www/shared
+      - ./logs/node:/var/log/node
+    depends_on:
+      - database
+      - rabbitmq
+    networks:
+      - internal-net
+
+  # Workers for background tasks (run only if RabbitMQ is needed)
+  worker_php:
+    profiles: ["php", "worker"]
+    build:
+      context: ./backends/php
+      dockerfile: worker/Dockerfile
+    container_name: worker_php
+    environment:
+      - DB_HOST=database
+      - RABBITMQ_HOST=rabbitmq
+    volumes:
+      - ./backends/php/worker:/var/www/worker
+      - ./backends/php/shared:/var/www/shared
+      - ./logs/php-worker:/var/log/php
+    depends_on:
+      - database
+      - rabbitmq
+    networks:
+      - internal-net
+
+  worker_python:
+    profiles: ["python", "worker"]
+    build:
+      context: ./backends/python
+      dockerfile: worker/Dockerfile
+    container_name: worker_python
+    environment:
+      - DB_HOST=database
+      - RABBITMQ_HOST=rabbitmq
+    volumes:
+      - ./backends/python/worker:/var/www/worker
+      - ./backends/python/shared:/var/www/shared
+      - ./logs/python-worker:/var/log/python
+    depends_on:
+      - database
+      - rabbitmq
+    networks:
+      - internal-net
+
+  worker_node:
+    profiles: ["node", "worker"]
+    build:
+      context: ./backends/node
+      dockerfile: worker/Dockerfile
+    container_name: worker_node
+    environment:
+      - DB_HOST=database
+      - RABBITMQ_HOST=rabbitmq
+    volumes:
+      - ./backends/node/worker:/var/www/worker
+      - ./backends/node/shared:/var/www/shared
+      - ./logs/node-worker:/var/log/node
+    depends_on:
+      - database
+      - rabbitmq
+    networks:
+      - internal-net
 
 networks:
-  app-network:
+  proxy-net:
+    driver: bridge
+    external: true
+  internal-net:
     driver: bridge
 
 volumes:
+  rabbitmq_data:
   postgres_data:

@@ -1,67 +1,92 @@
-# @bitrix24/ai-hackathon-starter-full
+# @bitrix24/starter-kit
 
-This framework provides:
+This starter provides:
 
-* Isolated containers for each service
-* Support for three backends via environment variables
-* Dev/Prod modes via Docker profiles
-* PostgreSQL database
-* Ready-made configurations for a quick start
-* Each backend can be easily extended with models, routes, and business logic.
+- Three backend options via profiles
+- Workers for background tasks
+- RabbitMQ for asynchronous work
+- Nginx for production
+- External logs and volumes
+- Ready-to-use SDKs and common utilities
+- Makefile for convenience
+- Documented API endpoints
+
+Developers can easily add their own backends by simply creating a folder in backends/ with the appropriate structure.
+
+## Structure
+
+```text
+starter-kit/
+├── frontend/               # Nuxt frontend
+├── backends/               # All backends
+│   ├── php/
+│   │   ├── api/            # API server
+│   │   ├── worker/         # Worker for background tasks
+│   │   └── shared/         # Common code
+│   ├── python/
+│   │   ├── api/
+│   │   ├── worker/
+│   │   └── shared/
+│   └── node/
+│       ├── api/
+│       ├── worker/
+│       └── shared/
+├── infrastructure/
+│   ├── nginx/
+│   ├── rabbitmq/
+│   └── database/
+└── logs/                    # Logs outside containers
+```
 
 ## Usage:
-
-1. Clone and configure:
 
 ```bash
 # Edit .env if necessary
 cp .env.example .env
-```
 
-2. Run in dev mode:
-
-```bash
-# With Node.js backend (default)
-make dev
-
-# Or a specific backend
-make dev-python
+# Development with PHP backend + worker
 make dev-php
+
+# Development with Python backend + worker
+make dev-python
+
+# Development with Node.js backend + worker
 make dev-node
-```
 
-3. Run in prod mode:
-
-```bash
-make prod
-```
-
-4. Stop
-
-```bash
+# Stop
 make down
+
+# Production with PHP
+make prod-PHP
+
+# Production with Python
+make prod-python
+
+# Production with Node.js
+make prod-node
+
+# Only the db + frontend (without the backend - for testing)
+COMPOSE_PROFILES= docker-compose up database frontend
+
+# Full stack
+COMPOSE_PROFILES=php,worker docker-compose up -d
 ```
-## API endpoints that must be present in the backends:
+
+## API endpoints for testing
 ```text
-GET /api/health - Health check
-GET /api/users - Get all users
-POST /api/users - Create user
-```
+# bash check
+curl http://localhost:8000/health
 
-The frontend automatically adapts to any of the three backends and provides a consistent interface for working with the application.
+# Get users
+curl http://localhost:8000/api/users
 
-### PHP Backend Testing
-After launching, check the endpoints:
+# Create user (send to queue)
+curl -X POST http://localhost:8000/api/users \
+  -H "Content-Type: application/json" \
+  -d '{"name":"John","email":"john@example.com"}'
 
-bash
-```# Health check
-curl http://localhost:3000/api/health
-
-# Get all users
-curl http://localhost:3000/api/users
-
-# Create user
-curl -X POST http://localhost:3000/api/users \
--H "Content-Type: application/json" \
--d '{"name":"John Doe","email":"john@example.com"}'
+# Run a background task
+curl -X POST http://localhost:8000/api/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"task":"process_data"}'
 ```

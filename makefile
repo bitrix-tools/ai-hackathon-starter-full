@@ -1,26 +1,66 @@
-.PHONY: dev prod build down clean
+.PHONY: init-network init-nginxproxy dev prod dev-php dev-python dev-node prod-php prod-python prod-node down logs clean
 
+# Init
+init-network:
+	@echo "Starting network"
+	docker network create proxy-net
+
+init-nginxproxy:
+	@echo "Starting nginx proxy"
+	docker compose -f docker-compose.server.yml up -d
+
+# Development
 dev:
-	@echo "Starting development environment with $(BACKEND_TYPE) backend"
-	docker-compose --env-file .env up --build
+	@echo "Starting dev php,worker"
+	COMPOSE_PROFILES=php,worker docker-compose up --build
 
+dev-php:
+	@echo "Starting dev php,worker"
+	COMPOSE_PROFILES=php,worker docker-compose up --build
+
+dev-python:
+	@echo "Starting dev python,worker"
+	COMPOSE_PROFILES=python,worker docker-compose up --build
+
+dev-node:
+	@echo "Starting dev node,worker"
+	COMPOSE_PROFILES=node,worker docker-compose up --build
+
+# Production
 prod:
-	@echo "Starting production environment"
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+	@echo "Starting prod php,worker environment"
+	COMPOSE_PROFILES=php,worker FRONTEND_TARGET=production docker-compose up --build -d
 
+prod-php:
+	@echo "Starting prod php,worker environment"
+	COMPOSE_PROFILES=php,worker FRONTEND_TARGET=production docker-compose up --build -d
+
+prod-python:
+	@echo "Starting prod python,worker environment"
+	COMPOSE_PROFILES=python,worker FRONTEND_TARGET=production docker-compose up --build -d
+
+prod-node:
+	@echo "Starting prod node,worker environment"
+	COMPOSE_PROFILES=node,worker FRONTEND_TARGET=production docker-compose up --build -d
+
+# Utils
 down:
 	docker-compose down
+
+logs:
+	docker-compose logs -f
 
 clean:
 	docker-compose down -v
 	docker system prune -f
 
-# Specific backend targets
-dev-python:
-	BACKEND_TYPE=python make dev
+# Database operations
+db-backup:
+	docker-compose exec database pg_dump -U appuser appdb > backup_$(shell date +%Y%m%d_%H%M%S).sql
 
-dev-php:
-	BACKEND_TYPE=php make dev
+db-restore:
+	docker-compose exec -T database psql -U appuser appdb < $(file)
 
-dev-node:
-	BACKEND_TYPE=node make dev
+# RabbitMQ management
+rabbitmq-ui:
+	open http://localhost:15672
