@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # (~) Frontend - always runs
   frontend:
@@ -14,8 +12,6 @@ services:
     networks:
       - internal-net
       - proxy-net
-    depends_on:
-      - api
 
   # (~) Database
   database:
@@ -139,24 +135,24 @@ services:
     networks:
       - internal-net
 
-  worker_python:
-    profiles: ["python", "worker"]
-    build:
-      context: ./backends/python
-      dockerfile: worker/Dockerfile
-    container_name: worker_python
-    environment:
-      - DB_HOST=database
-      - RABBITMQ_HOST=rabbitmq
-    volumes:
-      - ./backends/python/worker:/var/www/worker
-      - ./backends/python/shared:/var/www/shared
-      - ./logs/python-worker:/var/log/python
-    depends_on:
-      - database
-      - rabbitmq
-    networks:
-      - internal-net
+#  worker_python:
+#    profiles: ["python", "worker"]
+#    build:
+#      context: ./backends/python
+#      dockerfile: worker/Dockerfile
+#    container_name: worker_python
+#    environment:
+#      - DB_HOST=database
+#      - RABBITMQ_HOST=rabbitmq
+#    volumes:
+#      - ./backends/python/worker:/var/www/worker
+#      - ./backends/python/shared:/var/www/shared
+#      - ./logs/python-worker:/var/log/python
+#    depends_on:
+#      - database
+#      - rabbitmq
+#    networks:
+#      - internal-net
 
   worker_node:
     profiles: ["node", "worker"]
