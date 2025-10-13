@@ -1,13 +1,12 @@
 services:
   # (~) Frontend - always runs
   frontend:
+    container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
       target: ${FRONTEND_TARGET:-dev}
     env_file: .env
-    environment:
-      NUXT_PUBLIC_API_URL: "http://${VIRTUAL_HOST}:8000"
     expose:
       - '3000'
     volumes:
@@ -15,7 +14,6 @@ services:
       - /app/node_modules
     networks:
       - internal-net
-      - proxy-net
 
   # (~) Database
   database:
@@ -34,7 +32,7 @@ services:
       - internal-net
 
   # (~) API servers (selected via profile)
-  api_php:
+  api-php:
     profiles: ["php"]
     build:
       context: ./backends/php
@@ -42,9 +40,10 @@ services:
     container_name: api
     env_file: .env
     environment:
-      VIRTUAL_PORT: 8000
       DB_HOST: database
       NODE_ENV: ${NODE_ENV:-development}
+    expose:
+      - "8000"
     ports:
       - "8000:8000"
     volumes:
@@ -56,7 +55,7 @@ services:
     networks:
       - internal-net
 
-  api_python:
+  api-python:
     profiles: ["python"]
     build:
       context: ./backends/python
@@ -75,7 +74,7 @@ services:
     networks:
       - internal-net
 
-  api_node:
+  api-node:
     profiles: ["node"]
     build:
       context: ./backends/node
@@ -95,12 +94,26 @@ services:
     networks:
       - internal-net
 
+  cloudpub:
+    container_name: cloudpub
+    image: cloudpub/cloudpub:latest
+    restart: unless-stopped
+    environment:
+      - TOKEN=${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
+      - HTTP=frontend:3000,api-php:8000
+    command: run
+    depends_on:
+      - frontend
+      - api-php
+    volumes:
+      - cloudpub-config:/home/cloudpub
+    networks:
+      - internal-net
+
 networks:
-  proxy-net:
-    driver: bridge
-    external: true
   internal-net:
     driver: bridge
 
 volumes:
   postgres_data:
+  cloudpub-config:
