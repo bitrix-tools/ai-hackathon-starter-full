@@ -15,34 +15,33 @@ dev-front:
 	COMPOSE_PROFILES= docker compose --env-file .env up frontend --build
 
 dev-php:
-	@echo "Starting dev php,worker"
+	@echo "Starting dev php"
 	COMPOSE_PROFILES=php docker compose up --build
 
-# todo restore this: COMPOSE_PROFILES=php,worker docker compose up --build -d
 dev-python:
-	@echo "Starting dev python,worker"
-	COMPOSE_PROFILES=python,worker docker compose up --build -d
+	@echo "Starting dev python"
+	COMPOSE_PROFILES=python docker compose up --build -d
 
 dev-node:
-	@echo "Starting dev node,worker"
-	COMPOSE_PROFILES=node,worker docker compose up --build -d
+	@echo "Starting dev node"
+	COMPOSE_PROFILES=node docker compose up --build -d
 
 # Production
 prod:
-	@echo "Starting prod php,worker environment"
-	COMPOSE_PROFILES=php,worker FRONTEND_TARGET=production docker compose up --build -d
+	@echo "Starting prod php environment"
+	COMPOSE_PROFILES=php FRONTEND_TARGET=production docker compose up --build -d
 
 prod-php:
-	@echo "Starting prod php,worker environment"
-	COMPOSE_PROFILES=php,worker FRONTEND_TARGET=production docker compose up --build -d
+	@echo "Starting prod php environment"
+	COMPOSE_PROFILES=php FRONTEND_TARGET=production docker compose up --build -d
 
 prod-python:
-	@echo "Starting prod python,worker environment"
-	COMPOSE_PROFILES=python,worker FRONTEND_TARGET=production docker compose up --build -d
+	@echo "Starting prod python environment"
+	COMPOSE_PROFILES=python FRONTEND_TARGET=production docker compose up --build -d
 
 prod-node:
-	@echo "Starting prod node,worker environment"
-	COMPOSE_PROFILES=node,worker FRONTEND_TARGET=production docker compose up --build -d
+	@echo "Starting prod node environment"
+	COMPOSE_PROFILES=node FRONTEND_TARGET=production docker compose up --build -d
 
 # Utils
 status:
@@ -74,7 +73,3 @@ db-backup:
 
 db-restore:
 	docker compose exec -T database psql -U appuser appdb < $(file)
-
-# RabbitMQ management
-rabbitmq-ui:
-	open http://localhost:15672

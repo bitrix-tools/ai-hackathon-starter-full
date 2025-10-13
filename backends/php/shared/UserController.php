@@ -4,63 +4,51 @@ namespace App;
 
 class UserController
 {
-    private $db;
+  private $db;
 
-    public function __construct($database)
-    {
-        $this->db = $database;
+  public function __construct($database)
+  {
+    $this->db = $database;
+  }
+
+  public function getUsers()
+  {
+    $stmt = $this->db->query("SELECT * FROM users ORDER BY id");
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+  }
+
+  /**
+   * @throws \Exception
+   */
+  public function createUser($data)
+  {
+    if (!$data || !isset($data['name']) || !isset($data['email'])) {
+      throw new \Exception('Name and email are required', 400);
     }
 
-    public function getUsers()
-    {
-        try {
-            $stmt = $this->db->query("SELECT * FROM users ORDER BY id");
-            $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    $name = trim($data['name']);
+    $email = trim($data['email']);
 
-            echo json_encode($users);
-        } catch (\Exception $e) {
-            http_response_code(500);
-            echo json_encode(['error' => $e->getMessage()]);
-        }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      throw new \Exception('Invalid email format', 400);
     }
 
-    public function createUser($data)
-    {
-        if (!$data || !isset($data['name']) || !isset($data['email'])) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Name and email are required']);
-            return;
-        }
+    try {
+      $stmt = $this->db->query(
+        "INSERT INTO users (name, email) VALUES (?, ?) RETURNING *",
+        [$name, $email]
+      );
 
-        $name = trim($data['name']);
-        $email = trim($data['email']);
+      $newUser = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        // Валидация email
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            http_response_code(400);
-            echo json_encode(['error' => 'Invalid email format']);
-            return;
-        }
+      return $newUser;
+    } catch (\Exception $e) {
+      // Test is error about unique
+      if (strpos($e->getMessage(), 'unique') !== false) {
+        throw new \Exception('Email already exists', 400);
+      }
 
-        try {
-            $stmt = $this->db->query(
-                "INSERT INTO users (name, email) VALUES (?, ?) RETURNING *",
-                [$name, $email]
-            );
-
-            $newUser = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            http_response_code(201);
-            echo json_encode($newUser);
-        } catch (\Exception $e) {
-            // Проверяем, является ли ошибка нарушением уникальности
-            if (strpos($e->getMessage(), 'unique') !== false) {
-                http_response_code(400);
-                echo json_encode(['error' => 'Email already exists']);
-            } else {
-                http_response_code(500);
-                echo json_encode(['error' => $e->getMessage()]);
-            }
-        }
+      throw new \Exception($e->getMessage(), $e->getCode());
     }
+  }
 }

@@ -10,10 +10,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
   exit(0);
 }
 
-//// Инициализация
+//// Init
 try {
   $db = new App\Database();
-  // $rabbitmq = new App\RabbitMQClient();
 } catch (Exception $e) {
   http_response_code(500);
   echo json_encode(['error' => 'Service initialization failed: ' . $e->getMessage()]);
@@ -30,15 +29,13 @@ try {
         'status' => 'healthy',
         'backend' => 'php',
         'timestamp' => time(),
-        // 'rabbitmq' => $rabbitmq->isConnected() ? 'connected' : 'disconnected'
       ];
       echo json_encode($status);
       break;
 
     case $path === '/api/users' && $method === 'GET':
-      $stmt = $db->query("SELECT * FROM users ORDER BY id");
-      $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      echo json_encode($users);
+      $userController = new \App\UserController($db);
+      echo json_encode($userController->getUsers());
       break;
 
     case $path === '/api/users' && $method === 'POST':
@@ -50,58 +47,14 @@ try {
         break;
       }
 
-//      // Отправляем задачу в очередь для асинхронной обработки
-//      $rabbitmq->publish('user_created', [
-//        'name' => $input['name'],
-//        'email' => $input['email'],
-//        'created_at' => time()
-//      ]);
-
-      echo json_encode([
-        'message' => 'User creation queued for processing',
-        'queue' => 'user_created'
+      $userController = new \App\UserController($db);
+      $userController->createUser([
+        'name' => $input['name'],
+        'email' => $input['email']
       ]);
-      break;
-
-    case $path === '/api/tasks' && $method === 'POST':
-      $input = json_decode(file_get_contents('php://input'), true);
-
-//      $rabbitmq->publish('background_tasks', [
-//        'type' => $input['type'] ?? 'default',
-//        'data' => $input['data'] ?? [],
-//        'priority' => $input['priority'] ?? 'normal',
-//        'timestamp' => time()
-//      ]);
 
       echo json_encode([
-        'message' => 'Task queued for background processing',
-        'queue' => 'background_tasks'
-      ]);
-      break;
-
-    case $path === '/api/notifications' && $method === 'POST':
-      $input = json_decode(file_get_contents('php://input'), true);
-
-//      // Используем exchange для разных типов уведомлений
-//      $rabbitmq->publishToExchange(
-//        'notifications',
-//        $input['type'] ?? 'general',
-//        [
-//          'title' => $input['title'],
-//          'message' => $input['message'],
-//          'recipients' => $input['recipients'] ?? [],
-//          'timestamp' => time()
-//        ]
-//      );
-
-      echo json_encode(['message' => 'Notification sent']);
-      break;
-
-    case $path === '/api/rabbitmq/status' && $method === 'GET':
-      echo json_encode([
-        // 'connected' => $rabbitmq->isConnected(),
-        'connected' => '?',
-        'service' => 'rabbitmq'
+        'message' => 'User created'
       ]);
       break;
 

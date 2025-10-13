@@ -3,7 +3,6 @@ FROM php:8.4-cli
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
-    librabbitmq-dev \
     libssl-dev \
     libicu-dev \
     libpq-dev \
@@ -13,9 +12,7 @@ RUN apt-get update && apt-get install -y \
       bcmath \
       sockets \
       pdo_pgsql \
-      pgsql \
-    && pecl install amqp \
-    && docker-php-ext-enable amqp
+      pgsql
 
 RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin \
