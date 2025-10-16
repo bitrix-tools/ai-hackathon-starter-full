@@ -21,19 +21,15 @@ starter-kit/
 ├── backends/               # All backends
 │   ├── php/
 │   │   ├── api/            # API server
-│   │   ├── worker/         # Worker for background tasks
 │   │   └── shared/         # Common code
 │   ├── python/
 │   │   ├── api/
-│   │   ├── worker/
 │   │   └── shared/
 │   └── node/
 │       ├── api/
-│       ├── worker/
 │       └── shared/
 ├── infrastructure/
 │   ├── nginx/
-│   ├── rabbitmq/
 │   └── database/
 └── logs/                    # Logs outside containers
 ```
@@ -72,21 +68,170 @@ COMPOSE_PROFILES= docker-compose up database frontend
 COMPOSE_PROFILES=php,worker docker-compose up -d
 ```
 
-## API endpoints for testing
-```text
-# bash check
-curl http://localhost:8000/health
+## API endpoints
 
-# Get users
-curl http://localhost:8000/api/users
+### General principles
+All requests (except `/api/install`, `/api/getToken`) pass JWT in the headers.
 
-# Create user (send to queue)
-curl -X POST http://localhost:8000/api/users \
+Example:
+```javascript
+const { data, error } = await $fetch('/api/protected-route', {
+  method: 'GET',
+  headers: {
+    Authorization: `Bearer ${soneJWT}`
+  }
+});
+```
+
+The server checks every request (except `/api/install`, `/api/getToken`) for a valid JWT token.
+
+The server returns a response in `json` format.
+
+If an error occurs, the server sets the response code to `401` or `404` or `500` and returns an error description in the following format:
+  - error: `string`
+
+Return example:
+```json
+{
+  error: 'Internal server error'
+}
+```
+
+### `/api/health`
+
+Specifies the status of the backend.
+
+- method `GET`
+- params: not
+- response:
+  - status: `string`
+  - backend: `string`
+  - timestamp: `number`
+
+Return example:
+```json
+{
+  status: 'healthy',
+  backend: 'php',
+  timestamp: 1760611967,
+}
+```
+
+Test
+```bash
+curl http://localhost:8000/api/health
+```
+
+### `/api/enum`
+
+Returns an enumeration of options.
+
+- method `GET`
+- params: not
+- response: `string[]`
+
+Return example:
+```json
+[
+  'option 1',
+  'option 2',
+  'option 3'
+]
+```
+
+Test
+```bash
+curl http://localhost:8000/api/list
+```
+
+### `/api/list`
+
+Returns a list of elements.
+
+- method `GET`
+- params: not
+- response: `string[]`
+
+Return example:
+```json
+[
+  'element 1',
+  'element 2',
+  'element 3'
+]
+```
+
+Test
+```bash
+curl http://localhost:8000/api/list
+```
+
+### `/api/install`
+
+Called from the frontend client when the application is installed.
+
+JWT token is not transferred.
+
+- method `POST`
+- params:
+  - DOMAIN': string
+  - PROTOCOL: number
+  - LANG: string
+  - APP_SID: string
+  - AUTH_ID: string
+  - AUTH_EXPIRES: number
+  - REFRESH_ID: string
+  - member_id: string
+  - status: string
+  - PLACEMENT: string
+  - PLACEMENT_OPTIONS: Record<string: any>
+- response:
+  - message: `string`
+
+Return example:
+```json
+{
+  message: 'All success'
+}
+```
+
+Test
+```bash
+curl -X POST http://localhost:8000/api/install \
   -H "Content-Type: application/json" \
-  -d '{"name":"John","email":"john@example.com"}'
+  -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_ID":"176xxxe","member_id":"a3xxx22","status":"L","PLACEMENT":"DEFAULT","PLACEMENT_OPTIONS":"{"any":"6\/"}"}'
+```
+### `/api/getToken`
 
-# Run a background task
-curl -X POST http://localhost:8000/api/tasks \
+Called by the frontend to obtain a JWT token from the backend.
+
+Authorization data from Bitrix24 is passed as input.
+
+The token lifetime is `1 hour`.
+
+**JWT token is not transferred.**
+
+- method `POST`
+- params:
+  - APP_SID: string
+  - AUTH_ID: string
+  - AUTH_EXPIRES: number
+  - REFRESH_ID: string
+  - member_id: string
+  - status: string
+- response:
+  - token: `string`
+
+Return example:
+```json
+{
+  token: 'AIHBdxxxLLL'
+}
+```
+
+Test
+```bash
+curl -X POST http://localhost:8000/api/install \
   -H "Content-Type: application/json" \
-  -d '{"task":"process_data"}'
+  -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_ID":"176xxxe","member_id":"a3xxx22","status":"L"}'
 ```

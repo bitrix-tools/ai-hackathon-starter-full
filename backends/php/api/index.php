@@ -33,28 +33,27 @@ try {
       echo json_encode($status);
       break;
 
-    case $path === '/api/users' && $method === 'GET':
-      $userController = new \App\UserController($db);
-      echo json_encode($userController->getUsers());
+    case $path === '/api/enum' && $method === 'GET':
+      echo json_encode([
+        'option 1',
+        'option 2',
+        'option 3',
+      ]);
       break;
 
-    case $path === '/api/users' && $method === 'POST':
+    case $path === '/api/list' && $method === 'GET':
+      echo json_encode([
+        'element 1',
+        'element 2',
+        'element 3',
+      ]);
+      break;
+
+    case $path === '/api/install' && $method === 'POST':
       $input = json_decode(file_get_contents('php://input'), true);
 
-      if (!isset($input['name']) || !isset($input['email'])) {
-        http_response_code(400);
-        echo json_encode(['error' => 'Name and email are required']);
-        break;
-      }
-
-      $userController = new \App\UserController($db);
-      $userController->createUser([
-        'name' => $input['name'],
-        'email' => $input['email']
-      ]);
-
       echo json_encode([
-        'message' => 'User created'
+        'message' => 'All success'
       ]);
       break;
 
