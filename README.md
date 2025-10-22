@@ -201,6 +201,7 @@ curl -X POST http://localhost:8000/api/install \
   -H "Content-Type: application/json" \
   -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_ID":"176xxxe","member_id":"a3xxx22","status":"L","PLACEMENT":"DEFAULT","PLACEMENT_OPTIONS":"{"any":"6\/"}"}'
 ```
+
 ### `/api/getToken`
 
 Called by the frontend to obtain a JWT token from the backend.
@@ -231,7 +232,7 @@ Return example:
 
 Test
 ```bash
-curl -X POST http://localhost:8000/api/install \
+curl -X POST http://localhost:8000/api/getToken \
   -H "Content-Type: application/json" \
   -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_ID":"176xxxe","member_id":"a3xxx22","status":"L"}'
 ```
