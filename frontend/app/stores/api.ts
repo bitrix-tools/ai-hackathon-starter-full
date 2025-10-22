@@ -5,15 +5,19 @@ export const useApiStore = defineStore('api', () => {
   const $api = $fetch.create({
     baseURL: apiUrl,
     headers: {
-      'Content-Type': 'application/json',
-    },
+      'Content-Type': 'application/json'
+    }
   })
 
   // Health check
-  const checkHealth = async () => {
+  const checkHealth = async (): Promise<{
+    status: string
+    backend: string
+    timestamp: number
+  }> => {
     try {
       return await $api('/api/health')
-    } catch (error) {
+    } catch {
       throw new Error('Backend health check failed')
     }
   }

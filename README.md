@@ -13,6 +13,15 @@ This starter provides:
 
 Developers can easily add their own backends by simply creating a folder in backends/ with the appropriate structure.
 
+## Core Components
+
+**Required scopes**: `crm, user_brief, pull, placement, userfieldconfig`
+
+Path for install:
+* **app:** https://amply-awake-dace.cloudpub.ru/
+* **install:** https://amply-awake-dace.cloudpub.ru/install
+
+
 ## Structure
 
 ```text

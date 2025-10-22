@@ -1,6 +1,6 @@
 export const useBackend = () => {
   const apiStore = useApiStore()
-  const backendStatus = ref<'healthy' | 'error' | 'checking'>('checking')
+  const backendStatus = ref<'healthy' | 'error' | 'checking' | undefined>(undefined)
   const backendType = ref<string>('')
 
   // Check backend health
@@ -9,7 +9,7 @@ export const useBackend = () => {
     try {
       const health = await apiStore.checkHealth()
       backendStatus.value = 'healthy'
-      backendType.value = health.backend
+      backendType.value = health.backend as string
       return health
     } catch (error) {
       backendStatus.value = 'error'

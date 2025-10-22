@@ -1,20 +1,4 @@
 services:
-  # (~) Frontend - always runs
-  frontend:
-    container_name: frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-      target: ${FRONTEND_TARGET:-dev}
-    env_file: .env
-    expose:
-      - '3000'
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    networks:
-      - internal-net
-
   # (~) Database
   database:
     image: postgres:17-alpine
@@ -28,6 +12,45 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./infrastructure/database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./logs/postgres:/var/log/postgresql
+    networks:
+      - internal-net
+
+  # (~) Frontend
+  frontend:
+    profiles: [ "frontend" ]
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: ${FRONTEND_TARGET:-dev}
+    env_file: .env
+    environment:
+      - NUXT_PUBLIC_APP_URL=${VIRTUAL_HOST}
+      - HTTP=frontend:3000
+    expose:
+      - '3000'
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.nuxt
+    networks:
+      - internal-net
+
+  # (~) Cloudpub - for frontend
+  cloudpub-front:
+    profiles: ["cloudpub-front"]
+    container_name: cloudpubFront
+    image: cloudpub/cloudpub:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - TOKEN=${CLOUDPUB_TOKEN}
+      - HTTP=frontend:3000
+    command: run
+    depends_on:
+      - frontend
+    volumes:
+      - cloudpub-config:/home/cloudpub
     networks:
       - internal-net
 
@@ -52,6 +75,25 @@ services:
       - ./logs/php:/var/log/php
     depends_on:
       - database
+    networks:
+      - internal-net
+
+  # (~) Cloudpub - for php
+  cloudpub-php:
+    profiles: ["cloudpub-php"]
+    container_name: cloudpubApi
+    image: cloudpub/cloudpub:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - TOKEN=${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
+      - HTTP=frontend:3000,api-php:8000
+    command: run
+    depends_on:
+      - frontend
+      - api-php
+    volumes:
+      - cloudpub-config:/home/cloudpub
     networks:
       - internal-net
 
@@ -91,22 +133,6 @@ services:
       - ./logs/node:/var/log/node
     depends_on:
       - database
-    networks:
-      - internal-net
-
-  cloudpub:
-    container_name: cloudpub
-    image: cloudpub/cloudpub:latest
-    restart: unless-stopped
-    environment:
-      - TOKEN=${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
-      - HTTP=frontend:3000,api-php:8000
-    command: run
-    depends_on:
-      - frontend
-      - api-php
-    volumes:
-      - cloudpub-config:/home/cloudpub
     networks:
       - internal-net
 

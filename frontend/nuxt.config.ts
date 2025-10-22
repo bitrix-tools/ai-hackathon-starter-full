@@ -1,25 +1,59 @@
+import tailwindcss from '@tailwindcss/vite'
+import { contentLocales } from './i18n/i18n.map'
+
 export default defineNuxtConfig({
-  modules: ['@pinia/nuxt'],
-  // @todo fix this
+  modules: [
+    '@bitrix24/b24ui-nuxt',
+    '@bitrix24/b24jssdk-nuxt',
+    '@nuxt/eslint',
+    '@nuxtjs/i18n',
+    '@pinia/nuxt'
+  ],
+
   ssr: false,
+
   devtools: { enabled: false },
+
   runtimeConfig: {
     /**
      * @memo this will be overwritten from .env or Docker_*
      * @see https://nuxt.com/docs/guide/going-further/runtime-config#example
      */
     public: {
+      appUrl: '',
       apiUrl: ''
     }
   },
+
   compatibilityDate: '2025-07-16',
+
   app: {
     head: {
-      title: 'Multi-Backend Starter',
+      title: 'Starter',
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      ],
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-      ]
+      ],
+      htmlAttrs: { class: 'light' }
     }
+  },
+
+  css: ['~/assets/css/main.css'],
+
+  vite: {
+    plugins: [
+      tailwindcss()
+    ]
+  },
+
+  i18n: {
+    detectBrowserLanguage: false,
+    strategy: 'no_prefix',
+    langDir: 'locales',
+    locales: contentLocales,
+    defaultLocale: 'en'
   }
 })

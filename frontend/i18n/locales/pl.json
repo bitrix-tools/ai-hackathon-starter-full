@@ -1,0 +1,289 @@
+{
+  "layout": {
+    "default": {
+      "sidebarHeader": {
+        "title": "Bitrix24::Frame"
+      },
+      "navbarHeader": {
+        "home": "Główna",
+        "pages": "Strony",
+        "optionApp": "Ustawienia aplikacji",
+        "optionUser": "Ustawienia użytkownika",
+        "feedback": "Informacja zwrotna"
+      }
+    }
+  },
+  "page": {
+    "index": {
+      "seo": {
+        "title": "[playground] Testowanie aplikacji"
+      },
+      "menu": {
+        "main": "Otwórz"
+      },
+      "message": {
+        "title": "Cześć!",
+        "line1": "Przetestujmy działanie aplikacji w Bitrix24. Otwórz aplikację w suwaku."
+      }
+    },
+    "install": {
+      "seo": {
+        "title": "Instalacja aplikacji"
+      },
+      "ui": {
+        "title": "Instalacja aplikacji"
+      },
+      "step": {
+        "init": {
+          "caption": "Trzeba chwilę poczekać..."
+        },
+        "demo": {
+          "caption": "Przykłady..."
+        },
+        "events": {
+          "caption": "Zdarzenia..."
+        },
+        "placement": {
+          "caption": "Widżety..."
+        },
+        "userFields": {
+          "caption": "Uf..."
+        },
+        "crm": {
+          "caption": "CRM..."
+        },
+        "finish": {
+          "caption": "Zakończenie"
+        }
+      }
+    },
+    "main": {
+      "seo": {
+        "title": "[playground] Testowanie aplikacji"
+      },
+      "message": {
+        "line1": "Otwórz każdą stronę w górnym menu i zobacz, jak wszystko na niej działa.",
+        "line2": "Nie zapomnij pobawić się trybem kolorów.",
+        "scopes": "Wymagane uprawnienia (scopes):"
+      }
+    },
+    "feedback": {
+      "seo": {
+        "title": "Formularz informacji zwrotnej",
+        "description": "Przykład formularza informacji zwrotnej."
+      }
+    },
+    "app-options": {
+      "seo": {
+        "title": "Ustawienia aplikacji",
+        "description": "Przykład pracy z ustawieniami aplikacji."
+      },
+      "actions": {
+        "save": "Zapisz",
+        "cancel": "Anuluj"
+      },
+      "error": {
+        "title": "Błąd",
+        "notAdmin": "Tylko administrator może edytować ustawienia aplikacji."
+      },
+      "option": {
+        "history": {
+          "title": "Historia operacji",
+          "alert": "Demonstracja pracy z właściwością. Analogicznie można skonfigurować dowolne właściwości aplikacji.",
+          "property": "Przez ile dni przechowywać historię"
+        },
+        "present": {
+          "title": "Dziennik zdarzeń",
+          "alert": "Każde logowanie pracowników jest wyświetlane w Dzienniku zdarzeń. Zawsze możesz sprawdzić, kto, kiedy i z jakich adresów IP logował się do Bitrix24.",
+          "action": "Przejdź do dziennika zdarzeń"
+        }
+      }
+    },
+    "user-options": {
+      "seo": {
+        "title": "Ustawienia użytkownika",
+        "description": "Przykład pracy z ustawieniami użytkownika aplikacji."
+      },
+      "actions": {
+        "save": "Zapisz",
+        "cancel": "Anuluj"
+      },
+      "error": {
+        "title": "Błąd"
+      },
+      "option": {
+        "demo": {
+          "title": "Przykład",
+          "alert": "Demonstracja pracy z właściwością. Analogicznie można skonfigurować dowolne właściwości użytkownika.",
+          "property_someValue_1": "Dowolna liczba",
+          "property_someValue_2": "Dowolny ciąg znaków",
+          "property_isShowChangeColorMode": "Pokazywać przycisk zmiany koloru?"
+        }
+      }
+    },
+    "base_app-info": {
+      "nav": "Aplikacja",
+      "seo": {
+        "title": "Aplikacja",
+        "description": "Informacje o aplikacji."
+      },
+      "message": {
+        "line1": "To są kluczowe znaczniki do identyfikacji, kontroli i diagnostyki aplikacji.",
+        "id": "identyfikator",
+        "code": "kod",
+        "version": "wersja",
+        "status": "status",
+        "isInstalled": "status instalacji"
+      }
+    },
+    "base_license-info": {
+      "nav": "Licencja i płatność",
+      "seo": {
+        "title": "Licencja i płatność",
+        "description": "Oznaczenie planu taryfowego z podaniem regionu jako prefiksu."
+      },
+      "message": {
+        "line1": "Można wcześniej uprzedzić użytkownika o nadchodzącym terminie przedłużenia.",
+        "languageId": "kod języka",
+        "license": "oznaczenie taryfy z podaniem regionu jako prefiksu",
+        "licenseType": "wewnętrzne oznaczenie taryfy bez podania regionu",
+        "licensePrevious": "poprzednia licencja",
+        "licenseFamily": "oznaczenie taryfy bez podania regionu",
+        "isSelfHosted": "flaga wskazująca, czy Bitrix24 jest wersją pudełkową, czy chmurową",
+        "isExpired": "flaga wskazująca, czy wygasł okres płatny lub próbny",
+        "days": "liczba dni pozostałych do końca okresu płatnego lub próbnego"
+      }
+    },
+    "base_specific-methods": {
+      "nav": "Metody spec.",
+      "seo": {
+        "title": "Metody specjalne",
+        "description": "Testowanie metod specjalnych."
+      },
+      "message": {
+        "line1": "Tu pokazana jest praca metod dostępnych w aplikacji wbudowanej przez Frame.",
+        "line2": "Jeśli otworzysz ustawienia aplikacji i je zapiszesz, to na tej stronie zobaczysz push wiadomość z żądaniem odświeżenia strony.",
+        "selectUsers": "Wybór użytkownika",
+        "selectUsersDescription": "użyj `$b24.dialog.selectUsers` do wyboru użytkownika",
+        "makeImCallToVideo": "Wewnętrzny wideorozmowa",
+        "makeImCallToVideoDescription": "użyj `$b24.parent.imCallTo(xxx, true)` do inicjacji połączenia",
+        "makeImCallToVoice": "Wewnętrzny rozmowa głosowa",
+        "makeImCallToVoiceDescription": "użyj `$b24.parent.imCallTo(xxx, false)` do inicjacji połączenia",
+        "makeImOpenMessenger": "Czat",
+        "makeImOpenMessengerDescription": "użyj `$b24.parent.imOpenMessenger`, aby otworzyć okno czatu",
+        "makeImOpenHistory": "Historia czatu",
+        "makeImOpenHistoryDescription": "użyj `$b24.parent.imOpenHistory`, aby otworzyć historię czatu",
+        "makeImPhoneTo": "Połączenie przez telefonię",
+        "makeImPhoneToDescription": "użyj `$b24.parent.imPhoneTo`, aby zadzwonić",
+        "makeSendPullCommand": "Wiadomość Pull",
+        "makeSendPullCommandDescription": "użyj `pull.application.event.add`, aby wysłać wiadomość"
+      },
+      "actions": {
+        "clear": "Wyczyść log",
+        "reload": "Przeładuj",
+        "select": "Wybierz",
+        "videoCall": "Wideorozmowa",
+        "voiceCall": "Rozmowa głosowa",
+        "imOpenMessenger": "Czat",
+        "imOpenMessengerHistory": "Historia czatu",
+        "makeImPhoneTo": "Zadzwoń",
+        "makeSendPullCommand": "Wyślij"
+      },
+      "error": {
+        "notSelect": "Użytkownik nie wybrany.",
+        "tryCallToSelf": "Nie możesz zadzwonić do siebie.",
+        "emptyNumber": "Nie podano numeru telefonu do połączenia."
+      }
+    },
+    "base_specific-parameters": {
+      "nav": "Parametry spec.",
+      "seo": {
+        "title": "Parametry specjalne",
+        "description": "Lista parametrów specjalnych dla wersji pudełkowej i chmurowej."
+      },
+      "message": {
+        "line1": "Jest kilka różnic między wersją pudełkową i chmurową Bitrix24.",
+        "isSelfHosted": "flaga wskazująca, czy Bitrix24 jest wersją pudełkową, czy chmurową",
+        "primaryKeyIncrementValue": "krok przyrostu dla pól typu ID",
+        "mainSettings": "link do ustawień",
+        "ufList": "link do listy Uf",
+        "ufPage": "link do Uf"
+      }
+    },
+    "base_lang": {
+      "nav": "I18n",
+      "seo": {
+        "title": "I18n",
+        "description": "Demonstruje wypisanie wiadomości językowych w zależności od lokalizacji Bitrix24."
+      },
+      "message": {
+        "line1": "Spróbuj zmienić język Bitrix24.",
+        "message1": "pierwsza wiadomość",
+        "message2": "druga wiadomość"
+      }
+    },
+    "base_feedback": {
+      "nav": "Informacja zwrotna",
+      "seo": {
+        "title": "Formularz informacji zwrotnej",
+        "description": "Przykłady pól dla formularza informacji zwrotnej."
+      },
+      "message": {
+        "line1": "Możesz wbudować w aplikację formularz CRM z twojego Bitrix24 i przekazać do niego specjalne pola.",
+        "line2": "Kiedy użytkownik wypełni formularz, w twoim Bitrix24 będą dostępne dane o aplikacji, taryfie itd.",
+        "app_code": "kod",
+        "app_status": "status",
+        "payment_expired": "flaga wskazująca, czy wygasł okres płatny lub próbny",
+        "days": "liczba dni pozostałych do końca okresu płatnego lub próbnego",
+        "b24_plan": "oznaczenie taryfy z podaniem regionu jako prefiksu",
+        "c_name": "imię użytkownika",
+        "c_last_name": "nazwisko użytkownika",
+        "hostname": "adres Bitrix24"
+      }
+    },
+    "base_currency": {
+      "nav": "Waluty",
+      "seo": {
+        "title": "Waluty",
+        "description": "Lista walut Bitrix24."
+      },
+      "actions": {
+        "create": "Utwórz"
+      },
+      "message": {
+        "line1": "Pokazanie sformatowanej sumy jest bardzo łatwe."
+      },
+      "list": {
+        "code": "Kod",
+        "title": "Nazwa",
+        "literal": "Znak",
+        "value": "Formatowanie",
+        "baseCurrency": "Kod waluty bazowej"
+      }
+    }
+  },
+  "uf": {
+    "demo": {
+      "field": {
+        "label": "Przykładowe pole",
+        "description": "Zmiana wartości prowadzi do przebudowy wykresu",
+        "hint": "Trend"
+      }
+    }
+  },
+  "placement": {
+    "crm_deal_detail_tab": {
+      "seo": {
+        "title": "Wstawienie w kartę deala",
+        "description": "Demonstracja."
+      },
+      "field": {
+        "label": "Przykładowe pole",
+        "description": "Zmiana wartości prowadzi do przebudowy wykresu",
+        "hint": "Trend"
+      }
+    }
+  },
+  "message1": "Kto rano wstaje, temu Pan Bóg daje",
+  "message2": "Lepiej raz zobaczyć niż sto razy usłyszeć"
+}

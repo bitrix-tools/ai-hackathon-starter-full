@@ -1,0 +1,289 @@
+{
+  "layout": {
+    "default": {
+      "sidebarHeader": {
+        "title": "Bitrix24::Frame"
+      },
+      "navbarHeader": {
+        "home": "Inicio",
+        "pages": "Páginas",
+        "optionApp": "Configuración de la aplicación",
+        "optionUser": "Configuración de usuario",
+        "feedback": "Comentarios"
+      }
+    }
+  },
+  "page": {
+    "index": {
+      "seo": {
+        "title": "[playground] Prueba de la aplicación"
+      },
+      "menu": {
+        "main": "Abrir"
+      },
+      "message": {
+        "title": "¡Hola!",
+        "line1": "Probemos el funcionamiento de la aplicación en Bitrix24. Abre la aplicación en el panel deslizante."
+      }
+    },
+    "install": {
+      "seo": {
+        "title": "Instalación de la aplicación"
+      },
+      "ui": {
+        "title": "Instalación de la aplicación"
+      },
+      "step": {
+        "init": {
+          "caption": "Espere un momento..."
+        },
+        "demo": {
+          "caption": "Ejemplos..."
+        },
+        "events": {
+          "caption": "Eventos..."
+        },
+        "placement": {
+          "caption": "Widgets..."
+        },
+        "userFields": {
+          "caption": "Uf..."
+        },
+        "crm": {
+          "caption": "CRM..."
+        },
+        "finish": {
+          "caption": "Finalización"
+        }
+      }
+    },
+    "main": {
+      "seo": {
+        "title": "[playground] Prueba de la aplicación"
+      },
+      "message": {
+        "line1": "Abre cada página en el menú superior y explora cómo funciona todo en ella.",
+        "line2": "No olvides jugar con el modo de color.",
+        "scopes": "Permisos requeridos (scopes):"
+      }
+    },
+    "feedback": {
+      "seo": {
+        "title": "Formulario de comentarios",
+        "description": "Ejemplo de un formulario de comentarios."
+      }
+    },
+    "app-options": {
+      "seo": {
+        "title": "Configuración de la aplicación",
+        "description": "Ejemplo de trabajo con la configuración de la aplicación."
+      },
+      "actions": {
+        "save": "Guardar",
+        "cancel": "Cancelar"
+      },
+      "error": {
+        "title": "Error",
+        "notAdmin": "Solo un administrador puede editar la configuración de la aplicación."
+      },
+      "option": {
+        "history": {
+          "title": "Historial de operaciones",
+          "alert": "Demostración del trabajo con la propiedad. De manera similar, se pueden configurar cualquier propiedad de la aplicación.",
+          "property": "Cuántos días guardar el historial"
+        },
+        "present": {
+          "title": "Registro de eventos",
+          "alert": "Cada inicio de sesión de los empleados se muestra en el Registro de eventos. Siempre puedes verificar quién, cuándo y desde qué dirección IP accedió a Bitrix24.",
+          "action": "Ir al registro de eventos"
+        }
+      }
+    },
+    "user-options": {
+      "seo": {
+        "title": "Configuración de usuario",
+        "description": "Ejemplo de trabajo con la configuración de usuario de la aplicación."
+      },
+      "actions": {
+        "save": "Guardar",
+        "cancel": "Cancelar"
+      },
+      "error": {
+        "title": "Error"
+      },
+      "option": {
+        "demo": {
+          "title": "Ejemplo",
+          "alert": "Demostración del trabajo con la propiedad. De manera similar, se pueden configurar cualquier propiedad de usuario.",
+          "property_someValue_1": "Número arbitrario",
+          "property_someValue_2": "Cadena arbitraria",
+          "property_isShowChangeColorMode": "¿Mostrar botón para cambiar el color?"
+        }
+      }
+    },
+    "base_app-info": {
+      "nav": "Aplicación",
+      "seo": {
+        "title": "Aplicación",
+        "description": "Información sobre la aplicación."
+      },
+      "message": {
+        "line1": "Estas son las etiquetas clave para identificar, controlar y diagnosticar la aplicación.",
+        "id": "identificador",
+        "code": "código",
+        "version": "versión",
+        "status": "estado",
+        "isInstalled": "estado de instalación"
+      }
+    },
+    "base_license-info": {
+      "nav": "Licencia y pago",
+      "seo": {
+        "title": "Licencia y pago",
+        "description": "Designación del plan tarifario con la región como prefijo."
+      },
+      "message": {
+        "line1": "Puede advertir al usuario con anticipación sobre la llegada de la fecha de renovación.",
+        "languageId": "código de idioma",
+        "license": "designación del plan con la región como prefijo",
+        "licenseType": "designación interna del plan sin especificar la región",
+        "licensePrevious": "licencia anterior",
+        "licenseFamily": "designación del plan sin especificar la región",
+        "isSelfHosted": "bandera que indica si Bitrix24 es la versión on-premise o en la nube",
+        "isExpired": "bandera que indica si ha expirado el período pagado o de prueba",
+        "days": "número de días restantes hasta el final del período pagado o de prueba"
+      }
+    },
+    "base_specific-methods": {
+      "nav": "Mét. esp.",
+      "seo": {
+        "title": "Métodos especiales",
+        "description": "Prueba de métodos especiales."
+      },
+      "message": {
+        "line1": "Aquí se muestra el trabajo de los métodos disponibles en la aplicación integrada a través de Frame.",
+        "line2": "Si abre la configuración de la aplicación y la guarda, verá en esta página un mensaje push solicitando actualizar la página.",
+        "selectUsers": "Seleccionar usuario",
+        "selectUsersDescription": "use `$b24.dialog.selectUsers` para seleccionar un usuario",
+        "makeImCallToVideo": "Llamada de video interna",
+        "makeImCallToVideoDescription": "use `$b24.parent.imCallTo(xxx, true)` para iniciar una llamada",
+        "makeImCallToVoice": "Llamada de voz interna",
+        "makeImCallToVoiceDescription": "use `$b24.parent.imCallTo(xxx, false)` para iniciar una llamada",
+        "makeImOpenMessenger": "Chat",
+        "makeImOpenMessengerDescription": "use `$b24.parent.imOpenMessenger` para abrir una ventana de chat",
+        "makeImOpenHistory": "Historial de chat",
+        "makeImOpenHistoryDescription": "use `$b24.parent.imOpenHistory` para abrir el historial de chat",
+        "makeImPhoneTo": "Llamada a través de telefonía",
+        "makeImPhoneToDescription": "use `$b24.parent.imPhoneTo` para llamar",
+        "makeSendPullCommand": "Mensaje Pull",
+        "makeSendPullCommandDescription": "use `pull.application.event.add` para enviar un mensaje"
+      },
+      "actions": {
+        "clear": "Limpiar registro",
+        "reload": "Recargar",
+        "select": "Seleccionar",
+        "videoCall": "Llamada de video",
+        "voiceCall": "Llamada de voz",
+        "imOpenMessenger": "Chat",
+        "imOpenMessengerHistory": "Historial de chat",
+        "makeImPhoneTo": "Llamar",
+        "makeSendPullCommand": "Enviar"
+      },
+      "error": {
+        "notSelect": "Usuario no seleccionado.",
+        "tryCallToSelf": "No puedes llamarte a ti mismo.",
+        "emptyNumber": "No se especificó el teléfono para llamar."
+      }
+    },
+    "base_specific-parameters": {
+      "nav": "Parám. esp.",
+      "seo": {
+        "title": "Parámetros especiales",
+        "description": "Lista de parámetros especiales para la versión on-premise y en la nube."
+      },
+      "message": {
+        "line1": "Hay algunas diferencias entre las versiones on-premise y en la nube de Bitrix24.",
+        "isSelfHosted": "bandera que indica si Bitrix24 es la versión on-premise o en la nube",
+        "primaryKeyIncrementValue": "incremento para campos de tipo ID",
+        "mainSettings": "enlace a configuraciones",
+        "ufList": "enlace a la lista Uf",
+        "ufPage": "enlace a Uf"
+      }
+    },
+    "base_lang": {
+      "nav": "I18n",
+      "seo": {
+        "title": "I18n",
+        "description": "Muestra mensajes de idioma dependiendo de la configuración regional de Bitrix24."
+      },
+      "message": {
+        "line1": "Intenta cambiar el idioma de Bitrix24.",
+        "message1": "primer mensaje",
+        "message2": "segundo mensaje"
+      }
+    },
+    "base_feedback": {
+      "nav": "Comentarios",
+      "seo": {
+        "title": "Formulario de comentarios",
+        "description": "Ejemplos de campos para un formulario de comentarios."
+      },
+      "message": {
+        "line1": "Puede incrustar un formulario CRM de su Bitrix24 en la aplicación y pasarle campos especiales.",
+        "line2": "Cuando el usuario complete el formulario, en su Bitrix24 estarán disponibles datos sobre la aplicación, el plan, etc.",
+        "app_code": "código",
+        "app_status": "estado",
+        "payment_expired": "bandera que indica si ha expirado el período pagado o de prueba",
+        "days": "número de días restantes hasta el final del período pagado o de prueba",
+        "b24_plan": "designación del plan con la región como prefijo",
+        "c_name": "nombre de usuario",
+        "c_last_name": "apellido de usuario",
+        "hostname": "dirección de Bitrix24"
+      }
+    },
+    "base_currency": {
+      "nav": "Monedas",
+      "seo": {
+        "title": "Monedas",
+        "description": "Lista de monedas de Bitrix24."
+      },
+      "actions": {
+        "create": "Crear"
+      },
+      "message": {
+        "line1": "Mostrar el monto formateado es muy fácil."
+      },
+      "list": {
+        "code": "Código",
+        "title": "Nombre",
+        "literal": "Símbolo",
+        "value": "Formato",
+        "baseCurrency": "Código de moneda base"
+      }
+    }
+  },
+  "uf": {
+    "demo": {
+      "field": {
+        "label": "Campo de ejemplo",
+        "description": "Cambiar el valor reconstruye el gráfico",
+        "hint": "Tendencia"
+      }
+    }
+  },
+  "placement": {
+    "crm_deal_detail_tab": {
+      "seo": {
+        "title": "Incrustación en la tarjeta de negocio",
+        "description": "Demostración."
+      },
+      "field": {
+        "label": "Campo de ejemplo",
+        "description": "Cambiar el valor reconstruye el gráfico",
+        "hint": "Tendencia"
+      }
+    }
+  },
+  "message1": "A quien madruga, Dios le ayuda",
+  "message2": "Una imagen vale más que mil palabras"
+}

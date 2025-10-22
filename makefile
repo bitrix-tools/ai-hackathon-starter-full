@@ -1,36 +1,32 @@
-.PHONY: init-network init-nginxproxy prod dev-front dev-php dev-python dev-node prod-php prod-python prod-node status ps down down-all logs logs-nginxproxy clean
+.PHONY: dev-front dev-php dev-python dev-node prod-php prod-python prod-node status ps down down-all logs logs-nginxproxy clean
 
 # Init
-init-network:
-	@echo "Starting network"
-	docker network create proxy-net
-
-init-nginxproxy:
-	@echo "Starting nginx proxy"
-	docker compose -f docker-compose.server.yml up -d
+#init-network:
+#	@echo "Starting network"
+#	docker network create proxy-net
+#
+#init-nginxproxy:
+#	@echo "Starting nginx proxy"
+#	docker compose -f docker-compose.server.yml up -d
 
 # Development
 dev-front:
 	@echo "Starting frontend"
-	COMPOSE_PROFILES= docker compose --env-file .env up frontend --build
+	COMPOSE_PROFILES=frontend,cloudpub-front docker compose --env-file .env up --build
 
 dev-php:
 	@echo "Starting dev php"
-	COMPOSE_PROFILES=php docker compose up --build
+	COMPOSE_PROFILES=frontend,php,cloudpub-php docker compose --env-file .env up --build
 
 dev-python:
 	@echo "Starting dev python"
-	COMPOSE_PROFILES=python docker compose up --build -d
+	COMPOSE_PROFILES=frontend,python docker compose --env-file .env up --build -d
 
 dev-node:
 	@echo "Starting dev node"
-	COMPOSE_PROFILES=node docker compose up --build -d
+	COMPOSE_PROFILES=frontend,node docker compose --env-file .env up --build -d
 
 # Production
-prod:
-	@echo "Starting prod php environment"
-	COMPOSE_PROFILES=php FRONTEND_TARGET=production docker compose up --build -d
-
 prod-php:
 	@echo "Starting prod php environment"
 	COMPOSE_PROFILES=php FRONTEND_TARGET=production docker compose up --build -d
