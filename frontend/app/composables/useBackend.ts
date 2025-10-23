@@ -17,21 +17,9 @@ export const useBackend = () => {
     }
   }
 
-  // Get users
-  const fetchUsers = async () => {
-    return await apiStore.getUsers()
-  }
-
-  // Create user
-  const addUser = async (userData: { name: string; email: string }) => {
-    return await apiStore.createUser(userData)
-  }
-
   return {
     backendStatus,
     backendType,
-    checkBackendHealth,
-    fetchUsers,
-    addUser,
+    checkBackendHealth
   }
 }

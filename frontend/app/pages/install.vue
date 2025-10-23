@@ -33,6 +33,8 @@ const isShowDebug = ref(false)
 
 const progressColor = ref<ProgressProps['color']>('air-primary')
 const progressValue = ref<null | number>(null)
+
+const apiStore = useApiStore()
 // endregion ////
 
 // region Steps ////
@@ -154,11 +156,19 @@ const steps = ref<Record<string, IStep>>({
   serverSide: {
     caption: t('page.install.step.serverSide.caption'),
     action: async () => {
-      /**
-       * @todo add server call
-       */
-      $logger.warn(`call ${apiUrl}`)
-      return sleepAction(1000)
+      await apiStore.postInstall({
+        DOMAIN: '',
+        PROTOCOL: 1,
+        LANG: '?',
+        APP_SID: '?',
+        AUTH_ID: '?',
+        AUTH_EXPIRES: 1,
+        REFRESH_ID: '?',
+        member_id: '?',
+        status: '?',
+        PLACEMENT: '?',
+        PLACEMENT_OPTIONS: { tst: '?' }
+      })
     }
   },
   finish: {

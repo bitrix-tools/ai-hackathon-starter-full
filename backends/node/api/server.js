@@ -14,37 +14,38 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD || 'apppass'
 });
 
-app.get('/', (req, res) => {
-  res.json({ message: 'Node.js Backend is running' });
-});
-
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'healthy', backend: 'node' });
+  res.json({
+    status: 'healthy',
+    backend: 'node',
+    timestamp: Math.floor(Date.now() / 1000)
+  });
 });
 
-app.get('/api/users', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM users ORDER BY id');
-    res.json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+app.get('/api/enum', async (req, res) => {
+  res.json([
+    'option 1',
+    'option 2',
+    'option 3'
+  ]);
 });
 
-app.post('/api/users', async (req, res) => {
-  try {
-    const { name, email } = req.body;
-    const result = await pool.query(
-      'INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *',
-      [name, email]
-    );
-    res.json(result.rows[0]);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
+app.get('/api/list', async (req, res) => {
+  res.json([
+    'element 1',
+    'element 2',
+    'element 3'
+  ]);
 });
 
-const PORT = process.env.PORT || 3000;
+app.post('/api/install', async (req, res) => {
+  req.body
+  res.json({
+    message: 'All success'
+  });
+});
+
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

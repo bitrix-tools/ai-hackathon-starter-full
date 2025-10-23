@@ -22,21 +22,26 @@ export const useApiStore = defineStore('api', () => {
     }
   }
 
-  // Users API
-  const getUsers = async () => {
-    return await $api('/api/users')
+  // API
+  const getEnum = async (): Promise<string[]> => {
+    return await $api('/api/enum')
   }
 
-  const createUser = async (userData: { name: string; email: string }) => {
-    return await $api('/api/users', {
+  const getList = async (): Promise<string[]> => {
+    return await $api('/api/enum')
+  }
+
+  const postInstall = async (data: Record<string, any>) => {
+    return await $api('/api/install', {
       method: 'POST',
-      body: JSON.stringify(userData),
+      body: JSON.stringify(data),
     })
   }
 
   return {
     checkHealth,
-    getUsers,
-    createUser,
+    getEnum,
+    getList,
+    postInstall,
   }
 })

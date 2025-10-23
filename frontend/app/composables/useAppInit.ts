@@ -165,24 +165,25 @@ export const useAppInit = (loggerTitle?: string) => {
   ) {
     $logger.error(error)
 
-    let title = 'Error'
-    let description = ''
+    let statusMessage = 'Error'
+    let message = ''
+    let statusCode = 404
 
     if (error instanceof AjaxError) {
-      title = `[${error.name}] ${error.code} (${error.status})`
-      description = `${error.message}`
+      statusCode = error.status
+      statusMessage = error.name
+      message = `${error.message}`
     } else if (error instanceof Error) {
-      description = error.message
+      message = error.message
     } else {
-      description = error as string
+      message = error as string
     }
 
     showError({
-      statusCode: 404,
-      statusMessage: title,
-      data: Object.assign({
-        description: description
-      }, (processErrorData ?? {})),
+      statusCode,
+      statusMessage,
+      message,
+      data: Object.assign({}, (processErrorData ?? {})),
       cause: error,
       fatal: true
     })
