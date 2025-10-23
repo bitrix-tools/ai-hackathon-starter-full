@@ -39,13 +39,13 @@ app.get('/api/list', async (req, res) => {
 });
 
 app.post('/api/install', async (req, res) => {
-  req.body
+  console.log(req.body)
   res.json({
     message: 'All success'
   });
 });
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

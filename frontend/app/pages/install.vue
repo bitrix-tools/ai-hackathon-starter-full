@@ -20,7 +20,6 @@ useHead({
 // region Init ////
 const config = useRuntimeConfig()
 const appUrl = withoutTrailingSlash(config.public.appUrl)
-const apiUrl = withoutTrailingSlash(config.public.apiUrl)
 
 const { $logger, initLang, processErrorGlobal } = useAppInit('Install')
 const { $initializeB24Frame } = useNuxtApp()
@@ -156,18 +155,23 @@ const steps = ref<Record<string, IStep>>({
   serverSide: {
     caption: t('page.install.step.serverSide.caption'),
     action: async () => {
+      const authData = $b24.auth.getAuthData()
+
+      if(authData === false) {
+        throw new Error('Some problem with auth. See App logic')
+      }
+
       await apiStore.postInstall({
-        DOMAIN: '',
-        PROTOCOL: 1,
-        LANG: '?',
-        APP_SID: '?',
-        AUTH_ID: '?',
-        AUTH_EXPIRES: 1,
-        REFRESH_ID: '?',
-        member_id: '?',
-        status: '?',
-        PLACEMENT: '?',
-        PLACEMENT_OPTIONS: { tst: '?' }
+        DOMAIN: withoutTrailingSlash(authData.domain).replace('https://', '').replace('http://', ''),
+        PROTOCOL: authData.domain.includes('https://'),
+        LANG: $b24.getLang(),
+        APP_SID: $b24.getAppSid(),
+        AUTH_ID: authData.access_token,
+        AUTH_EXPIRES: authData.expires_in,
+        REFRESH_ID: authData.refresh_token,
+        member_id: authData.member_id,
+        PLACEMENT: $b24.placement.title,
+        PLACEMENT_OPTIONS: $b24.placement.options
       })
     }
   },

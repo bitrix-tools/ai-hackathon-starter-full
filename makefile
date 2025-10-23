@@ -20,11 +20,11 @@ dev-php:
 
 dev-python:
 	@echo "Starting dev python"
-	COMPOSE_PROFILES=frontend,python docker compose --env-file .env up --build -d
+	COMPOSE_PROFILES=frontend,python docker compose --env-file .env up --build
 
 dev-node:
 	@echo "Starting dev node"
-	COMPOSE_PROFILES=frontend,node docker compose --env-file .env up --build -d
+	COMPOSE_PROFILES=frontend,node,cloudpub-node docker compose --env-file .env up --build
 
 # Production
 prod-php:

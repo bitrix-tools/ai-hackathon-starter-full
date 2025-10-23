@@ -1,6 +1,8 @@
+import { withoutTrailingSlash } from 'ufo'
+
 export const useApiStore = defineStore('api', () => {
   const config = useRuntimeConfig()
-  const apiUrl = config.public.apiUrl
+  const apiUrl = withoutTrailingSlash(config.public.apiUrl)
 
   const $api = $fetch.create({
     baseURL: apiUrl,
@@ -28,7 +30,7 @@ export const useApiStore = defineStore('api', () => {
   }
 
   const getList = async (): Promise<string[]> => {
-    return await $api('/api/enum')
+    return await $api('/api/list')
   }
 
   const postInstall = async (data: Record<string, any>) => {

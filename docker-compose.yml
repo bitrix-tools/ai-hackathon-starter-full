@@ -22,7 +22,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      target: ${FRONTEND_TARGET:-dev}
+      target: ${BUILD_TARGET:-dev}
     env_file: .env
     environment:
       - NUXT_PUBLIC_APP_URL=${VIRTUAL_HOST}
@@ -118,21 +118,46 @@ services:
 
   api-node:
     profiles: ["node"]
-    build:
-      context: ./backends/node
-      dockerfile: api/Dockerfile
     container_name: api
+    build:
+      context: ./backends/node/api
+      dockerfile: Dockerfile
+      target: ${BUILD_TARGET:-dev}
+    env_file: .env
     environment:
       - DB_HOST=database
       - NODE_ENV=${NODE_ENV:-development}
+      - PORT=8000
+    expose:
+      - "8000"
     ports:
       - "8000:8000"
     volumes:
       - ./backends/node/api:/var/www/api
       - ./backends/node/shared:/var/www/shared
       - ./logs/node:/var/log/node
+      - /app/node_modules
     depends_on:
       - database
+    networks:
+      - internal-net
+
+  # (~) Cloudpub - for php
+  cloudpub-node:
+    profiles: [ "cloudpub-node" ]
+    container_name: cloudpubApi
+    image: cloudpub/cloudpub:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - TOKEN=${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
+      - HTTP=frontend:3000,api-node:8000
+    command: run
+    depends_on:
+      - frontend
+      - api-node
+    volumes:
+      - cloudpub-config:/home/cloudpub
     networks:
       - internal-net
 

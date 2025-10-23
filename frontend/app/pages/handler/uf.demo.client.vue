@@ -18,10 +18,14 @@ const appSettings = useAppSettingsStore()
 const { $initializeB24Frame } = useNuxtApp()
 let $b24: null | B24Frame = null
 const isEditMode = ref(false)
+
+const apiStore = useApiStore()
 // endregion ////
 
 // region Init Data ////
 const dataField = ref(0)
+
+const enumList = await apiStore.getEnum()
 // endregion ////
 
 // region Actions ////
@@ -52,14 +56,10 @@ const makeSendPullCommandHandler = async (message: TypePullMessage) => {
 // endregion ////
 
 // region Tools ////
-function getRandomInt(max: number = 5) {
-  return Math.floor(Math.random() * max)
-}
-
 async function resizeWindow() {
   await $b24?.parent.resizeWindowAuto(
     null,
-    isEditMode.value ? 60 : 105
+    isEditMode.value ? 260 : 105
   )
 }
 // endregion ////
@@ -111,14 +111,27 @@ onUnmounted(() => {
 <template>
   <div>
     <template v-if="isEditMode">
-      <B24FormField
-        :label="$t('uf.demo.field.label')"
-      >
-        <B24Input
-          v-model.number="dataField"
-          @keyup="setData"
-        />
-      </B24FormField>
+      <div class="flex flex-wrap items-center justify-start gap-[10px]">
+        <B24FormField :label="$t('uf.demo.field.label')" class="w-full">
+          <B24SelectMenu
+            class="w-[400px]"
+            :items="enumList"
+          />
+        </B24FormField>
+        <B24FormField :label="$t('uf.demo.field.label')" class="w-full">
+          <B24InputNumber
+            class="w-[200px]"
+            v-model="dataField"
+            @change="setData"
+          />
+        </B24FormField>
+        <B24Advice
+          :avatar="{ src: '/avatar/employee.png' }"
+        >
+          <ProseH5>{{ $t('uf.demo.alert.title') }}</ProseH5>
+          <div>{{ $t('uf.demo.alert.description') }}</div>
+        </B24Advice>
+      </div>
     </template>
     <template v-else>
       <B24Card
@@ -132,7 +145,6 @@ onUnmounted(() => {
           <div class="flex-1 w-full flex flex-row items-center justify-between gap-[10px]">
             <ProseP class="mb-0">{{ appSettings.configSettings.someValue_2 }}</ProseP>
             <B24Badge
-              class="cursor-pointer"
               rounded
               size="md"
               :color="appSettings.configSettings.isSomeOption ? 'air-primary-copilot' : 'air-primary-alert'"

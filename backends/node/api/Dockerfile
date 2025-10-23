@@ -1,12 +1,23 @@
-FROM node:18-alpine
-
+# Dev stage
+FROM node:20-slim AS dev
+RUN apt-get update && apt-get install -y openssl
 WORKDIR /app
+RUN corepack enable
+# COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY .npmrc package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY . ./
+EXPOSE 8000
+CMD ["pnpm", "run", "dev"]
 
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
+# Production stage
+FROM node:20-alpine AS production
+RUN apk add --no-cache openssl
+WORKDIR /app
+RUN corepack enable
+# COPY .npmrc package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY .npmrc package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+COPY . ./
+EXPOSE 8000
+CMD ["pnpm", "run", "start"]
