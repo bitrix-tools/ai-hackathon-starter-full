@@ -163,7 +163,7 @@ const steps = ref<Record<string, IStep>>({
 
       await apiStore.postInstall({
         DOMAIN: withoutTrailingSlash(authData.domain).replace('https://', '').replace('http://', ''),
-        PROTOCOL: authData.domain.includes('https://'),
+        PROTOCOL: authData.domain.includes('https://') ? 1 : 0,
         LANG: $b24.getLang(),
         APP_SID: $b24.getAppSid(),
         AUTH_ID: authData.access_token,
