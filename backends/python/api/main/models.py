@@ -40,7 +40,7 @@ class Bitrix24Account(models.Model):
         now_dt = timezone.now()
 
         payload = {
-            "account_id": self.pk,
+            "account_id": str(self.pk),
             "exp": now_dt + timedelta(hours=1),
             "iat": now_dt,
         }
@@ -48,19 +48,19 @@ class Bitrix24Account(models.Model):
         return jwt.encode(payload, config.jwt_secret, algorithm=config.jwt_algorithm)
 
     @staticmethod
-    def _validate_jwt_token(jwt_token: str) -> str:
+    def _validate_jwt_token(jwt_token: str) -> uuid.UUID:
         payload = jwt.decode(jwt_token, config.jwt_secret, algorithms=[config.jwt_algorithm])
 
-        # Validate required fields in payload
         for key in ("account_id", "exp", "iat"):
             if key not in payload:
                 raise ValueError("Invalid JWT token")
 
-        return payload["account_id"]
+        return uuid.UUID(payload["account_id"])
 
     @classmethod
     def get_from_jwt_token(cls, jwt_token: str) -> "Bitrix24Account":
-        return cls.objects.get(pk=cls._validate_jwt_token(jwt_token))
+        account_uuid = cls._validate_jwt_token(jwt_token)
+        return cls.objects.get(pk=account_uuid)
 
     @classmethod
     def update_or_create_from_auth_data(cls, oauth_data: "OAuthData") -> Tuple["Bitrix24Account", bool]:
