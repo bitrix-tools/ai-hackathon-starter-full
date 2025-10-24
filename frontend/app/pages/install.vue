@@ -89,18 +89,27 @@ const steps = ref<Record<string, IStep>>({
   placement: {
     caption: t('page.install.step.placement.caption'),
     action: async () => {
+      const key = {
+        placement: 'CRM_DEAL_DETAIL_TAB',
+        handler: `${appUrl}/handler/placement-crm-deal-detail-tab`
+      }
+      const exists = (steps.value.init?.data?.placementList as { placement: string, handler: string }[]).some(item => item.placement === key.placement && item.handler === key.handler )
+      if (exists) {
+        return
+      }
+
       await $b24.callBatch([
-        {
-          method: 'placement.unbind',
-          params: {
-            PLACEMENT: 'CRM_DEAL_DETAIL_TAB'
-          }
-        },
+        // {
+        //   method: 'placement.unbind',
+        //   params: {
+        //     PLACEMENT: key.placement
+        //   }
+        // },
         {
           method: 'placement.bind',
           params: {
-            PLACEMENT: 'CRM_DEAL_DETAIL_TAB',
-            HANDLER: `${appUrl}/handler/placement-crm-deal-detail-tab`,
+            PLACEMENT: key.placement,
+            HANDLER: key.handler,
             TITLE: '[demo] Some Tab',
             OPTIONS: {
               errorHandlerUrl: `${appUrl}/handler/background-some-problem`
@@ -115,13 +124,18 @@ const steps = ref<Record<string, IStep>>({
     action: async () => {
       const typeId = `some_type_${import.meta.dev ? 'dev' : 'prod'}`
 
+      const exists = (steps.value.init?.data?.userFieldTypeList as { USER_TYPE_ID: string }[]).some(item => item.USER_TYPE_ID === typeId)
+      if (exists) {
+        return
+      }
+
       await $b24.callBatch([
-        {
-          method: 'userfieldtype.delete',
-          params: {
-            USER_TYPE_ID: typeId
-          }
-        },
+        // {
+        //   method: 'userfieldtype.delete',
+        //   params: {
+        //     USER_TYPE_ID: typeId
+        //   }
+        // },
         {
           method: 'userfieldtype.add',
           params: {
@@ -174,9 +188,6 @@ const steps = ref<Record<string, IStep>>({
         PLACEMENT: $b24.placement.title,
         PLACEMENT_OPTIONS: $b24.placement.options
       })
-
-      $logger.warn(steps.value.init?.data)
-      throw new Error ('@todo')
     }
   },
   finish: {
