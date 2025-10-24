@@ -33,6 +33,7 @@ export const useAppInit = (loggerTitle?: string) => {
   const appSettings = useAppSettingsStore()
   const userSettings = useUserSettingsStore()
   const user = useUserStore()
+  const api = useApiStore()
 
   /**
    * Initialize application data
@@ -83,6 +84,7 @@ export const useAppInit = (loggerTitle?: string) => {
 
     // Update stores with received data
     user.initFromBatch({
+      id: data.profileData?.data.id ?? undefined,
       name: data.profileData?.data.name ?? undefined,
       lastName: data.profileData?.data.lastName ?? undefined,
       isAdmin: data.profileData?.data.isAdmin
@@ -99,6 +101,8 @@ export const useAppInit = (loggerTitle?: string) => {
     userSettings.initFromBatch({
       configSettings: (data.userSettings?.data ?? new Map()).get('configSettings')
     })
+
+    await api.init($b24)
 
     $logger.info('InitApp stop')
   }

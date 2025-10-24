@@ -12,37 +12,37 @@ useHead({
 })
 
 // region Init ////
-const { $logger, initLang, processErrorGlobal } = useAppInit('IndexPage')
+const { $logger, initApp, processErrorGlobal } = useAppInit('IndexPage')
 const { $initializeB24Frame } = useNuxtApp()
-const $b24: B24Frame = await $initializeB24Frame()
-await initLang($b24, localesI18n, setLocale)
+let $b24: null | B24Frame = null
+const isInit = ref(false)
 // endregion ////
 
 // region Lifecycle Hooks ////
 onMounted(async () => {
   $logger.info('Hi from index page')
 
+  $b24 = await $initializeB24Frame()
+  await initApp($b24, localesI18n, setLocale)
+
   try {
     await $b24.parent.setTitle(t('page.index.seo.title'))
+    isInit.value = true
   } catch (error) {
     processErrorGlobal(error)
   }
-})
-
-onUnmounted(() => {
-  $b24?.destroy()
 })
 // endregion ////
 </script>
 
 <template>
   <div class="flex flex-col items-center justify-center gap-16 h-[calc(100vh-200px)]">
-    <B24Card>
-      <template #header>
-        <ProseH2>{{ $t('page.index.message.title') }}</ProseH2>
-        <ProseP>{{ $t('page.index.message.line1') }}</ProseP>
-      </template>
-      <BackendStatus />
-    </B24Card>
+      <B24Card v-if="isInit">
+        <template #header>
+          <ProseH2>{{ $t('page.index.message.title') }}</ProseH2>
+          <ProseP>{{ $t('page.index.message.line1') }}</ProseP>
+        </template>
+        <BackendStatus />
+      </B24Card>
   </div>
 </template>
