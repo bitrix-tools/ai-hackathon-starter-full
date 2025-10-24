@@ -69,6 +69,9 @@ CREATE TABLE bitrix24account (
 
     -- Embedded Scope field
     current_scope JSON
+
+    -- Unique constraint for combination of b24_user_id and domain_url
+    CONSTRAINT unique_b24_user_domain UNIQUE (b24_user_id, domain_url)
 );
 
 -------------------------------------------------------------
