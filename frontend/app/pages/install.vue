@@ -170,9 +170,13 @@ const steps = ref<Record<string, IStep>>({
         AUTH_EXPIRES: authData.expires_in,
         REFRESH_ID: authData.refresh_token,
         member_id: authData.member_id,
+        user_id: Number(steps.value.init?.data?.profile.ID),
         PLACEMENT: $b24.placement.title,
         PLACEMENT_OPTIONS: $b24.placement.options
       })
+
+      $logger.warn(steps.value.init?.data)
+      throw new Error ('@todo')
     }
   },
   finish: {
@@ -186,13 +190,35 @@ const stepCode = ref<string>('init' as const)
 // region Actions ////
 async function makeInit(): Promise<void> {
   if (steps.value.init) {
-    steps.value.init.data = {
-      par11: 'val11',
-      par12: 'val12'
+    const response = await $b24.callBatch({
+      profile: { method: 'profile' },
+      userFieldTypeList: { method: 'userfieldtype.list' },
+      placementList: { method: 'placement.get' }
+    })
+
+    steps.value.init.data = response.getData() as {
+      profile: {
+        ID: number
+        ADMIN: boolean
+        LAST_NAME?: string
+        NAME?: string
+      }
+      userFieldTypeList: {
+        USER_TYPE_ID: string
+        HANDLER: string
+        TITLE: string
+        DESCRIPTION: string
+      }[]
+      placementList: {
+        placement: string
+        userId: number
+        handler: string
+        options: any
+        title: string
+        description: string
+      }[]
     }
   }
-
-  return sleepAction()
 }
 
 async function makeFinish(): Promise<void> {
