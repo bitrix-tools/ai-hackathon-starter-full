@@ -22,10 +22,10 @@ const isInit = ref(false)
 onMounted(async () => {
   $logger.info('Hi from index page')
 
-  $b24 = await $initializeB24Frame()
-  await initApp($b24, localesI18n, setLocale)
-
   try {
+    $b24 = await $initializeB24Frame()
+    await initApp($b24, localesI18n, setLocale)
+
     await $b24.parent.setTitle(t('page.index.seo.title'))
     isInit.value = true
   } catch (error) {

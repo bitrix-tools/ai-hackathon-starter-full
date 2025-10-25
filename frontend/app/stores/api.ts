@@ -85,6 +85,9 @@ export const useApiStore = defineStore(
       const user = useUserStore()
 
       const response = await getToken({
+        DOMAIN: withoutTrailingSlash(authData.domain).replace('https://', '').replace('http://', ''),
+        PROTOCOL: authData.domain.includes('https://') ? 1 : 0,
+        LANG: $b24.getLang(),
         APP_SID: $b24.getAppSid(),
         AUTH_ID: authData.access_token,
         AUTH_EXPIRES: authData.expires_in,

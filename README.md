@@ -223,6 +223,9 @@ The token lifetime is `1 hour`.
 
 - method `POST`
 - params:
+  - DOMAIN': string
+  - PROTOCOL: number
+  - LANG: string
   - APP_SID: string
   - AUTH_ID: string
   - AUTH_EXPIRES: number
