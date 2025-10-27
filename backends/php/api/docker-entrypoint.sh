@@ -25,9 +25,11 @@ if [ ! -f "bin/console" ]; then
 fi
 
 echo "Symfony application ready"
-echo "Starting PHP built-in server on 0.0.0.0:8000..."
+echo "Starting PHP-FPM..."
+php-fpm -D
+
+echo "Starting Nginx on 0.0.0.0:8000..."
 echo "Document root: /var/www/public"
 
-cd /var/www/public
-
-exec php -S 0.0.0.0:8000
+# Start nginx in foreground
+exec nginx -g 'daemon off;'

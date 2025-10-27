@@ -1,6 +1,7 @@
-FROM php:8.4-cli
+FROM php:8.4-fpm
 
 RUN apt-get update && apt-get install -y \
+    nginx \
     libzip-dev \
     zip \
     libssl-dev \
@@ -20,6 +21,12 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 
 WORKDIR /var/www
 
+# Copy nginx config
+COPY api/nginx.conf /etc/nginx/sites-available/default
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default && \
+    rm -f /etc/nginx/sites-enabled/default.conf
+
+# Copy entrypoint script
 COPY api/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 

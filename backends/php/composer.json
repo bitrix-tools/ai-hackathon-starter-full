@@ -14,16 +14,17 @@
     "doctrine/doctrine-migrations-bundle": "^3.4.2",
     "doctrine/orm": "^3.5.2",
     "giggsey/libphonenumber-for-php": "^8.13.55",
+    "mesilov/bitrix24-php-lib": "dev-dev",
+    "nelmio/cors-bundle": "^2.0@dev",
     "nesbot/carbon": "^3.10.2",
     "odolbeau/phone-number-bundle": "4.*",
     "symfony/console": "7.3.*",
     "symfony/dotenv": "7.3.*",
     "symfony/flex": "^2.8.1",
     "symfony/framework-bundle": "7.3.*",
-    "symfony/runtime": "7.3.*",
-    "symfony/yaml": "7.3.*",
     "symfony/monolog-bundle": "^3.10",
-    "mesilov/bitrix24-php-lib": "dev-dev"
+    "symfony/runtime": "7.3.*",
+    "symfony/yaml": "7.3.*"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

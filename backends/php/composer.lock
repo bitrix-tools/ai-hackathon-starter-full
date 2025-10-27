@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0846f180bd8b148107a6eb699eb8266",
+    "content-hash": "28d6abf0b04905d7966b938b527ecfb5",
     "packages": [
         {
             "name": "bitrix24/b24phpsdk",
@@ -2098,6 +2098,72 @@
                 }
             ],
             "time": "2025-10-27T13:40:53+00:00"
+        },
+        {
+            "name": "nelmio/cors-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nelmio/NelmioCorsBundle.git",
+                "reference": "bdd78311f1116e31977905d581c84003fe413a8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nelmio/NelmioCorsBundle/zipball/bdd78311f1116e31977905d581c84003fe413a8c",
+                "reference": "bdd78311f1116e31977905d581c84003fe413a8c",
+                "shasum": ""
+            },
+            "require": {
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
+                "symfony/framework-bundle": "^5.4 || ^6.0 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.11.5",
+                "phpstan/phpstan-deprecation-rules": "^1.2.0",
+                "phpstan/phpstan-phpunit": "^1.4",
+                "phpstan/phpstan-symfony": "^1.4.4",
+                "phpunit/phpunit": "^8"
+            },
+            "default-branch": true,
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nelmio\\CorsBundle\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nelmio",
+                    "homepage": "http://nelm.io"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://github.com/nelmio/NelmioCorsBundle/contributors"
+                }
+            ],
+            "description": "Adds CORS (Cross-Origin Resource Sharing) headers support in your Symfony application",
+            "keywords": [
+                "api",
+                "cors",
+                "crossdomain"
+            ],
+            "support": {
+                "issues": "https://github.com/nelmio/NelmioCorsBundle/issues",
+                "source": "https://github.com/nelmio/NelmioCorsBundle/tree/master"
+            },
+            "time": "2025-10-27T15:29:26+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -7510,6 +7576,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "mesilov/bitrix24-php-lib": 20,
+        "nelmio/cors-bundle": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,

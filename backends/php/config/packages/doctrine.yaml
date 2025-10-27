@@ -8,6 +8,11 @@ doctrine:
 
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
+        types:
+            carbon_immutable: Carbon\Doctrine\CarbonImmutableType
+            carbon: \Carbon\Doctrine\CarbonType
+            phone_number: Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType
+            ip: Darsyn\IP\Doctrine\MultiType
     orm:
         auto_generate_proxy_classes: true
         enable_lazy_ghost_objects: true
@@ -24,6 +29,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
                 alias: App
+            Bitrix24:
+                type: xml
+                is_bundle: false
+                dir: '%kernel.project_dir%/config/doctrine'
+                prefix: 'Bitrix24'
+                alias: Bitrix24
         controller_resolver:
             auto_mapping: false
 

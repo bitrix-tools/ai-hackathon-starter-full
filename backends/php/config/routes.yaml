@@ -3,3 +3,9 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+bitrix24_controllers:
+    resource:
+        path: ../src/Bitrix24Core/Controller/
+        namespace: App\Bitrix24Core\Controller
+    type: attribute
