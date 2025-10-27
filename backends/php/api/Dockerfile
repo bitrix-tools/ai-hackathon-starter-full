@@ -20,18 +20,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 
 WORKDIR /var/www
 
-# Копируем composer.json из корня PHP бэкенда
-COPY ../composer.json ../composer.lock* ./
-
-# Устанавливаем зависимости
-RUN composer install --no-dev --optimize-autoloader
-
-# Копируем код API и общие файлы
-COPY ../api ./api
-COPY ../shared ./shared
-
-WORKDIR /var/www/api
+COPY api/docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 8000
 
-CMD ["php", "-S", "api-php:8000"]
+ENTRYPOINT ["docker-entrypoint.sh"]

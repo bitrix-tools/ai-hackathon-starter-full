@@ -1,4 +1,7 @@
-.PHONY: dev-front dev-php dev-python dev-node prod-php prod-python prod-node status ps down down-all logs logs-nginxproxy clean
+.PHONY: dev-front dev-php dev-python dev-node prod-php prod-python prod-node status ps down down-all logs logs-nginxproxy clean composer-install composer-update composer-dumpautoload composer
+
+# Variables
+DOCKER_COMPOSE = docker compose
 
 # Init
 #init-network:
@@ -17,6 +20,30 @@ dev-front:
 dev-php:
 	@echo "Starting dev php"
 	COMPOSE_PROFILES=frontend,php,cloudpub-php docker compose --env-file .env up --build
+
+# work with composer
+.PHONY: composer-install
+composer-install:
+	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www api-php composer install
+
+.PHONY: composer-update
+composer-update:
+	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www api-php composer update
+
+.PHONY: composer-dumpautoload
+composer-dumpautoload:
+	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www api-php composer dumpautoload
+
+# call composer with any parameters
+# make composer install
+# make composer "install --no-dev"
+# make composer require symfony/http-client
+.PHONY: composer
+composer:
+	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www api-php composer $(filter-out $@,$(MAKECMDGOALS))
+
+
+
 
 dev-python:
 	@echo "Starting dev python"
@@ -38,6 +65,8 @@ prod-python:
 prod-node:
 	@echo "Starting prod node environment"
 	COMPOSE_PROFILES=node FRONTEND_TARGET=production docker compose up --build -d
+
+
 
 # Utils
 status:
