@@ -39,9 +39,16 @@ app.get('/api/list', async (req, res) => {
 });
 
 app.post('/api/install', async (req, res) => {
-  console.log(req.body)
+  console.log('/api/install', req.body)
   res.json({
     message: 'All success'
+  });
+});
+
+app.post('/api/getToken', async (req, res) => {
+  console.log('/api/getToken', req.body)
+  res.json({
+    token: '123-456-78-9'
   });
 });
 

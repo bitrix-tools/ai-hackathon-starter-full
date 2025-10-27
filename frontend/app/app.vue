@@ -13,14 +13,10 @@ useHead({
 </script>
 
 <template>
-  <ClientOnly>
-    <B24App :locale="locales[locale]">
-      <NuxtLoadingIndicator color="var(--ui-color-design-filled-warning-bg)" :height="3" />
-      <B24DashboardGroup class="border border-red-500">
-        <NuxtLayout>
-          <NuxtPage />
-        </NuxtLayout>
-      </B24DashboardGroup>
-    </B24App>
-  </ClientOnly>
+  <B24App :locale="locales[locale]">
+    <NuxtLoadingIndicator color="var(--ui-color-design-filled-warning-bg)" :height="3" />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </B24App>
 </template>

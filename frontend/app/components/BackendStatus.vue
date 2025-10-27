@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { onMounted, getCurrentInstance } from 'vue'
 import SuccessIcon from '@bitrix24/b24icons-vue/button/SuccessIcon'
 import UnavailableIcon from '@bitrix24/b24icons-vue/main/UnavailableIcon'
 import LoaderClockIcon from '@bitrix24/b24icons-vue/animated/LoaderClockIcon'
+import { useDashboard } from '@bitrix24/b24ui-nuxt/utils/dashboard'
+import { sleepAction } from '../utils/sleep'
 
 const { t } = useI18n()
 const { backendStatus, backendType, checkBackendHealth } = useBackend()
@@ -40,6 +43,16 @@ const statusDescription = computed(() => {
   return ''
 })
 
+const instance = getCurrentInstance()
+console.log('📋 All provides in btn:', instance?.parent?.provides)
+const { contextId, isLoading, load } = useDashboard({ isLoading: ref(false), load: () => {} })
+const makeToggleLoading = async () => {
+  console.log('📍 makeToggleLoading in btn:', contextId)
+  load?.(!isLoading?.value, contextId)
+  await sleepAction()
+  load?.(!isLoading?.value, contextId)
+}
+
 onMounted(async () => {
   await checkHealth()
 })
@@ -56,7 +69,7 @@ onMounted(async () => {
       {
         label: $t('components.backendStatus.action'),
         size: 'sm',
-        onClick: checkHealth
+        onClick: makeToggleLoading
       }
     ]"
   />

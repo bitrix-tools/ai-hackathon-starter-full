@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { B24Frame } from '@bitrix24/b24jssdk'
+import { onMounted, getCurrentInstance } from 'vue'
 import { useDashboard } from '@bitrix24/b24ui-nuxt/utils/dashboard'
-import { onMounted } from 'vue'
 import { sleepAction } from '../utils/sleep'
 
 const { t, locales: localesI18n, setLocale } = useI18n()
@@ -17,7 +17,9 @@ const { $initializeB24Frame } = useNuxtApp()
 let $b24: null | B24Frame = null
 // endregion ////
 
-console.error(new Error('@todo test > 2'))
+console.log(new Error('@todo test > 2'))
+const instance = getCurrentInstance()
+console.log('📋 All provides in index:', instance?.parent?.provides)
 const { contextId, isLoading, load } = useDashboard({ isLoading: ref(false), load: () => {} })
 // const isLoading = computed({
 //   get: () => isLoadingState?.value === true,
@@ -27,27 +29,28 @@ const { contextId, isLoading, load } = useDashboard({ isLoading: ref(false), loa
 //   }
 // })
 const makeToggleLoading = async (timeout: number = 1000) => {
+  console.log('📍 makeToggleLoading in index:', contextId)
   load?.(!isLoading?.value, contextId)
   await sleepAction(timeout)
   load?.(!isLoading?.value, contextId)
 }
 // region Lifecycle Hooks ////
-onMounted(async () => {
-  $logger.info('Hi from index page')
-
-  try {
-    // isLoading.value = true
-    // await sleepAction(10_500)
-    $b24 = await $initializeB24Frame()
-    await initApp($b24, localesI18n, setLocale)
-
-    // await $b24.parent.setTitle(t('page.index.seo.title'))
-  } catch (error) {
-    processErrorGlobal(error)
-  } finally {
-    // isLoading.value = false
-  }
-})
+// onMounted(async () => {
+//   $logger.info('Hi from index page')
+//
+//   try {
+//     // isLoading.value = true
+//     // await sleepAction(10_500)
+//     $b24 = await $initializeB24Frame()
+//     await initApp($b24, localesI18n, setLocale)
+//
+//     // await $b24.parent.setTitle(t('page.index.seo.title'))
+//   } catch (error) {
+//     processErrorGlobal(error)
+//   } finally {
+//     // isLoading.value = false
+//   }
+// })
 // endregion ////
 </script>
 
@@ -58,9 +61,7 @@ onMounted(async () => {
         <ProseH2>{{ $t('page.index.message.title') }}</ProseH2>
         <ProseP>{{ $t('page.index.message.line1') }}</ProseP>
       </template>
-      <ClientOnly>
-        <BackendStatus />
-      </ClientOnly>
+      <BackendStatus />
 
       <B24Button loading-auto @click="makeToggleLoading(1500)">Test</B24Button>
     </B24Card>

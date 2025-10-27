@@ -15,8 +15,8 @@ importers:
         specifier: ^0.4.10
         version: 0.4.10(magicast@0.3.5)
       '@bitrix24/b24ui-nuxt':
-        specifier: ^2.0.3
-        version: 2.0.3(@babel/parser@7.28.4)(axios@1.12.2)(change-case@5.4.4)(embla-carousel@8.6.0)(magicast@0.3.5)(typescript@5.9.3)(vite@7.1.12(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(vue-router@4.6.3(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)
+        specifier: ^2.0.4
+        version: 2.0.4(@babel/parser@7.28.4)(axios@1.12.2)(change-case@5.4.4)(embla-carousel@8.6.0)(magicast@0.3.5)(typescript@5.9.3)(vite@7.1.12(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(vue-router@4.6.3(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)
       '@nuxtjs/i18n':
         specifier: ^10.1.1
         version: 10.1.1(@vue/compiler-dom@3.5.22)(db0@0.3.4)(eslint@9.38.0(jiti@2.6.1))(ioredis@5.8.2)(magicast@0.3.5)(rollup@4.52.5)(vue@3.5.22(typescript@5.9.3))
@@ -224,8 +224,8 @@ packages:
     resolution: {integrity: sha512-94S4z1wJYSwJ2wmlb1PQd0pzo3yCI1zKdxpDZZ3HLFWklqrpxRD1/SdOWXN5BFkCk4HCP5hu+bxF+g3G2qH2Zg==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
 
-  '@bitrix24/b24ui-nuxt@2.0.3':
-    resolution: {integrity: sha512-TD7ITebac+zFdVy10EQhu5Vq5vDegtQ2HAP0DTeXi8gUV8gnfne2zHWgj9+7v9pLx2O5JviGu/X7A+KEjsU1SA==}
+  '@bitrix24/b24ui-nuxt@2.0.4':
+    resolution: {integrity: sha512-3TbWsiiKTlzTw08l19nN/kZYe48QgB036CA6vUAhMyel9Src/BurPxXHg5eK3jQZszVHBZvUbYjNMnlJvJH3mw==}
     hasBin: true
     peerDependencies:
       '@inertiajs/vue3': ^2.0.7
@@ -5145,7 +5145,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@bitrix24/b24ui-nuxt@2.0.3(@babel/parser@7.28.4)(axios@1.12.2)(change-case@5.4.4)(embla-carousel@8.6.0)(magicast@0.3.5)(typescript@5.9.3)(vite@7.1.12(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(vue-router@4.6.3(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)':
+  '@bitrix24/b24ui-nuxt@2.0.4(@babel/parser@7.28.4)(axios@1.12.2)(change-case@5.4.4)(embla-carousel@8.6.0)(magicast@0.3.5)(typescript@5.9.3)(vite@7.1.12(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.0)(yaml@2.8.1))(vue-router@4.6.3(vue@3.5.22(typescript@5.9.3)))(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)':
     dependencies:
       '@ai-sdk/vue': 2.0.76(vue@3.5.22(typescript@5.9.3))(zod@4.1.12)
       '@bitrix24/b24icons-vue': 2.0.4(vue@3.5.22(typescript@5.9.3))
