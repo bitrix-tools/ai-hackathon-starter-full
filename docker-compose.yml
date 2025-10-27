@@ -41,6 +41,8 @@ services:
     profiles: ["cloudpub-front"]
     container_name: cloudpubFront
     image: cloudpub/cloudpub:latest
+    # for arm64 proc
+    # image: cloudpub/cloudpub:latest-arm64
     restart: unless-stopped
     env_file: .env
     environment:
@@ -83,6 +85,8 @@ services:
     profiles: ["cloudpub-php"]
     container_name: cloudpubApi
     image: cloudpub/cloudpub:latest
+    # for arm64 proc
+    # image: cloudpub/cloudpub:latest-arm64
     restart: unless-stopped
     env_file: .env
     environment:
@@ -126,6 +130,8 @@ services:
     profiles: ["cloudpub-python"]
     container_name: cloudpubApiPython
     image: cloudpub/cloudpub:latest
+    # for arm64 proc
+    # image: cloudpub/cloudpub:latest-arm64
     restart: unless-stopped
     env_file: .env
     environment:
@@ -171,6 +177,8 @@ services:
     profiles: [ "cloudpub-node" ]
     container_name: cloudpubApi
     image: cloudpub/cloudpub:latest
+    # for arm64 proc
+    # image: cloudpub/cloudpub:latest-arm64
     restart: unless-stopped
     env_file: .env
     environment:
