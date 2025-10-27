@@ -16,9 +16,15 @@ const { $initializeB24Frame } = useNuxtApp()
 let $b24: null | B24Frame = null
 
 const apiStore = useApiStore()
-
-const { sidebarLoading, toggleLoading } = useDashboard({ sidebarLoading: ref(false), toggleLoading: () => {} })
 // endregion ////
+
+const { contextId, isLoading: isLoadingState, load } = useDashboard({ isLoading: ref(false), load: () => {} })
+const isLoading = computed({
+  get: () => isLoadingState?.value === true,
+  set: (value: boolean) => {
+    load?.(value, contextId)
+  }
+})
 
 // region Init ////
 const elementList = await apiStore.getList()
@@ -65,10 +71,16 @@ const dataList = ref([
 
 // region Actions ////
 async function makeSomeRandom(timeout: number = 1000) {
-  toggleLoading?.(!sidebarLoading?.value)
-  await sleepAction(timeout)
-  dataList.value = [...dataList.value].sort(() => Math.random() - 0.5)
-  toggleLoading?.(!sidebarLoading?.value)
+  try {
+    isLoading.value = true
+    await sleepAction(timeout)
+    dataList.value = [...dataList.value].sort(() => Math.random() - 0.5)
+    isLoading.value = false
+  } catch (error) {
+    processErrorGlobal(error)
+  } finally {
+    isLoading.value = false
+  }
 }
 // endregion ////
 
@@ -139,7 +151,7 @@ onUnmounted(() => {
     }"
   >
     <B24Table
-      :loading="sidebarLoading"
+      :loading="isLoading"
       loading-color="air-primary"
       loading-animation="loading"
       :data="dataList"

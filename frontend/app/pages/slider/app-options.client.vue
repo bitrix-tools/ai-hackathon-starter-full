@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type { B24Frame } from '@bitrix24/b24jssdk'
+import type { AccordionItem } from '@bitrix24/b24ui-nuxt'
 import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useDashboard } from '@bitrix24/b24ui-nuxt/utils/dashboard'
 import { usePageStore } from '~/stores/page'
 import { useUserStore } from '~/stores/user'
 import { useAppSettingsStore } from '~/stores/appSettings'
 import { AjaxError } from '@bitrix24/b24jssdk'
-import type { B24Frame } from '@bitrix24/b24jssdk'
-import type { AccordionItem } from '@bitrix24/b24ui-nuxt'
 import ListIcon from '@bitrix24/b24icons-vue/main/ListIcon'
 import CloudErrorIcon from '@bitrix24/b24icons-vue/main/CloudErrorIcon'
 import ClockWithArrowIcon from '@bitrix24/b24icons-vue/main/ClockWithArrowIcon'
@@ -47,6 +48,14 @@ const infoItems = computed(() => [
 ] satisfies AccordionItem[])
 // endregion ////
 
+const { contextId, isLoading: isLoadingState, load } = useDashboard({ isLoading: ref(false), load: () => {} })
+const isLoading = computed({
+  get: () => isLoadingState?.value === true,
+  set: (value: boolean) => {
+    load?.(value, contextId)
+  }
+})
+
 // region Actions ////
 function initData() {
   someValue_1.value = appSettings.configSettings.someValue_1
@@ -56,7 +65,7 @@ function initData() {
 
 async function makeSave() {
   try {
-    page.isLoading = true
+    isLoading.value = true
 
     appSettings.configSettings.someValue_1 = someValue_1.value
     appSettings.configSettings.someValue_2 = someValue_2.value
@@ -88,7 +97,7 @@ async function makeSave() {
       icon: CloudErrorIcon
     })
   } finally {
-    page.isLoading = false
+    isLoading.value = false
   }
 }
 
@@ -127,7 +136,7 @@ onMounted(async () => {
   $logger.info('Hi from slider/app-options')
 
   try {
-    page.isLoading = true
+    isLoading.value = true
 
     $b24 = await $initializeB24Frame()
     await initApp($b24, localesI18n, setLocale)
@@ -144,13 +153,9 @@ onMounted(async () => {
 
     initData()
   } catch (error) {
-    processErrorGlobal(error, {
-      homePageIsHide: true,
-      isShowClearError: true,
-      clearErrorHref: '/slider/app-options.html'
-    })
+    processErrorGlobal(error)
   } finally {
-    page.isLoading = false
+    isLoading.value = false
   }
 })
 
@@ -163,6 +168,7 @@ onUnmounted(() => {
 <template>
   <NuxtLayout name="slider">
     <B24Accordion
+      v-if="isLoading === false"
       v-model="activeInfoItem"
       type="multiple"
       :items="infoItems"
