@@ -1,41 +1,28 @@
 {
-  "layout": {
-    "default": {
-      "sidebarHeader": {
-        "title": "Bitrix24::Frame"
-      },
-      "navbarHeader": {
-        "home": "Startseite",
-        "pages": "Seiten",
-        "optionApp": "App-Einstellungen",
-        "optionUser": "Benutzereinstellungen",
-        "feedback": "Feedback"
-      }
-    }
-  },
+  "layout": {},
   "page": {
     "index": {
       "seo": {
-        "title": "[playground] App-Test"
+        "title": "[playground] Anwendungstest"
       },
       "menu": {
         "main": "Öffnen"
       },
       "message": {
         "title": "Hallo!",
-        "line1": "Lassen Sie uns die Funktion der App in Bitrix24 testen. Öffnen Sie die App im Slider."
+        "line1": "Lassen Sie uns die Anwendung in Bitrix24 testen."
       }
     },
     "install": {
       "seo": {
-        "title": "App-Installation"
+        "title": "Anwendungsinstallation"
       },
       "ui": {
-        "title": "App-Installation"
+        "title": "Anwendungsinstallation"
       },
       "step": {
         "init": {
-          "caption": "Bitte haben Sie einen Moment Geduld..."
+          "caption": "Bitte warten Sie einen Moment..."
         },
         "demo": {
           "caption": "Beispiele..."
@@ -47,36 +34,23 @@
           "caption": "Widgets..."
         },
         "userFields": {
-          "caption": "Uf..."
+          "caption": "Benutzerfelder..."
         },
         "crm": {
           "caption": "CRM..."
+        },
+        "serverSide": {
+          "caption": "Serverseitige Skripte..."
         },
         "finish": {
           "caption": "Abschluss"
         }
       }
     },
-    "main": {
-      "seo": {
-        "title": "[playground] App-Test"
-      },
-      "message": {
-        "line1": "Öffnen Sie jede Seite im oberen Menü und untersuchen Sie, wie alles darauf funktioniert.",
-        "line2": "Vergessen Sie nicht, mit dem Farbmodus zu spielen.",
-        "scopes": "Erforderliche Berechtigungen (scopes):"
-      }
-    },
-    "feedback": {
-      "seo": {
-        "title": "Feedback-Formular",
-        "description": "Beispiel eines Feedback-Formulars."
-      }
-    },
     "app-options": {
       "seo": {
-        "title": "App-Einstellungen",
-        "description": "Beispiel für die Arbeit mit App-Einstellungen."
+        "title": "Anwendungseinstellungen",
+        "description": "Beispiel für die Arbeit mit Anwendungseinstellungen."
       },
       "actions": {
         "save": "Speichern",
@@ -84,190 +58,36 @@
       },
       "error": {
         "title": "Fehler",
-        "notAdmin": "Nur ein Administrator kann die App-Einstellungen bearbeiten."
+        "notAdmin": "Nur der Administrator kann die Anwendungseinstellungen bearbeiten."
       },
       "option": {
         "history": {
-          "title": "Betriebsverlauf",
-          "alert": "Demonstration der Arbeit mit der Eigenschaft. Analog können beliebige App-Eigenschaften konfiguriert werden.",
-          "property": "Wie viele Tage der Verlauf gespeichert werden soll"
+          "title": "Vorgangshistorie",
+          "alert": "Demonstration der Arbeit mit der Eigenschaft. Analog können beliebige Anwendungseigenschaften konfiguriert werden.",
+          "property_1": "Wie viele Tage soll der Verlauf aufbewahrt werden",
+          "property_2": "Ereignisüberschrift",
+          "property_bool": "Aufwärtstrend?"
         },
         "present": {
           "title": "Ereignisprotokoll",
-          "alert": "Jeder Login von Mitarbeitern wird im Ereignisprotokoll angezeigt. Sie können jederzeit prüfen, wer, wann und von welcher IP-Adresse auf Bitrix24 zugegriffen hat.",
-          "action": "Zum Ereignisprotokoll"
+          "alert": "Jeder Login von Mitarbeitern wird im Ereignisprotokoll angezeigt. Sie können jederzeit überprüfen, wer, wann und von welcher IP-Adresse sich bei Bitrix24 angemeldet hat."
         }
-      }
-    },
-    "user-options": {
-      "seo": {
-        "title": "Benutzereinstellungen",
-        "description": "Beispiel für die Arbeit mit benutzerdefinierten App-Einstellungen."
-      },
-      "actions": {
-        "save": "Speichern",
-        "cancel": "Abbrechen"
-      },
-      "error": {
-        "title": "Fehler"
-      },
-      "option": {
-        "demo": {
-          "title": "Beispiel",
-          "alert": "Demonstration der Arbeit mit der Eigenschaft. Analog können beliebige benutzerdefinierte Eigenschaften konfiguriert werden.",
-          "property_someValue_1": "Beliebige Zahl",
-          "property_someValue_2": "Beliebige Zeichenkette",
-          "property_isShowChangeColorMode": "Schaltfläche zum Wechseln des Farbmodus anzeigen?"
-        }
-      }
-    },
-    "base_app-info": {
-      "nav": "Applikation",
-      "seo": {
-        "title": "Applikation",
-        "description": "Informationen zur Applikation."
-      },
-      "message": {
-        "line1": "Dies sind die Schlüsselmetriken zur Identifizierung, Kontrolle und Diagnose der Applikation.",
-        "id": "Identifikator",
-        "code": "Code",
-        "version": "Version",
-        "status": "Status",
-        "isInstalled": "Installationsstatus"
-      }
-    },
-    "base_license-info": {
-      "nav": "Lizenz und Bezahlung",
-      "seo": {
-        "title": "Lizenz und Bezahlung",
-        "description": "Bezeichnung des Tarifplans mit Angabe der Region als Präfix."
-      },
-      "message": {
-        "line1": "Der Benutzer kann im Voraus über den anstehenden Verlängerungstermin informiert werden.",
-        "languageId": "Sprachcode",
-        "license": "Tarifbezeichnung mit Regionspräfix",
-        "licenseType": "Interne Tarifbezeichnung ohne Regionsangabe",
-        "licensePrevious": "Vorherige Lizenz",
-        "licenseFamily": "Tarifbezeichnung ohne Regionsangabe",
-        "isSelfHosted": "Flag, das angibt, ob es sich um eine On-Premise- oder Cloud-Version von Bitrix24 handelt",
-        "isExpired": "Flag, das angibt, ob die bezahlte oder Testphase abgelaufen ist",
-        "days": "Anzahl der Tage bis zum Ende der bezahlten Periode oder Testphase"
-      }
-    },
-    "base_specific-methods": {
-      "nav": "Spez. Methoden",
-      "seo": {
-        "title": "Spezielle Methoden",
-        "description": "Testen spezieller Methoden."
-      },
-      "message": {
-        "line1": "Hier wird die Funktionsweise der Methoden gezeigt, die in der via Frame eingebetteten App verfügbar sind.",
-        "line2": "Wenn Sie die App-Einstellungen öffnen und speichern, sehen Sie auf dieser Seite eine Push-Nachricht mit der Aufforderung, die Seite zu aktualisieren.",
-        "selectUsers": "Benutzer auswählen",
-        "selectUsersDescription": "verwenden Sie `$b24.dialog.selectUsers` für die Benutzerauswahl",
-        "makeImCallToVideo": "Interner Videoanruf",
-        "makeImCallToVideoDescription": "verwenden Sie `$b24.parent.imCallTo(xxx, true)` zum Initiieren eines Anrufs",
-        "makeImCallToVoice": "Interner Sprachanruf",
-        "makeImCallToVoiceDescription": "verwenden Sie `$b24.parent.imCallTo(xxx, false)` zum Initiieren eines Anrufs",
-        "makeImOpenMessenger": "Chat",
-        "makeImOpenMessengerDescription": "verwenden Sie `$b24.parent.imOpenMessenger`, um das Chat-Fenster zu öffnen",
-        "makeImOpenHistory": "Chat-Verlauf",
-        "makeImOpenHistoryDescription": "verwenden Sie `$b24.parent.imOpenHistory`, um den Chat-Verlauf zu öffnen",
-        "makeImPhoneTo": "Anruf über Telefonie",
-        "makeImPhoneToDescription": "verwenden Sie `$b24.parent.imPhoneTo`, um anzurufen",
-        "makeSendPullCommand": "Pull-Nachricht",
-        "makeSendPullCommandDescription": "verwenden Sie `pull.application.event.add`, um eine Nachricht zu senden"
-      },
-      "actions": {
-        "clear": "Log löschen",
-        "reload": "Neu laden",
-        "select": "Auswählen",
-        "videoCall": "Videoanruf",
-        "voiceCall": "Sprachanruf",
-        "imOpenMessenger": "Chat",
-        "imOpenMessengerHistory": "Chat-Verlauf",
-        "makeImPhoneTo": "Anrufen",
-        "makeSendPullCommand": "Senden"
-      },
-      "error": {
-        "notSelect": "Benutzer nicht ausgewählt.",
-        "tryCallToSelf": "Sie können sich nicht selbst anrufen.",
-        "emptyNumber": "Keine Telefonnummer für den Anruf angegeben."
-      }
-    },
-    "base_specific-parameters": {
-      "nav": "Spez. Parameter",
-      "seo": {
-        "title": "Spezielle Parameter",
-        "description": "Liste spezieller Parameter für On-Premise- und Cloud-Versionen."
-      },
-      "message": {
-        "line1": "Es gibt einige Unterschiede zwischen der On-Premise- und der Cloud-Version von Bitrix24.",
-        "isSelfHosted": "Flag, das angibt, ob es sich um eine On-Premise- oder Cloud-Version von Bitrix24 handelt",
-        "primaryKeyIncrementValue": "Inkrementschritt für Felder vom Typ ID",
-        "mainSettings": "Link zu den Einstellungen",
-        "ufList": "Link zur Uf-Liste",
-        "ufPage": "Link zum Uf"
-      }
-    },
-    "base_lang": {
-      "nav": "I18n",
-      "seo": {
-        "title": "I18n",
-        "description": "Demonstriert die Ausgabe von Sprachmeldungen in Abhängigkeit von der Bitrix24-Lokalisierung."
-      },
-      "message": {
-        "line1": "Versuchen Sie, die Sprache von Bitrix24 zu ändern.",
-        "message1": "erste Nachricht",
-        "message2": "zweite Nachricht"
-      }
-    },
-    "base_feedback": {
-      "nav": "Feedback",
-      "seo": {
-        "title": "Feedback-Formular",
-        "description": "Beispiele für Felder eines Feedback-Formulars."
-      },
-      "message": {
-        "line1": "Sie können ein CRM-Formular aus Ihrem Bitrix24 in die App einbetten und spezielle Felder übergeben.",
-        "line2": "Wenn der Benutzer das Formular ausfüllt, sind in Ihrem Bitrix24 Daten zur App, zum Tarif usw. verfügbar.",
-        "app_code": "Code",
-        "app_status": "Status",
-        "payment_expired": "Flag, das angibt, ob die bezahlte oder Testphase abgelaufen ist",
-        "days": "Anzahl der Tage bis zum Ende der bezahlten Periode oder Testphase",
-        "b24_plan": "Tarifbezeichnung mit Regionspräfix",
-        "c_name": "Benutzername",
-        "c_last_name": "Benutzernachname",
-        "hostname": "Bitrix24-Adresse"
-      }
-    },
-    "base_currency": {
-      "nav": "Währungen",
-      "seo": {
-        "title": "Währungen",
-        "description": "Liste der Bitrix24-Währungen."
-      },
-      "actions": {
-        "create": "Erstellen"
-      },
-      "message": {
-        "line1": "Das Anzeigen eines formatierten Betrags ist sehr einfach."
-      },
-      "list": {
-        "code": "Code",
-        "title": "Name",
-        "literal": "Symbol",
-        "value": "Formatierung",
-        "baseCurrency": "Code der Basiswährung"
       }
     }
   },
   "uf": {
     "demo": {
+      "alert": {
+        "title": "Demonstration der Arbeit mit der Eigenschaft.",
+        "description": "Analog können beliebige Anwendungseigenschaften konfiguriert werden"
+      },
       "field": {
         "label": "Beispielfeld",
         "description": "Das Ändern des Werts führt zur Neuerstellung des Diagramms",
         "hint": "Trend"
+      },
+      "action": {
+        "settings": "Einstellungen öffnen"
       }
     }
   },
@@ -277,13 +97,18 @@
         "title": "Einbettung in die Deal-Karte",
         "description": "Demonstration."
       },
-      "field": {
-        "label": "Beispielfeld",
-        "description": "Das Ändern des Werts führt zur Neuerstellung des Diagramms",
-        "hint": "Trend"
-      }
+      "action": "Mischen"
     }
   },
-  "message1": "Morgenstund hat Gold im Mund",
-  "message2": "Ein Bild sagt mehr als tausend Worte"
+  "components": {
+    "backendStatus": {
+      "title": "Backend-Status",
+      "description": {
+        "healthy": "Backend ist gesund ({msg})",
+        "checking": "Backend-Status wird überprüft...",
+        "error": "Interner Verbindungsfehler"
+      },
+      "action": "Status aktualisieren"
+    }
+  }
 }

@@ -9,7 +9,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "translate-ui": "tsx tools/translate.ui.ts"
   },
   "dependencies": {
     "@bitrix24/b24icons-vue": "^2.0.4",
