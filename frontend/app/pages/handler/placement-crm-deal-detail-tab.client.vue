@@ -27,8 +27,8 @@ const isLoading = computed({
 })
 
 // region Init ////
-const elementList = await apiStore.getList()
-const dropdownValue = ref<string[]>([elementList[0] as string])
+const elementList = ref<string[]>([])
+const dropdownValue = ref<string[]>([])
 
 const dataList = ref([
   {
@@ -91,9 +91,10 @@ async function resizeWindow() {
 // endregion ////
 
 // region Lifecycle Hooks ////
+const isInit = ref(false)
 onMounted(async () => {
   try {
-
+    isLoading.value = true
     $b24 = await $initializeB24Frame()
     await initApp($b24, localesI18n, setLocale)
 
@@ -101,12 +102,18 @@ onMounted(async () => {
 
     $logger.info('Hi from crm-deal-detail-tab')
 
+    elementList.value = await apiStore.getList()
+    dropdownValue.value = [elementList.value[0] as string]
+
+    isInit.value = true
   } catch (error) {
     processErrorGlobal(error, {
       homePageIsHide: true,
       isShowClearError: true,
       clearErrorHref: '/handler/uf.demo.html'
     })
+  } finally {
+    isLoading.value = false
   }
 })
 
@@ -119,43 +126,47 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-row items-center justify-star gap-[12px]">
-    <B24Button
-      color="air-primary"
-      :icon="PlusLIcon"
-      :label="t('placement.crm_deal_detail_tab.action')"
-      loading-auto
-      @click="makeSomeRandom(1500)"
-    />
-    <div>
-      <B24InputMenu
-        v-model="dropdownValue"
-        id="select"
-        multiple
-        class="w-[200px]"
-        value-key="value"
-        :items="elementList"
-        :content="{
-          sideOffset: 4,
-          collisionPadding: 1
+  <div>
+    <div v-if="isInit">
+      <div class="flex flex-row items-center justify-star gap-[12px]">
+        <B24Button
+          color="air-primary"
+          :icon="PlusLIcon"
+          :label="t('placement.crm_deal_detail_tab.action')"
+          loading-auto
+          @click="makeSomeRandom(1500)"
+        />
+        <div>
+          <B24InputMenu
+            v-model="dropdownValue"
+            id="select"
+            multiple
+            class="w-[200px]"
+            value-key="value"
+            :items="elementList"
+            :content="{
+              sideOffset: 4,
+              collisionPadding: 1
+            }"
+          />
+        </div>
+      </div>
+      <B24Card
+        variant="outline"
+        class="flex-1 w-full mt-[12px]"
+        :b24ui="{
+          header: 'p-[12px] px-[14px] py-[14px] sm:px-[14px] sm:py-[14px]',
+          body: 'p-0 sm:px-0 sm:py-0'
         }"
-      />
+      >
+        <B24Table
+          :loading="isLoading"
+          loading-color="air-primary"
+          loading-animation="loading"
+          :data="dataList"
+          class="flex-1"
+        />
+      </B24Card>
     </div>
   </div>
-  <B24Card
-    variant="outline"
-    class="flex-1 w-full mt-[12px]"
-    :b24ui="{
-      header: 'p-[12px] px-[14px] py-[14px] sm:px-[14px] sm:py-[14px]',
-      body: 'p-0 sm:px-0 sm:py-0'
-    }"
-  >
-    <B24Table
-      :loading="isLoading"
-      loading-color="air-primary"
-      loading-animation="loading"
-      :data="dataList"
-      class="flex-1"
-    />
-  </B24Card>
 </template>

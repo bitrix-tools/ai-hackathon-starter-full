@@ -25,6 +25,7 @@ const isLoading = computed({
 })
 
 // region Lifecycle Hooks ////
+const isInit = ref(false)
 onMounted(async () => {
   $logger.info('Hi from index page')
 
@@ -34,6 +35,8 @@ onMounted(async () => {
     await initApp($b24, localesI18n, setLocale)
 
     await $b24.parent.setTitle(t('page.index.seo.title'))
+
+    isInit.value = true
   } catch (error) {
     processErrorGlobal(error)
   } finally {
@@ -45,7 +48,7 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col items-center justify-center gap-16 h-[calc(100vh-200px)]">
-    <B24Card v-if="isLoading === false">
+    <B24Card v-if="isInit">
       <template #header>
         <ProseH2>{{ $t('page.index.message.title') }}</ProseH2>
         <ProseP>{{ $t('page.index.message.line1') }}</ProseP>

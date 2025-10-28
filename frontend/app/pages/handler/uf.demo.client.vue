@@ -25,7 +25,7 @@ const apiStore = useApiStore()
 // region Init Data ////
 const dataField = ref(0)
 
-const enumList = await apiStore.getEnum()
+const enumList = ref<string[]>([])
 // endregion ////
 
 // region Actions ////
@@ -65,6 +65,7 @@ async function resizeWindow() {
 // endregion ////
 
 // region Lifecycle Hooks ////
+const isInit = ref(false)
 onMounted(async () => {
   try {
     $b24 = await $initializeB24Frame()
@@ -90,7 +91,9 @@ onMounted(async () => {
     $logger.info('Hi from uf-placement', $b24.placement.options)
 
     dataField.value = Number.parseInt($b24.placement.options?.VALUE || '0')
+    enumList.value = await apiStore.getEnum()
 
+    isInit.value = true
   } catch (error) {
     processErrorGlobal(error, {
       homePageIsHide: true,
@@ -110,60 +113,62 @@ onUnmounted(() => {
 
 <template>
   <div>
-    <template v-if="isEditMode">
-      <div class="flex flex-wrap items-center justify-start gap-[10px]">
-        <B24FormField :label="$t('uf.demo.field.label')" class="w-full">
-          <B24SelectMenu
-            class="w-[400px]"
-            :items="enumList"
-          />
-        </B24FormField>
-        <B24FormField :label="$t('uf.demo.field.label')" class="w-full">
-          <B24InputNumber
-            class="w-[200px]"
-            v-model="dataField"
-            @change="setData"
-          />
-        </B24FormField>
-        <B24Advice
-          :avatar="{ src: '/avatar/employee.png' }"
+    <div v-if="isInit">
+      <template v-if="isEditMode">
+        <div class="flex flex-wrap items-center justify-start gap-[10px]">
+          <B24FormField :label="$t('uf.demo.field.label')" class="w-full">
+            <B24SelectMenu
+              class="w-[400px]"
+              :items="enumList"
+            />
+          </B24FormField>
+          <B24FormField :label="$t('uf.demo.field.label')" class="w-full">
+            <B24InputNumber
+              class="w-[200px]"
+              v-model="dataField"
+              @change="setData"
+            />
+          </B24FormField>
+          <B24Advice
+            :avatar="{ src: '/avatar/employee.png' }"
+          >
+            <ProseH5>{{ $t('uf.demo.alert.title') }}</ProseH5>
+            <div>{{ $t('uf.demo.alert.description') }}</div>
+          </B24Advice>
+        </div>
+      </template>
+      <template v-else>
+        <B24Card
+          class="flex-1 w-full"
+          :b24ui="{
+            header: 'p-4 sm:px-4 sm:py-4',
+            body: 'p-4 sm:px-4 py-2',
+          }"
         >
-          <ProseH5>{{ $t('uf.demo.alert.title') }}</ProseH5>
-          <div>{{ $t('uf.demo.alert.description') }}</div>
-        </B24Advice>
-      </div>
-    </template>
-    <template v-else>
-      <B24Card
-        class="flex-1 w-full"
-        :b24ui="{
-          header: 'p-4 sm:px-4 sm:py-4',
-          body: 'p-4 sm:px-4 py-2',
-        }"
-      >
-        <template #header>
-          <div class="flex-1 w-full flex flex-row items-center justify-between gap-[10px]">
-            <ProseP class="mb-0">{{ appSettings.configSettings.someValue_2 }}</ProseP>
-            <B24Badge
-              rounded
-              size="md"
-              :color="appSettings.configSettings.isSomeOption ? 'air-primary-copilot' : 'air-primary-alert'"
-              inverted
-              :label="appSettings.configSettings.someValue_1 + dataField"
-              :icon="appSettings.configSettings.isSomeOption ? TrendUpIcon : TrendDownIcon"
+          <template #header>
+            <div class="flex-1 w-full flex flex-row items-center justify-between gap-[10px]">
+              <ProseP class="mb-0">{{ appSettings.configSettings.someValue_2 }}</ProseP>
+              <B24Badge
+                rounded
+                size="md"
+                :color="appSettings.configSettings.isSomeOption ? 'air-primary-copilot' : 'air-primary-alert'"
+                inverted
+                :label="appSettings.configSettings.someValue_1 + dataField"
+                :icon="appSettings.configSettings.isSomeOption ? TrendUpIcon : TrendDownIcon"
 
+              />
+            </div>
+          </template>
+          <div class="flex-1 w-full flex flex-row items-center justify-end gap-[10px]">
+            <B24Button
+              :label="t('uf.demo.action.settings')"
+              :icon="Settings5Icon"
+              size="sm"
+              @click="openSliderForOptions"
             />
           </div>
-        </template>
-        <div class="flex-1 w-full flex flex-row items-center justify-end gap-[10px]">
-          <B24Button
-            :label="t('uf.demo.action.settings')"
-            :icon="Settings5Icon"
-            size="sm"
-            @click="openSliderForOptions"
-          />
-        </div>
-      </B24Card>
-    </template>
+        </B24Card>
+      </template>
+    </div>
   </div>
 </template>

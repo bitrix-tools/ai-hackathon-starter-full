@@ -10,6 +10,10 @@ export const useApiStore = defineStore(
 
     const tokenJWT = ref('')
 
+    const isInitTokenJWT = computed(() => {
+      return tokenJWT.value.length > 2
+    })
+
     const $api = $fetch.create({
       baseURL: apiUrl,
       headers: {
