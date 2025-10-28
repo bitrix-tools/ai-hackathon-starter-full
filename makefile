@@ -42,6 +42,14 @@ composer-dumpautoload:
 composer:
 	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www api-php composer $(filter-out $@,$(MAKECMDGOALS))
 
+.PHONY: php-cli-sh
+php-cli-sh:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli sh
+
+php-cli-app-example:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli bin/console app:example
+
+
 # Doctrine/Symfony database commands
 .PHONY: dev-php-db-create dev-php-db-migrate dev-php-db-migrate-create dev-php-db-schema-update dev-php-db-schema-validate
 dev-php-db-create:

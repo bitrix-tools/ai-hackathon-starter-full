@@ -9,12 +9,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:test', description: 'Test CLI command')]
-class TestCommand extends Command
+#[AsCommand(name: 'app:example', description: 'Example CLI command')]
+class ExampleCommand extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('Hello from test CLI command');
+        $output->writeln('Hello from example CLI command');
 
         return Command::SUCCESS;
     }
