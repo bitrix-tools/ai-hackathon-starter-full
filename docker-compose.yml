@@ -40,7 +40,7 @@ services:
   cloudpub-front:
     profiles: ["cloudpub-front"]
     container_name: cloudpubFront
-    image: cloudpub/cloudpub:latest
+    image: cloudpub/cloudpub:latest-arm64
     restart: unless-stopped
     env_file: .env
     environment:
@@ -59,7 +59,7 @@ services:
     profiles: ["php"]
     build:
       context: ./backends/php
-      dockerfile: api/Dockerfile
+      dockerfile: docker/php-fpm/Dockerfile
     container_name: api
     env_file: .env
     environment:
@@ -79,11 +79,31 @@ services:
     networks:
       - internal-net
 
+  php-cli:
+    profiles: ["php", "php-cli"]
+    build:
+      context: ./backends/php
+      dockerfile: docker/php-cli/Dockerfile
+    container_name: php-cli
+    env_file: .env
+    environment:
+      DB_HOST: database
+      NODE_ENV: ${NODE_ENV:-development}
+    volumes:
+      - ./backends/php/:/var/www
+      - ./logs/php:/var/log/php
+    depends_on:
+      - database
+    networks:
+      - internal-net
+    stdin_open: true
+    tty: true
+
   # (~) Cloudpub - for php
   cloudpub-php:
     profiles: ["cloudpub-php"]
     container_name: cloudpubApi
-    image: cloudpub/cloudpub:latest
+    image: cloudpub/cloudpub:latest-arm64
     restart: unless-stopped
     env_file: .env
     environment:
