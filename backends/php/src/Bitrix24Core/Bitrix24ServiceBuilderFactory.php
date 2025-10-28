@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace App\Bitrix24Core;
 
+use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountStatus;
+use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Exceptions\Bitrix24AccountNotFoundException;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterface;
 use Bitrix24\SDK\Core\Contracts\Events\EventInterface;
 use Bitrix24\SDK\Core\Credentials\ApplicationProfile;
@@ -64,6 +66,7 @@ readonly class Bitrix24ServiceBuilderFactory
      * @throws WrongConfigurationException
      * @throws UnknownScopeCodeException
      * @throws InvalidArgumentException
+     * @throws Bitrix24AccountNotFoundException
      */
     public function createFromStoredToken(): ServiceBuilder
     {
@@ -72,7 +75,15 @@ readonly class Bitrix24ServiceBuilderFactory
             throw new InvalidArgumentException('localAppDomain is empty');
         }
 
-        $b24Account = $this->bitrix24AccountRepository->findByDomain($localAppDomain);
+        $b24Accounts = $this->bitrix24AccountRepository->findByDomain(
+            $localAppDomain,
+            Bitrix24AccountStatus::active,
+            true
+        );
+        if (count($b24Accounts) === 0) {
+            throw new Bitrix24AccountNotFoundException(sprintf('b24 account %s not found', $localAppDomain));
+        }
+        $b24Account = $b24Accounts[0];
 
         return new ServiceBuilderFactory(
             $this->eventDispatcher,
@@ -80,8 +91,8 @@ readonly class Bitrix24ServiceBuilderFactory
         )->init(
             $this->getApplicationProfile(),
             // load auth tokens from a database
-            $b24Account->getAuth()->getAccessToken(),
-            $b24Account->getAuth()->getDomain()
+            $b24Account->getAuthToken(),
+            $b24Account->getDomainUrl()
         );
     }
 
