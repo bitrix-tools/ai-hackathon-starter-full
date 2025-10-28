@@ -24,15 +24,15 @@ dev-php:
 # work with composer
 .PHONY: composer-install
 composer-install:
-	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www api-php composer install
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli composer install
 
 .PHONY: composer-update
 composer-update:
-	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www api-php composer update
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli composer update
 
 .PHONY: composer-dumpautoload
 composer-dumpautoload:
-	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www api-php composer dumpautoload
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli composer dumpautoload
 
 # call composer with any parameters
 # make composer install
@@ -40,7 +40,7 @@ composer-dumpautoload:
 # make composer require symfony/http-client
 .PHONY: composer
 composer:
-	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www api-php composer $(filter-out $@,$(MAKECMDGOALS))
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli composer $(filter-out $@,$(MAKECMDGOALS))
 
 .PHONY: php-cli-sh
 php-cli-sh:
@@ -53,19 +53,19 @@ php-cli-app-example:
 # Doctrine/Symfony database commands
 .PHONY: dev-php-db-create dev-php-db-migrate dev-php-db-migrate-create dev-php-db-schema-update dev-php-db-schema-validate
 dev-php-db-create:
-	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www --entrypoint "php" api-php bin/console doctrine:database:create --if-not-exists
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:database:create --if-not-exists
 
 dev-php-db-migrate:
-	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www --entrypoint "php" api-php bin/console doctrine:migrations:migrate --no-interaction
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:migrations:migrate --no-interaction
 
 dev-php-db-migrate-create:
-	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www --entrypoint "php" api-php bin/console make:migration --no-interaction
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console make:migration --no-interaction
 
 dev-php-db-schema-update:
-	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www --entrypoint "php" api-php bin/console doctrine:schema:update --force
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:schema:update --force
 
 dev-php-db-schema-validate:
-	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www --entrypoint "php" api-php bin/console doctrine:schema:validate
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:schema:validate
 
 
 

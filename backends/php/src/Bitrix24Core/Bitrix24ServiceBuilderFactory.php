@@ -40,7 +40,7 @@ readonly class Bitrix24ServiceBuilderFactory
     ) {
     }
 
-    public function createFromFrontendPayload(InstallPayload $payload): ServiceBuilder
+    public function createFromFrontendPayload(FrontendPayload $payload): ServiceBuilder
     {
         return new ServiceBuilderFactory($this->eventDispatcher, $this->logger)->init(
             $this->getApplicationProfile(),

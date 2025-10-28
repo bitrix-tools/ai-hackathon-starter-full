@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "28d6abf0b04905d7966b938b527ecfb5",
+    "content-hash": "af4295d5c420490ee9c13d6bad2c511f",
     "packages": [
         {
             "name": "bitrix24/b24phpsdk",
@@ -922,12 +922,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/instantiator.git",
-                "reference": "b69530590353826818e34b096813888516300858"
+                "reference": "e2b9c6e4cd59d335a95394bb3870c87a6e05706e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/b69530590353826818e34b096813888516300858",
-                "reference": "b69530590353826818e34b096813888516300858",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/e2b9c6e4cd59d335a95394bb3870c87a6e05706e",
+                "reference": "e2b9c6e4cd59d335a95394bb3870c87a6e05706e",
                 "shasum": ""
             },
             "require": {
@@ -984,7 +984,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-13T19:38:44+00:00"
+            "time": "2025-10-27T20:54:08+00:00"
         },
         {
             "name": "doctrine/lexer",
@@ -1355,12 +1355,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/sql-formatter.git",
-                "reference": "a8af23a8e9d622505baa2997465782cbe8bb7fc7"
+                "reference": "a30c92f02258d299f0b3b1ccb9f841e58692a285"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/a8af23a8e9d622505baa2997465782cbe8bb7fc7",
-                "reference": "a8af23a8e9d622505baa2997465782cbe8bb7fc7",
+                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/a30c92f02258d299f0b3b1ccb9f841e58692a285",
+                "reference": "a30c92f02258d299f0b3b1ccb9f841e58692a285",
                 "shasum": ""
             },
             "require": {
@@ -1403,7 +1403,7 @@
                 "issues": "https://github.com/doctrine/sql-formatter/issues",
                 "source": "https://github.com/doctrine/sql-formatter/tree/1.5.x"
             },
-            "time": "2025-10-26T09:35:14+00:00"
+            "time": "2025-10-27T21:41:15+00:00"
         },
         {
             "name": "fig/http-message-util",
@@ -1767,12 +1767,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mesilov/bitrix24-php-lib.git",
-                "reference": "d56734df4e533a364ae63e35fe7cd4ffc1b1b58c"
+                "reference": "76c5727da90ad7807c8a8d65413d01246d2379f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mesilov/bitrix24-php-lib/zipball/d56734df4e533a364ae63e35fe7cd4ffc1b1b58c",
-                "reference": "d56734df4e533a364ae63e35fe7cd4ffc1b1b58c",
+                "url": "https://api.github.com/repos/mesilov/bitrix24-php-lib/zipball/76c5727da90ad7807c8a8d65413d01246d2379f4",
+                "reference": "76c5727da90ad7807c8a8d65413d01246d2379f4",
                 "shasum": ""
             },
             "require": {
@@ -1844,7 +1844,7 @@
                 "issues": "https://github.com/mesilov/bitrix24-php-lib/issues?state=open",
                 "source": "https://github.com/mesilov/bitrix24-php-lib"
             },
-            "time": "2025-10-26T14:07:58+00:00"
+            "time": "2025-10-28T21:00:29+00:00"
         },
         {
             "name": "mesilov/moneyphp-percentage",
@@ -4289,12 +4289,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "68b6c3b931efdf32cb8d076086e51cf36281ac83"
+                "reference": "f04f696560674e6e42d3acb817e1b754e946116d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/68b6c3b931efdf32cb8d076086e51cf36281ac83",
-                "reference": "68b6c3b931efdf32cb8d076086e51cf36281ac83",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/f04f696560674e6e42d3acb817e1b754e946116d",
+                "reference": "f04f696560674e6e42d3acb817e1b754e946116d",
                 "shasum": ""
             },
             "require": {
@@ -4400,7 +4400,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-14T15:46:26+00:00"
+            "time": "2025-10-28T10:33:51+00:00"
         },
         {
             "name": "symfony/intl",
@@ -4671,12 +4671,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bundle.git",
-                "reference": "4fb8f83dd716115558ded6e01651b5ddb75361f0"
+                "reference": "ec54eb1624ae76056ddbeaa68e7db4bfe7ce774b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/4fb8f83dd716115558ded6e01651b5ddb75361f0",
-                "reference": "4fb8f83dd716115558ded6e01651b5ddb75361f0",
+                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/ec54eb1624ae76056ddbeaa68e7db4bfe7ce774b",
+                "reference": "ec54eb1624ae76056ddbeaa68e7db4bfe7ce774b",
                 "shasum": ""
             },
             "require": {
@@ -4743,7 +4743,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-23T18:15:35+00:00"
+            "time": "2025-10-27T23:00:49+00:00"
         },
         {
             "name": "symfony/polyfill-intl-grapheme",
@@ -6431,12 +6431,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "d8a6a765b23a6877089086ead3d4d415a3310068"
+                "reference": "8119dfbfb1319bb83c5b72f30b2e29bf71ef3838"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d8a6a765b23a6877089086ead3d4d415a3310068",
-                "reference": "d8a6a765b23a6877089086ead3d4d415a3310068",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/8119dfbfb1319bb83c5b72f30b2e29bf71ef3838",
+                "reference": "8119dfbfb1319bb83c5b72f30b2e29bf71ef3838",
                 "shasum": ""
             },
             "conflict": {
@@ -7031,7 +7031,7 @@
                 "prestashop/ps_emailsubscription": "<2.6.1",
                 "prestashop/ps_facetedsearch": "<3.4.1",
                 "prestashop/ps_linklist": "<3.1",
-                "privatebin/privatebin": "<1.4|>=1.5,<1.7.4",
+                "privatebin/privatebin": "<1.4|>=1.5,<1.7.4|>=1.7.7,<2.0.2",
                 "processwire/processwire": "<=3.0.246",
                 "propel/propel": ">=2.0.0.0-alpha1,<=2.0.0.0-alpha7",
                 "propel/propel1": ">=1,<=1.7.1",
@@ -7405,7 +7405,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-24T21:05:23+00:00"
+            "time": "2025-10-28T21:05:31+00:00"
         },
         {
             "name": "symfony/maker-bundle",

@@ -17,7 +17,7 @@ use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use JsonException;
 
-readonly class InstallPayload
+readonly class FrontendPayload
 {
     public function __construct(
         public string $domain,
@@ -38,6 +38,15 @@ readonly class InstallPayload
      */
     public static function initFromArray(array $payload): self
     {
+        if ($payload['PLACEMENT_OPTIONS'] !== '') {
+            $placementOptions = json_decode($payload['PLACEMENT_OPTIONS'], true, 512, JSON_THROW_ON_ERROR);
+            if (!is_array($placementOptions)) {
+                throw new InvalidArgumentException('Invalid placement options');
+            }
+        } else {
+            $placementOptions = [];
+        }
+
         return new self(
             (string)$payload['DOMAIN'],
             $payload['PROTOCOL'] === 1,
@@ -53,7 +62,7 @@ readonly class InstallPayload
             (string)$payload['member_id'],
             (int)$payload['user_id'],
             (string)$payload['PLACEMENT'],
-            $payload['PLACEMENT_OPTIONS']
+            $placementOptions
         );
     }
 }

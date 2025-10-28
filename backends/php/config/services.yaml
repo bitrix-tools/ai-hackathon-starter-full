@@ -25,6 +25,8 @@ services:
     # Bitrix24 SDK services
     Bitrix24\Lib\ApplicationInstallations\UseCase\Install\Handler:
         autowire: true
+    Bitrix24\Lib\Bitrix24Accounts\UseCase\RenewAuthToken\Handler:
+        autowire: true
     Bitrix24\Lib\Services\Flusher:
         autowire: true
 
@@ -33,5 +35,11 @@ services:
         class: Bitrix24\Lib\Bitrix24Accounts\Infrastructure\Doctrine\Bitrix24AccountRepository
     Bitrix24\SDK\Application\Contracts\ApplicationInstallations\Repository\ApplicationInstallationRepositoryInterface:
         class: Bitrix24\Lib\ApplicationInstallations\Infrastructure\Doctrine\ApplicationInstallationRepository
+
+    # Bitrix24 SDK event listeners
+    App\Bitrix24Core\Bitrix24SdkEventListener:
+        tags:
+            - { name: kernel.event_listener, event: Bitrix24\SDK\Events\AuthTokenRenewedEvent, method: onAuthTokenRenewedEventListener }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

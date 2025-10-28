@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace App\Bitrix24Core\Controller;
 
 use App\Bitrix24Core\Bitrix24ServiceBuilderFactory;
-use App\Bitrix24Core\InstallPayload;
+use App\Bitrix24Core\FrontendPayload;
 use Bitrix24\SDK\Application\ApplicationStatus;
 use Bitrix24\SDK\Application\PortalLicenseFamily;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\OnApplicationInstall;
@@ -62,15 +62,18 @@ class AppLifecycleController extends AbstractController
         if (!$payload) {
             throw new InvalidArgumentException('Invalid JSON payload');
         }
-        $installPayload = InstallPayload::initFromArray($payload);
+        $this->logger->debug('AppLifecycleController.install.payload', [
+            'payload' => print_r($payload, true)
+        ]);
+        $frontendPayload = FrontendPayload::initFromArray($payload);
 
-        $this->logger->debug('AppLifecycleController.install.installPayload', [
-            'payload' => print_r($installPayload, true)
+        $this->logger->debug('AppLifecycleController.install.frontendPayload', [
+            'payload' => print_r($frontendPayload, true)
         ]);
 
         try {
             // now we receive OnApplicationInstall event from Bitrix24
-            $b24ServiceBuilder = $this->bitrix24ServiceBuilderFactory->createFromFrontendPayload($installPayload);
+            $b24ServiceBuilder = $this->bitrix24ServiceBuilderFactory->createFromFrontendPayload($frontendPayload);
 
             // get information about portal
             $b24CurrentUserProfile = $b24ServiceBuilder->getMainScope()->main()->getCurrentUserProfile()->getUserProfile();
@@ -90,9 +93,9 @@ class AppLifecycleController extends AbstractController
             // save auth tokens into database
             $this->installStartHandler->handle(
                 new ApplicationInstallations\UseCase\Install\Command(
-                    $installPayload->domain,
-                    new Domain($installPayload->domain),
-                    $installPayload->authToken,
+                    $frontendPayload->memberId,
+                    new Domain($frontendPayload->domain),
+                    $frontendPayload->authToken,
                     (int)$b24ApplicationInfo->VERSION,
                     $this->bitrix24ServiceBuilderFactory->getApplicationProfile()->scope,
                     $b24CurrentUserProfile->ID,
@@ -110,7 +113,7 @@ class AppLifecycleController extends AbstractController
                 )
             );
 
-             // step 2
+            // step 2
             // register application lifecycle event handlers
             $eventHandlerUrl = $this->generateUrl(
                 'b24_events',
