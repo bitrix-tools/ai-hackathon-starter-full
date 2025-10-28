@@ -9,10 +9,6 @@ import Logo from '~/components/Logo.vue'
 
 const { t, locales: localesI18n, setLocale } = useI18n()
 
-definePageMeta({
-  layout: 'index-page'
-})
-
 useHead({
   title: t('page.install.seo.title')
 })
@@ -178,13 +174,18 @@ const steps = ref<Record<string, IStep>>({
       await apiStore.postInstall({
         DOMAIN: withoutTrailingSlash(authData.domain).replace('https://', '').replace('http://', ''),
         PROTOCOL: authData.domain.includes('https://') ? 1 : 0,
+        license: steps.value.init?.data?.appInfo.LICENSE,
         LANG: $b24.getLang(),
         APP_SID: $b24.getAppSid(),
         AUTH_ID: authData.access_token,
         AUTH_EXPIRES: authData.expires_in,
-        REFRESH_TOKEN: authData.refresh_token,
+        REFRESH_ID: authData.refresh_token,
         member_id: authData.member_id,
         user_id: Number(steps.value.init?.data?.profile.ID),
+        status: steps.value.init?.data?.appInfo.STATUS,
+        appVersion: Number(steps.value.init?.data?.appInfo.VERSION),
+        appCode: steps.value.init?.data?.appInfo.CODE,
+        appId: Number(steps.value.init?.data?.appInfo.ID),
         PLACEMENT: $b24.placement.title,
         PLACEMENT_OPTIONS: $b24.placement.options
       })
@@ -202,12 +203,21 @@ const stepCode = ref<string>('init' as const)
 async function makeInit(): Promise<void> {
   if (steps.value.init) {
     const response = await $b24.callBatch({
+      appInfo: { method: 'app.info' },
       profile: { method: 'profile' },
       userFieldTypeList: { method: 'userfieldtype.list' },
       placementList: { method: 'placement.get' }
     })
 
     steps.value.init.data = response.getData() as {
+      appInfo: {
+        ID: number
+        CODE: string
+        VERSION: string
+        STATUS: string
+        LICENSE: string
+        INSTALLED: boolean
+      },
       profile: {
         ID: number
         ADMIN: boolean

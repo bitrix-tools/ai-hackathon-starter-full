@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { usePageStore } from '~/stores/page'
-import BtnSpinnerIcon from '@bitrix24/b24icons-vue/button-specialized/BtnSpinnerIcon'
 
 // region Init ////
 useHead({
   bodyAttrs: {
-    // 'dark' | 'light' | 'edge-dark' | 'edge-light'
-    class: `light`
+    class: `light` // 'dark' | 'light' | 'edge-dark' | 'edge-light'
   }
 })
 
@@ -31,17 +29,8 @@ useSeoMeta({
       pageBottomWrapper: 'flex-0 relative'
     }"
   >
-    <div v-if="page.isLoading">
-      <div class="cursor-wait isolate absolute z-1000 inset-0 w-full flex flex-row flex-nowrap items-center justify-center h-[400px] min-h-[400px]">
-        <BtnSpinnerIcon
-          class="text-(--ui-color-design-plain-content-icon-secondary) size-[110px] animate-spin-slow"
-          aria-hidden="true"
-        />
-      </div>
-    </div>
-
     <!-- Header -->
-    <template v-if="!page.isLoading" #content-top>
+    <template #content-top>
       <div class="w-full flex flex-col gap-[4px]">
         <div class="flex items-center gap-[12px]">
           <div class="w-full flex items-center gap-[20px]">
@@ -64,11 +53,9 @@ useSeoMeta({
     </template>
 
     <!-- Content -->
-    <div v-show="!page.isLoading">
-      <slot />
-    </div>
+    <slot />
 
-    <template v-if="!!slots['footer'] && !page.isLoading" #content-bottom>
+    <template v-if="!!slots['footer']" #content-bottom>
       <div class="absolute inset-x-0 bottom-0 light bg-(--popup-window-background-color) fixed flex items-center justify-center gap-3 border-t-1 border-t-(--ui-color-divider-less) shadow-top-md py-[9px] px-2 pr-(--scrollbar-width)">
         <div class="flex flex-row gap-[10px]">
           <slot name="footer" />

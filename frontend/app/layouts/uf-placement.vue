@@ -2,8 +2,7 @@
 // region Init ////
 useHead({
   bodyAttrs: {
-    // 'dark' | 'light' | 'edge-dark' | 'edge-light'
-    class: `light light:[--air-theme-bg-color:#f9fafb]`
+    class: `light light:[--air-theme-bg-color:#f9fafb]` // 'dark' | 'light' | 'edge-dark' | 'edge-light'
   }
 })
 // endregion ////

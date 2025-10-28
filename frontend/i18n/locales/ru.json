@@ -1,18 +1,5 @@
 {
-  "layout": {
-    "default": {
-      "sidebarHeader": {
-        "title": "Bitrix24::Frame"
-      },
-      "navbarHeader": {
-        "home": "Главная",
-        "pages": "Страницы",
-        "optionApp": "Настройки приложения",
-        "optionUser": "Пользовательские настройки",
-        "feedback": "Обратная связь"
-      }
-    }
-  },
+  "layout": {},
   "page": {
     "index": {
       "seo": {

@@ -40,7 +40,9 @@ services:
   cloudpub-front:
     profiles: ["cloudpub-front"]
     container_name: cloudpubFront
-    image: cloudpub/cloudpub:latest-arm64
+    image: cloudpub/cloudpub:latest
+    # for arm64 proc
+    # image: cloudpub/cloudpub:latest-arm64
     restart: unless-stopped
     env_file: .env
     environment:
@@ -103,7 +105,9 @@ services:
   cloudpub-php:
     profiles: ["cloudpub-php"]
     container_name: cloudpubApi
-    image: cloudpub/cloudpub:latest-arm64
+    image: cloudpub/cloudpub:latest
+    # for arm64 proc
+    # image: cloudpub/cloudpub:latest-arm64
     restart: unless-stopped
     env_file: .env
     environment:
@@ -123,17 +127,43 @@ services:
     build:
       context: ./backends/python
       dockerfile: api/Dockerfile
+      target: ${BUILD_TARGET:-dev}
     container_name: api
+    env_file: .env
     environment:
       - DB_HOST=database
+      - PORT=8000
+    expose:
+      - "8000"
     ports:
       - "8000:8000"
     volumes:
-      - ./backends/python/api:var/www/api
+      - ./backends/python/api:/var/www/api
       - ./backends/python/shared:/var/www/shared
       - ./logs/python:/var/log/python
     depends_on:
       - database
+    networks:
+      - internal-net
+
+  # (~) Cloudpub - for python
+  cloudpub-python:
+    profiles: ["cloudpub-python"]
+    container_name: cloudpubApiPython
+    image: cloudpub/cloudpub:latest
+    # for arm64 proc
+    # image: cloudpub/cloudpub:latest-arm64
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - TOKEN=${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
+      - HTTP=frontend:3000,api-python:8000
+    command: run
+    depends_on:
+      - frontend
+      - api-python
+    volumes:
+      - cloudpub-config:/home/cloudpub
     networks:
       - internal-net
 
@@ -168,6 +198,8 @@ services:
     profiles: [ "cloudpub-node" ]
     container_name: cloudpubApi
     image: cloudpub/cloudpub:latest
+    # for arm64 proc
+    # image: cloudpub/cloudpub:latest-arm64
     restart: unless-stopped
     env_file: .env
     environment:

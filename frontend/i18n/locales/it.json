@@ -1,18 +1,5 @@
 {
-  "layout": {
-    "default": {
-      "sidebarHeader": {
-        "title": "Bitrix24::Frame"
-      },
-      "navbarHeader": {
-        "home": "Principale",
-        "pages": "Pagine",
-        "optionApp": "Impostazioni applicazione",
-        "optionUser": "Impostazioni utente",
-        "feedback": "Feedback"
-      }
-    }
-  },
+  "layout": {},
   "page": {
     "index": {
       "seo": {
@@ -23,19 +10,19 @@
       },
       "message": {
         "title": "Ciao!",
-        "line1": "Testiamo il funzionamento dell'applicazione in Bitrix24. Apri l'applicazione nel pannello laterale."
+        "line1": "Testiamo il funzionamento dell'applicazione in Bitrix24."
       }
     },
     "install": {
       "seo": {
-        "title": "Installazione applicazione"
+        "title": "Installazione dell'applicazione"
       },
       "ui": {
-        "title": "Installazione applicazione"
+        "title": "Installazione dell'applicazione"
       },
       "step": {
         "init": {
-          "caption": "Attendere prego..."
+          "caption": "Bisogna aspettare un po'..."
         },
         "demo": {
           "caption": "Esempi..."
@@ -52,31 +39,18 @@
         "crm": {
           "caption": "CRM..."
         },
+        "serverSide": {
+          "caption": "Script lato server..."
+        },
         "finish": {
           "caption": "Completamento"
         }
       }
     },
-    "main": {
-      "seo": {
-        "title": "[playground] Test dell'applicazione"
-      },
-      "message": {
-        "line1": "Apri ogni pagina nel menu in alto e scopri come funziona tutto.",
-        "line2": "Non dimenticare di provare la modalità colore.",
-        "scopes": "Autorizzazioni richieste (scopes):"
-      }
-    },
-    "feedback": {
-      "seo": {
-        "title": "Modulo di feedback",
-        "description": "Esempio di modulo di feedback."
-      }
-    },
     "app-options": {
       "seo": {
-        "title": "Impostazioni applicazione",
-        "description": "Esempio di gestione delle impostazioni dell'applicazione."
+        "title": "Impostazioni dell'applicazione",
+        "description": "Esempio di lavoro con le impostazioni dell'applicazione."
       },
       "actions": {
         "save": "Salva",
@@ -89,201 +63,52 @@
       "option": {
         "history": {
           "title": "Cronologia operazioni",
-          "alert": "Dimostrazione del funzionamento della proprietà. Analogamente, è possibile configurare qualsiasi proprietà dell'applicazione.",
-          "property": "Per quanti giorni conservare la cronologia"
+          "alert": "Dimostrazione del lavoro con la proprietà. Analogamente, è possibile configurare qualsiasi proprietà dell'applicazione.",
+          "property_1": "Per quanti giorni conservare la cronologia",
+          "property_2": "Titolo dell'evento",
+          "property_bool": "Trend ascendente?"
         },
         "present": {
           "title": "Registro eventi",
-          "alert": "Ogni accesso dei dipendenti viene visualizzato nel Registro eventi. Puoi sempre verificare chi, quando e da quali indirizzi IP ha effettuato l'accesso a Bitrix24.",
-          "action": "Vai al registro eventi"
+          "alert": "Ogni accesso dei dipendenti viene visualizzato nel Registro eventi. Puoi sempre verificare chi, quando e da quali indirizzi IP ha effettuato l'accesso a Bitrix24."
         }
-      }
-    },
-    "user-options": {
-      "seo": {
-        "title": "Impostazioni utente",
-        "description": "Esempio di gestione delle impostazioni utente dell'applicazione."
-      },
-      "actions": {
-        "save": "Salva",
-        "cancel": "Annulla"
-      },
-      "error": {
-        "title": "Errore"
-      },
-      "option": {
-        "demo": {
-          "title": "Esempio",
-          "alert": "Dimostrazione del funzionamento della proprietà. Analogamente, è possibile configurare qualsiasi proprietà utente.",
-          "property_someValue_1": "Numero arbitrario",
-          "property_someValue_2": "Stringa arbitraria",
-          "property_isShowChangeColorMode": "Mostra il pulsante per cambiare colore?"
-        }
-      }
-    },
-    "base_app-info": {
-      "nav": "Applicazione",
-      "seo": {
-        "title": "Applicazione",
-        "description": "Informazioni sull'applicazione."
-      },
-      "message": {
-        "line1": "Questi sono i tag chiave per l'identificazione, il controllo e la diagnostica dell'applicazione.",
-        "id": "identificatore",
-        "code": "codice",
-        "version": "versione",
-        "status": "stato",
-        "isInstalled": "stato installazione"
-      }
-    },
-    "base_license-info": {
-      "nav": "Licenza e pagamento",
-      "seo": {
-        "title": "Licenza e pagamento",
-        "description": "Designazione del piano tariffario con indicazione della regione come prefisso."
-      },
-      "message": {
-        "line1": "È possibile avvisare in anticipo l'utente dell'avvicinarsi della scadenza del rinnovo.",
-        "languageId": "codice lingua",
-        "license": "designazione tariffa con indicazione della regione come prefisso",
-        "licenseType": "designazione tariffa interna senza indicazione della regione",
-        "licensePrevious": "licenza precedente",
-        "licenseFamily": "designazione tariffa senza indicazione della regione",
-        "isSelfHosted": "flag che indica se Bitrix24 è la versione on-premise o cloud",
-        "isExpired": "flag che indica se il periodo a pagamento o di prova è scaduto",
-        "days": "numero di giorni rimanenti fino alla fine del periodo a pagamento o di prova"
-      }
-    },
-    "base_specific-methods": {
-      "nav": "Metodi spec.",
-      "seo": {
-        "title": "Metodi speciali",
-        "description": "Test dei metodi speciali."
-      },
-      "message": {
-        "line1": "Qui viene mostrato il funzionamento dei metodi disponibili nell'applicazione incorporata tramite Frame.",
-        "line2": "Se apri le impostazioni dell'applicazione e le salvi, su questa pagina vedrai un messaggio push che richiede di aggiornare la pagina.",
-        "selectUsers": "Selezione utente",
-        "selectUsersDescription": "usa `$b24.dialog.selectUsers` per selezionare un utente",
-        "makeImCallToVideo": "Chiamata video interna",
-        "makeImCallToVideoDescription": "usa `$b24.parent.imCallTo(xxx, true)` per avviare una chiamata",
-        "makeImCallToVoice": "Chiamata vocale interna",
-        "makeImCallToVoiceDescription": "usa `$b24.parent.imCallTo(xxx, false)` per avviare una chiamata",
-        "makeImOpenMessenger": "Chat",
-        "makeImOpenMessengerDescription": "usa `$b24.parent.imOpenMessenger` per aprire la finestra di chat",
-        "makeImOpenHistory": "Cronologia chat",
-        "makeImOpenHistoryDescription": "usa `$b24.parent.imOpenHistory` per aprire la cronologia chat",
-        "makeImPhoneTo": "Chiamata tramite telefonia",
-        "makeImPhoneToDescription": "usa `$b24.parent.imPhoneTo` per chiamare",
-        "makeSendPullCommand": "Messaggio Pull",
-        "makeSendPullCommandDescription": "usa `pull.application.event.add` per inviare un messaggio"
-      },
-      "actions": {
-        "clear": "Pulisci log",
-        "reload": "Ricarica",
-        "select": "Seleziona",
-        "videoCall": "Videochiamata",
-        "voiceCall": "Chiamata vocale",
-        "imOpenMessenger": "Chat",
-        "imOpenMessengerHistory": "Cronologia chat",
-        "makeImPhoneTo": "Chiama",
-        "makeSendPullCommand": "Invia"
-      },
-      "error": {
-        "notSelect": "Utente non selezionato.",
-        "tryCallToSelf": "Non puoi chiamare te stesso.",
-        "emptyNumber": "Numero di telefono non specificato per la chiamata."
-      }
-    },
-    "base_specific-parameters": {
-      "nav": "Param. spec.",
-      "seo": {
-        "title": "Parametri speciali",
-        "description": "Elenco dei parametri speciali per la versione on-premise e cloud."
-      },
-      "message": {
-        "line1": "Ci sono alcune differenze tra le versioni on-premise e cloud di Bitrix24.",
-        "isSelfHosted": "flag che indica se Bitrix24 è la versione on-premise o cloud",
-        "primaryKeyIncrementValue": "valore di incremento per i campi di tipo ID",
-        "mainSettings": "link alle impostazioni",
-        "ufList": "link all'elenco Uf",
-        "ufPage": "link a Uf"
-      }
-    },
-    "base_lang": {
-      "nav": "I18n",
-      "seo": {
-        "title": "I18n",
-        "description": "Dimostra l'output dei messaggi linguistici in base alla lingua di Bitrix24."
-      },
-      "message": {
-        "line1": "Prova a cambiare la lingua di Bitrix24.",
-        "message1": "primo messaggio",
-        "message2": "secondo messaggio"
-      }
-    },
-    "base_feedback": {
-      "nav": "Feedback",
-      "seo": {
-        "title": "Modulo di feedback",
-        "description": "Esempi di campi per un modulo di feedback."
-      },
-      "message": {
-        "line1": "Puoi incorporare nel tuo applicativo un modulo CRM dal tuo Bitrix24 e trasferirvi campi speciali.",
-        "line2": "Quando l'utente compila il modulo, nel tuo Bitrix24 saranno disponibili dati sull'applicazione, sulla tariffa, ecc.",
-        "app_code": "codice",
-        "app_status": "stato",
-        "payment_expired": "flag che indica se il periodo a pagamento o di prova è scaduto",
-        "days": "numero di giorni rimanenti fino alla fine del periodo a pagamento o di prova",
-        "b24_plan": "designazione tariffa con indicazione della regione come prefisso",
-        "c_name": "nome utente",
-        "c_last_name": "cognome utente",
-        "hostname": "indirizzo Bitrix24"
-      }
-    },
-    "base_currency": {
-      "nav": "Valute",
-      "seo": {
-        "title": "Valute",
-        "description": "Elenco delle valute di Bitrix24."
-      },
-      "actions": {
-        "create": "Crea"
-      },
-      "message": {
-        "line1": "Mostrare un importo formattato è molto semplice."
-      },
-      "list": {
-        "code": "Codice",
-        "title": "Nome",
-        "literal": "Simbolo",
-        "value": "Formattazione",
-        "baseCurrency": "Codice valuta base"
       }
     }
   },
   "uf": {
     "demo": {
+      "alert": {
+        "title": "Dimostrazione del lavoro con la proprietà.",
+        "description": "Analogamente, è possibile configurare qualsiasi proprietà dell'applicazione"
+      },
       "field": {
-        "label": "Esempio campo",
+        "label": "Esempio di campo",
         "description": "La modifica del valore porta alla ricostruzione del grafico",
         "hint": "Trend"
+      },
+      "action": {
+        "settings": "Apri impostazioni"
       }
     }
   },
   "placement": {
     "crm_deal_detail_tab": {
       "seo": {
-        "title": "Incorpora nella scheda affare",
+        "title": "Incorpora nella scheda dell'affare",
         "description": "Dimostrazione."
       },
-      "field": {
-        "label": "Esempio campo",
-        "description": "La modifica del valore porta alla ricostruzione del grafico",
-        "hint": "Trend"
-      }
+      "action": "Mescola"
     }
   },
-  "message1": "Chi dorme non piglia pesci",
-  "message2": "Un'immagine vale più di mille parole"
+  "components": {
+    "backendStatus": {
+      "title": "Stato del backend",
+      "description": {
+        "healthy": "Il backend è sano ({msg})",
+        "checking": "Verifica dello stato operativo del backend...",
+        "error": "Errore di connessione interna"
+      },
+      "action": "Aggiorna stato"
+    }
+  }
 }

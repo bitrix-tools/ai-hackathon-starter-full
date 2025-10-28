@@ -1,18 +1,5 @@
 {
-  "layout": {
-    "default": {
-      "sidebarHeader": {
-        "title": "Bitrix24::Frame"
-      },
-      "navbarHeader": {
-        "home": "Ana Sayfa",
-        "pages": "Sayfalar",
-        "optionApp": "Uygulama Ayarları",
-        "optionUser": "Kullanıcı Ayarları",
-        "feedback": "Geri Bildirim"
-      }
-    }
-  },
+  "layout": {},
   "page": {
     "index": {
       "seo": {
@@ -23,7 +10,7 @@
       },
       "message": {
         "title": "Merhaba!",
-        "line1": "Bitrix24'te uygulamanın çalışmasını test edelim. Uygulamayı slaytçıda açın."
+        "line1": "Bitrix24'te uygulamanın çalışmasını test edelim."
       }
     },
     "install": {
@@ -52,31 +39,18 @@
         "crm": {
           "caption": "CRM..."
         },
+        "serverSide": {
+          "caption": "Sunucu Taraflı Scriptler..."
+        },
         "finish": {
           "caption": "Tamamlama"
         }
       }
     },
-    "main": {
-      "seo": {
-        "title": "[playground] Uygulama Testi"
-      },
-      "message": {
-        "line1": "Üst menüdeki her sayfayı açın ve üzerinde her şeyin nasıl çalıştığını inceleyin.",
-        "line2": "Renk modu ile oynamayı unutmayın.",
-        "scopes": "Gerekli izinler (scopes):"
-      }
-    },
-    "feedback": {
-      "seo": {
-        "title": "Geri Bildirim Formu",
-        "description": "Geri bildirim formu örneği."
-      }
-    },
     "app-options": {
       "seo": {
         "title": "Uygulama Ayarları",
-        "description": "Uygulama ayarları ile çalışma örneği."
+        "description": "Uygulama ayarlarıyla çalışma örneği."
       },
       "actions": {
         "save": "Kaydet",
@@ -89,185 +63,31 @@
       "option": {
         "history": {
           "title": "İşlem Geçmişi",
-          "alert": "Özellikle çalışma demonstrasyonu. Benzer şekilde, herhangi bir uygulama özelliği yapılandırılabilir.",
-          "property": "Geçmiş kaç gün saklansın"
+          "alert": "Özellikle çalışmanın gösterimi. Benzer şekilde, uygulamanın herhangi bir özelliği yapılandırılabilir.",
+          "property_1": "Geçmiş kaç gün saklansın",
+          "property_2": "Olay başlığı",
+          "property_bool": "Yükselen trend?"
         },
         "present": {
           "title": "Olay Günlüğü",
-          "alert": "Çalışanların her girişi Olay Günlüğü'nde görüntülenir. Bitrix24'e kimin, ne zaman ve hangi IP adreslerinden girdiğini her zaman kontrol edebilirsiniz.",
-          "action": "Olay günlüğüne git"
+          "alert": "Personelin her girişi Olay Günlüğü'nde görüntülenir. Kimin, ne zaman ve hangi IP adreslerinden Bitrix24'e giriş yaptığını her zaman kontrol edebilirsiniz."
         }
-      }
-    },
-    "user-options": {
-      "seo": {
-        "title": "Kullanıcı Ayarları",
-        "description": "Uygulama kullanıcı ayarları ile çalışma örneği."
-      },
-      "actions": {
-        "save": "Kaydet",
-        "cancel": "İptal"
-      },
-      "error": {
-        "title": "Hata"
-      },
-      "option": {
-        "demo": {
-          "title": "Örnek",
-          "alert": "Özellikle çalışma demonstrasyonu. Benzer şekilde, herhangi bir kullanıcı özelliği yapılandırılabilir.",
-          "property_someValue_1": "Rastgele sayı",
-          "property_someValue_2": "Rastgele dize",
-          "property_isShowChangeColorMode": "Renk değiştirme düğmesi gösterilsin mi?"
-        }
-      }
-    },
-    "base_app-info": {
-      "nav": "Uygulama",
-      "seo": {
-        "title": "Uygulama",
-        "description": "Uygulama hakkında bilgi."
-      },
-      "message": {
-        "line1": "Bunlar, uygulamayı tanımlamak, kontrol etmek ve teşhis etmek için temel etiketlerdir.",
-        "id": "tanımlayıcı",
-        "code": "kod",
-        "version": "versiyon",
-        "status": "durum",
-        "isInstalled": "kurulum durumu"
-      }
-    },
-    "base_license-info": {
-      "nav": "Lisans ve Ödeme",
-      "seo": {
-        "title": "Lisans ve Ödeme",
-        "description": "Bölgeyi önek olarak belirten tarif planı tanımı."
-      },
-      "message": {
-        "line1": "Kullanıcıyı yenileme süresinin gelmesi konusunda önceden uyarabilirsiniz.",
-        "languageId": "dil kodu",
-        "license": "bölge öneki ile tarife tanımı",
-        "licenseType": "bölge belirtmeden iç tarife tanımı",
-        "licensePrevious": "önceki lisans",
-        "licenseFamily": "bölge belirtmeden tarife tanımı",
-        "isSelfHosted": "Bitrix24'ün kutu veya bulut sürümü olup olmadığını belirten bayrak",
-        "isExpired": "ödenen veya deneme süresinin dolup dolmadığını belirten bayrak",
-        "days": "ödenen veya deneme süresinin bitmesine kalan gün sayısı"
-      }
-    },
-    "base_specific-methods": {
-      "nav": "Özel Metodlar",
-      "seo": {
-        "title": "Özel Metodlar",
-        "description": "Özel metodların test edilmesi."
-      },
-      "message": {
-        "line1": "Burada, Frame üzerinden gömülü uygulamalarda bulunan metodların çalışması gösterilmektedir.",
-        "line2": "Uygulama ayarlarını açıp kaydederseniz, bu sayfada sayfayı yenileme isteği içeren bir push mesajı görürsünüz.",
-        "selectUsers": "Kullanıcı seçimi",
-        "selectUsersDescription": "kullanıcı seçmek için `$b24.dialog.selectUsers` kullanın",
-        "makeImCallToVideo": "Dahili video araması",
-        "makeImCallToVideoDescription": "aramayı başlatmak için `$b24.parent.imCallTo(xxx, true)` kullanın",
-        "makeImCallToVoice": "Dahili sesli arama",
-        "makeImCallToVoiceDescription": "aramayı başlatmak için `$b24.parent.imCallTo(xxx, false)` kullanın",
-        "makeImOpenMessenger": "Sohbet",
-        "makeImOpenMessengerDescription": "sohbet penceresini açmak için `$b24.parent.imOpenMessenger` kullanın",
-        "makeImOpenHistory": "Sohbet geçmişi",
-        "makeImOpenHistoryDescription": "sohbet geçmişini açmak için `$b24.parent.imOpenHistory` kullanın",
-        "makeImPhoneTo": "Telefoni üzerinden arama",
-        "makeImPhoneToDescription": "aramak için `$b24.parent.imPhoneTo` kullanın",
-        "makeSendPullCommand": "Pull mesajı",
-        "makeSendPullCommandDescription": "mesaj göndermek için `pull.application.event.add` kullanın"
-      },
-      "actions": {
-        "clear": "Günlüğü temizle",
-        "reload": "Yeniden yükle",
-        "select": "Seç",
-        "videoCall": "Video Araması",
-        "voiceCall": "Sesli Arama",
-        "imOpenMessenger": "Sohbet",
-        "imOpenMessengerHistory": "Sohbet Geçmişi",
-        "makeImPhoneTo": "Ara",
-        "makeSendPullCommand": "Gönder"
-      },
-      "error": {
-        "notSelect": "Kullanıcı seçilmedi.",
-        "tryCallToSelf": "Kendinizi arayamazsınız.",
-        "emptyNumber": "Arama için telefon numarası belirtilmedi."
-      }
-    },
-    "base_specific-parameters": {
-      "nav": "Özel Parametreler",
-      "seo": {
-        "title": "Özel Parametreler",
-        "description": "Kutu ve bulut sürümleri için özel parametreler listesi."
-      },
-      "message": {
-        "line1": "Bitrix24'ün kutu ve bulut sürümleri arasında birkaç fark vardır.",
-        "isSelfHosted": "Bitrix24'ün kutu veya bulut sürümü olup olmadığını belirten bayrak",
-        "primaryKeyIncrementValue": "ID tipindeki alanlar için artış değeri",
-        "mainSettings": "ayarlara bağlantı",
-        "ufList": "Uf listesine bağlantı",
-        "ufPage": "Uf sayfasına bağlantı"
-      }
-    },
-    "base_lang": {
-      "nav": "I18n",
-      "seo": {
-        "title": "I18n",
-        "description": "Bitrix24 yerel ayarına bağlı olarak dil mesajlarının çıktısını gösterir."
-      },
-      "message": {
-        "line1": "Bitrix24 dilini değiştirmeyi deneyin.",
-        "message1": "ilk mesaj",
-        "message2": "ikinci mesaj"
-      }
-    },
-    "base_feedback": {
-      "nav": "Geri Bildirim",
-      "seo": {
-        "title": "Geri Bildirim Formu",
-        "description": "Geri bildirim formu için alan örnekleri."
-      },
-      "message": {
-        "line1": "Uygulamanıza Bitrix24'inizden bir CRM formu gömebilir ve ona özel alanlar iletebilirsiniz.",
-        "line2": "Kullanıcı formu doldurduğunda, Bitrix24'inizde uygulama, tarife vb. hakkında veriler erişilebilir olacaktır.",
-        "app_code": "kod",
-        "app_status": "durum",
-        "payment_expired": "ödenen veya deneme süresinin dolup dolmadığını belirten bayrak",
-        "days": "ödenen veya deneme süresinin bitmesine kalan gün sayısı",
-        "b24_plan": "bölge öneki ile tarife tanımı",
-        "c_name": "kullanıcı adı",
-        "c_last_name": "kullanıcı soyadı",
-        "hostname": "Bitrix24 adresi"
-      }
-    },
-    "base_currency": {
-      "nav": "Para Birimleri",
-      "seo": {
-        "title": "Para Birimleri",
-        "description": "Bitrix24 para birimleri listesi."
-      },
-      "actions": {
-        "create": "Oluştur"
-      },
-      "message": {
-        "line1": "Biçimlendirilmiş bir tutarı göstermek çok kolaydır."
-      },
-      "list": {
-        "code": "Kod",
-        "title": "İsim",
-        "literal": "Sembol",
-        "value": "Biçimlendirme",
-        "baseCurrency": "Temel para birimi kodu"
       }
     }
   },
   "uf": {
     "demo": {
+      "alert": {
+        "title": "Özellikle çalışmanın gösterimi.",
+        "description": "Benzer şekilde, uygulamanın herhangi bir özelliği yapılandırılabilir"
+      },
       "field": {
         "label": "Örnek alan",
-        "description": "Değerin değiştirilmesi grafiğin yeniden oluşturulmasına neden olur",
-        "hint": "Eğilim"
+        "description": "Değerin değişmesi grafiğin yeniden oluşturulmasına neden olur",
+        "hint": "Trend"
+      },
+      "action": {
+        "settings": "Ayarları aç"
       }
     }
   },
@@ -275,15 +95,20 @@
     "crm_deal_detail_tab": {
       "seo": {
         "title": "Kart işlemine gömme",
-        "description": "Demonstrasyon."
+        "description": "Gösterim."
       },
-      "field": {
-        "label": "Örnek alan",
-        "description": "Değerin değiştirilmesi grafiğin yeniden oluşturulmasına neden olur",
-        "hint": "Eğilim"
-      }
+      "action": "Karıştır"
     }
   },
-  "message1": "Erken kalkan yol alır",
-  "message2": "Bin dinle, bir gör"
+  "components": {
+    "backendStatus": {
+      "title": "Backend Durumu",
+      "description": {
+        "healthy": "Backend sağlıklı ({msg})",
+        "checking": "Backend çalışabilirliği kontrol ediliyor...",
+        "error": "Dahili bağlantı hatası"
+      },
+      "action": "Durumu güncelle"
+    }
+  }
 }

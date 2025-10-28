@@ -206,7 +206,7 @@ JWT token is not transferred.
   - APP_SID: string
   - AUTH_ID: string
   - AUTH_EXPIRES: number
-  - REFRESH_TOKEN: string
+  - REFRESH_ID: string
   - member_id: string
   - user_id: number
   - PLACEMENT: string
@@ -225,7 +225,7 @@ Test
 ```bash
 curl -X POST http://localhost:8000/api/install \
   -H "Content-Type: application/json" \
-  -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_TOKEN":"176xxxe","member_id":"a3xxx22","user_id":"1","PLACEMENT":"DEFAULT","PLACEMENT_OPTIONS":"{"any":"6\/"}"}'
+  -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_ID":"176xxxe","member_id":"a3xxx22","user_id":"1","PLACEMENT":"DEFAULT","PLACEMENT_OPTIONS":"{"any":"6\/"}"}'
 ```
 
 ### `/api/getToken`
@@ -240,10 +240,13 @@ The token lifetime is `1 hour`.
 
 - method `POST`
 - params:
+  - DOMAIN': string
+  - PROTOCOL: number
+  - LANG: string
   - APP_SID: string
   - AUTH_ID: string
   - AUTH_EXPIRES: number
-  - REFRESH_TOKEN: string
+  - REFRESH_ID: string
   - member_id: string
   - user_id: number
 - response:
@@ -260,5 +263,5 @@ Test
 ```bash
 curl -X POST http://localhost:8000/api/getToken \
   -H "Content-Type: application/json" \
-  -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_TOKEN":"176xxxe","member_id":"a3xxx22","member_id":1}'
+  -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_ID":"176xxxe","member_id":"a3xxx22","member_id":1}'
 ```

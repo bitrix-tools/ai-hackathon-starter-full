@@ -1,6 +1,8 @@
-const express = require('express');
-const cors = require('cors');
-const { Pool } = require('pg');
+import express from 'express';
+import cors from 'cors';
+import { Pool } from 'pg';
+import jwt from 'jsonwebtoken';
+import verifyToken from './utils/verifyToken.js';
 
 const app = express();
 app.use(cors());
@@ -14,7 +16,7 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD || 'apppass'
 });
 
-app.get('/api/health', (req, res) => {
+app.get('/api/health', verifyToken, (req, res) => {
   res.json({
     status: 'healthy',
     backend: 'node',
@@ -22,7 +24,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-app.get('/api/enum', async (req, res) => {
+app.get('/api/enum', verifyToken, async (req, res) => {
   res.json([
     'option 1',
     'option 2',
@@ -30,7 +32,7 @@ app.get('/api/enum', async (req, res) => {
   ]);
 });
 
-app.get('/api/list', async (req, res) => {
+app.get('/api/list', verifyToken, async (req, res) => {
   res.json([
     'element 1',
     'element 2',
@@ -39,9 +41,22 @@ app.get('/api/list', async (req, res) => {
 });
 
 app.post('/api/install', async (req, res) => {
-  console.log(req.body)
+  console.log('/api/install', req.body);
   res.json({
     message: 'All success'
+  });
+});
+
+app.post('/api/getToken', async (req, res) => {
+  console.log('/api/getToken', req.body);
+  const appInfo = {
+    id: 1
+  };
+
+  const token = jwt.sign(appInfo, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+  res.json({
+    token: token
   });
 });
 

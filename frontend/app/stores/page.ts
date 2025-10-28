@@ -7,13 +7,11 @@ export const usePageStore = defineStore(
     // region State ////
     const title = ref('')
     const description = ref('')
-    const isLoading = ref(false)
     // endregion ////
 
     return {
       title,
-      description,
-      isLoading
+      description
     }
   }
 )
