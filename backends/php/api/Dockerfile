@@ -1,6 +1,7 @@
-FROM php:8.4-cli
+FROM php:8.4-fpm
 
 RUN apt-get update && apt-get install -y \
+    nginx \
     libzip-dev \
     zip \
     libssl-dev \
@@ -20,18 +21,18 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
 
 WORKDIR /var/www
 
-# Копируем composer.json из корня PHP бэкенда
-COPY ../composer.json ../composer.lock* ./
+# Copy nginx config
+COPY api/nginx.conf /etc/nginx/sites-available/default
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default && \
+    rm -f /etc/nginx/sites-enabled/default.conf
 
-# Устанавливаем зависимости
-RUN composer install --no-dev --optimize-autoloader
+# Copy PHP-FPM config
+COPY api/php-fpm.conf /usr/local/etc/php-fpm.d/zzz-custom.conf
 
-# Копируем код API и общие файлы
-COPY ../api ./api
-COPY ../shared ./shared
-
-WORKDIR /var/www/api
+# Copy entrypoint script
+COPY api/docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 EXPOSE 8000
 
-CMD ["php", "-S", "api-php:8000"]
+ENTRYPOINT ["docker-entrypoint.sh"]

@@ -77,6 +77,23 @@ COMPOSE_PROFILES= docker-compose up database frontend
 COMPOSE_PROFILES=php,worker docker-compose up -d
 ```
 
+## Getting started
+1. Create .env file from example file 
+```bash
+cp -pv .env.example .env
+
+```
+2. Register on ngrok or other tunneling service
+If you use cloudpub - enter api key in .env file
+If you use mackbook add `-arm64` prefix to the `image: cloudpub/cloudpub:latest`
+
+
+3. Register local application in your Bitrix24 portal
+
+4. Fill in .env file application parameters
+
+5. Install application
+
 ## API endpoints
 
 ### General principles
