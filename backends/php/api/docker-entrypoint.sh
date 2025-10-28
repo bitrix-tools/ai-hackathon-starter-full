@@ -25,6 +25,12 @@ if [ ! -f "bin/console" ]; then
 fi
 
 echo "Symfony application ready"
+
+# Create log directories
+mkdir -p /var/log/php/nginx
+mkdir -p /var/log/php/phpfpm
+mkdir -p /var/log/php/symfony
+
 echo "Starting PHP-FPM..."
 php-fpm -D
 

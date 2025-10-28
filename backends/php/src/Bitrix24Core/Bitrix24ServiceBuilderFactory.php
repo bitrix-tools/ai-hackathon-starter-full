@@ -38,6 +38,14 @@ readonly class Bitrix24ServiceBuilderFactory
     ) {
     }
 
+    public function createFromFrontendPayload(InstallPayload $payload): ServiceBuilder
+    {
+        return new ServiceBuilderFactory($this->eventDispatcher, $this->logger)->init(
+            $this->getApplicationProfile(),
+            $payload->authToken,
+            $payload->domain
+        );
+    }
 
     /**
      * @throws InvalidArgumentException
@@ -82,7 +90,7 @@ readonly class Bitrix24ServiceBuilderFactory
      * @throws InvalidArgumentException
      * @throws UnknownScopeCodeException
      */
-    private function getApplicationProfile(): ApplicationProfile
+    public function getApplicationProfile(): ApplicationProfile
     {
         try {
             //todo add validation

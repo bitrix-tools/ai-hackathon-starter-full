@@ -26,6 +26,9 @@ COPY api/nginx.conf /etc/nginx/sites-available/default
 RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default && \
     rm -f /etc/nginx/sites-enabled/default.conf
 
+# Copy PHP-FPM config
+COPY api/php-fpm.conf /usr/local/etc/php-fpm.d/zzz-custom.conf
+
 # Copy entrypoint script
 COPY api/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
