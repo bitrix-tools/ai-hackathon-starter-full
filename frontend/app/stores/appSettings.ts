@@ -76,6 +76,7 @@ export const useAppSettingsStore = defineStore(
     // endregion ////
 
     return {
+      status,
       version,
       isTrial,
       setB24,

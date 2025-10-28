@@ -46,11 +46,7 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       tailwindcss()
-    ],
-    // @todo remove this
-    optimizeDeps: {
-      exclude: ['@bitrix24/b24ui-nuxt']
-    }
+    ]
   },
 
   i18n: {

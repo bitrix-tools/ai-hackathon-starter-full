@@ -83,6 +83,7 @@ export const useApiStore = defineStore(
       }
 
       const user = useUserStore()
+      const appSettings = useAppSettingsStore()
 
       const response = await getToken({
         DOMAIN: withoutTrailingSlash(authData.domain).replace('https://', '').replace('http://', ''),
@@ -93,7 +94,8 @@ export const useApiStore = defineStore(
         AUTH_EXPIRES: authData.expires_in,
         REFRESH_ID: authData.refresh_token,
         member_id: authData.member_id,
-        user_id: user.id
+        user_id: user.id,
+        status: appSettings.status
       })
 
       tokenJWT.value = response.token
