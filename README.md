@@ -85,6 +85,8 @@ cp -pv .env.example .env
 ```
 2. Register on ngrok or other tunneling service
 If you use cloudpub - enter api key in .env file
+If you use mackbook add `-arm64` prefix to the `image: cloudpub/cloudpub:latest`
+
 
 3. Register local application in your Bitrix24 portal
 
