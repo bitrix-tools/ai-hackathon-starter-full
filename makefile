@@ -1,4 +1,4 @@
-.PHONY: dev-front dev-php dev-python dev-node prod-php prod-python prod-node status ps down down-all logs logs-nginxproxy clean composer-install composer-update composer-dumpautoload composer
+.PHONY: dev-front dev-php dev-python dev-node prod-php prod-python prod-node status ps down down-all logs logs-nginxproxy clean composer-install composer-update composer-dumpautoload composer db-create db-migrate db-migrate-create db-schema-update db-schema-validate
 
 # Variables
 DOCKER_COMPOSE = docker compose
@@ -41,6 +41,23 @@ composer-dumpautoload:
 .PHONY: composer
 composer:
 	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www api-php composer $(filter-out $@,$(MAKECMDGOALS))
+
+# Doctrine/Symfony database commands
+.PHONY: dev-php-db-create dev-php-db-migrate dev-php-db-migrate-create dev-php-db-schema-update dev-php-db-schema-validate
+dev-php-db-create:
+	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www --entrypoint "php" api-php bin/console doctrine:database:create --if-not-exists
+
+dev-php-db-migrate:
+	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www --entrypoint "php" api-php bin/console doctrine:migrations:migrate --no-interaction
+
+dev-php-db-migrate-create:
+	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www --entrypoint "php" api-php bin/console make:migration --no-interaction
+
+dev-php-db-schema-update:
+	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www --entrypoint "php" api-php bin/console doctrine:schema:update --force
+
+dev-php-db-schema-validate:
+	COMPOSE_PROFILES=php $(DOCKER_COMPOSE) run --rm --workdir /var/www --entrypoint "php" api-php bin/console doctrine:schema:validate
 
 
 
@@ -98,3 +115,4 @@ db-backup:
 
 db-restore:
 	docker compose exec -T database psql -U appuser appdb < $(file)
+
