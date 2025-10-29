@@ -12,6 +12,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./infrastructure/database/init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./logs/postgres:/var/log/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-appuser} -d ${DB_NAME:-appdb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     networks:
       - internal-net
 
@@ -78,7 +83,8 @@ services:
       - ./backends/php/:/var/www
       - ./logs/php:/var/log/php
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     networks:
       - internal-net
 
@@ -99,7 +105,8 @@ services:
       - ./backends/php/:/var/www
       - ./logs/php:/var/log/php
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     networks:
       - internal-net
     stdin_open: true

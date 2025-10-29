@@ -5,6 +5,32 @@ echo "Starting Symfony application..."
 
 cd /var/www
 
+# Function to wait for database
+wait_for_db() {
+    echo "Waiting for PostgreSQL to be ready..."
+
+    # Extract database connection details from DATABASE_URL
+    DB_HOST=${DB_HOST:-database}
+    DB_PORT=${DB_PORT:-5432}
+    DB_USER=${DB_USER:-appuser}
+    DB_NAME=${DB_NAME:-appdb}
+
+    MAX_RETRIES=30
+    RETRY_COUNT=0
+
+    until PGPASSWORD=${DB_PASSWORD:-apppass} psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -c '\q' 2>/dev/null; do
+        RETRY_COUNT=$((RETRY_COUNT + 1))
+        if [ $RETRY_COUNT -ge $MAX_RETRIES ]; then
+            echo "ERROR: PostgreSQL is not available after $MAX_RETRIES attempts"
+            exit 1
+        fi
+        echo "PostgreSQL is unavailable - attempt $RETRY_COUNT/$MAX_RETRIES - sleeping"
+        sleep 2
+    done
+
+    echo "PostgreSQL is ready!"
+}
+
 if [ -f "composer.json" ]; then
     echo "Found composer.json, checking dependencies..."
 
@@ -26,6 +52,8 @@ fi
 
 echo "Symfony application ready"
 
+# Wait for database before any DB operations
+wait_for_db
 # Create log directories
 mkdir -p /var/log/php/nginx
 mkdir -p /var/log/php/phpfpm
