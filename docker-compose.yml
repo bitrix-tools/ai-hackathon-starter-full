@@ -102,7 +102,7 @@ services:
   # (~) Cloudpub - for php
   cloudpub-php:
     profiles: ["cloudpub-php"]
-    container_name: cloudpubApi
+    container_name: cloudpubApiPhp
     image: cloudpub/cloudpub:latest
     # for arm64 proc
     # image: cloudpub/cloudpub:latest-arm64
@@ -194,7 +194,7 @@ services:
   # (~) Cloudpub - for php
   cloudpub-node:
     profiles: [ "cloudpub-node" ]
-    container_name: cloudpubApi
+    container_name: cloudpubApiNode
     image: cloudpub/cloudpub:latest
     # for arm64 proc
     # image: cloudpub/cloudpub:latest-arm64
