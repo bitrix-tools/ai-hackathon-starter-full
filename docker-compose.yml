@@ -78,8 +78,6 @@ services:
       - database
     networks:
       - internal-net
-    stdin_open: true
-    tty: true
 
   php-cli:
     profiles: ["php", "php-cli"]
