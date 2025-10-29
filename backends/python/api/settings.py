@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 from config import config
@@ -9,7 +8,7 @@ SECRET_KEY = config.jwt_secret
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
-NUXT_PUBLIC_API_URL = os.getenv("NUXT_PUBLIC_API_URL")
+NUXT_PUBLIC_API_URL = config.app_base_url
 
 if NUXT_PUBLIC_API_URL:
     CSRF_TRUSTED_ORIGINS = [NUXT_PUBLIC_API_URL]
