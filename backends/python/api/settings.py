@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from config import config
@@ -7,6 +8,17 @@ BASE_DIR = Path(__file__).resolve().parent
 SECRET_KEY = config.jwt_secret
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
+
+NUXT_PUBLIC_API_URL = os.getenv("NUXT_PUBLIC_API_URL")
+
+if NUXT_PUBLIC_API_URL:
+    CSRF_TRUSTED_ORIGINS = [NUXT_PUBLIC_API_URL]
+
+    domain = NUXT_PUBLIC_API_URL.replace("https://", '').replace("http://", '')
+    ALLOWED_HOSTS = [domain, "localhost", "127.0.0.1"]
+else:
+    CSRF_TRUSTED_ORIGINS = []
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
