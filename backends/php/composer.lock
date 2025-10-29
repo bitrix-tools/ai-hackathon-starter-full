@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bitrix24/b24phpsdk.git",
-                "reference": "3ce75cf3a9bb420ac5eff331f4c4fd7b19bb5ca0"
+                "reference": "e76b28861d121bee9cd19677e6ccec8573b1b974"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bitrix24/b24phpsdk/zipball/3ce75cf3a9bb420ac5eff331f4c4fd7b19bb5ca0",
-                "reference": "3ce75cf3a9bb420ac5eff331f4c4fd7b19bb5ca0",
+                "url": "https://api.github.com/repos/bitrix24/b24phpsdk/zipball/e76b28861d121bee9cd19677e6ccec8573b1b974",
+                "reference": "e76b28861d121bee9cd19677e6ccec8573b1b974",
                 "shasum": ""
             },
             "require": {
@@ -90,7 +90,7 @@
                 "issues": "https://github.com/bitrix24/b24phpsdk/issues",
                 "source": "https://github.com/bitrix24/b24phpsdk/tree/dev"
             },
-            "time": "2025-10-18T20:07:14+00:00"
+            "time": "2025-10-29T07:25:01+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -1172,12 +1172,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "dd4e8fe78fe0ce914b5a0f2ffcdb2952911a57f6"
+                "reference": "01774c035c1ba6aa6e806337a2fc09715274979c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/dd4e8fe78fe0ce914b5a0f2ffcdb2952911a57f6",
-                "reference": "dd4e8fe78fe0ce914b5a0f2ffcdb2952911a57f6",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/01774c035c1ba6aa6e806337a2fc09715274979c",
+                "reference": "01774c035c1ba6aa6e806337a2fc09715274979c",
                 "shasum": ""
             },
             "require": {
@@ -1253,7 +1253,7 @@
                 "issues": "https://github.com/doctrine/orm/issues",
                 "source": "https://github.com/doctrine/orm/tree/3.6.x"
             },
-            "time": "2025-10-25T08:59:22+00:00"
+            "time": "2025-10-29T06:28:16+00:00"
         },
         {
             "name": "doctrine/persistence",

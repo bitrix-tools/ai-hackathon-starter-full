@@ -67,6 +67,9 @@ services:
     environment:
       DB_HOST: database
       NODE_ENV: ${NODE_ENV:-development}
+      BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID: ${CLIENT_ID:-enter_your_b24_app_client_id}
+      BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET: ${CLIENT_SECRET:-enter_your_b24_app_secret}
+      BITRIX24_PHP_SDK_APPLICATION_SCOPE: ${SCOPE:-enter_your_b24_app_scope}
     expose:
       - "8000"
     ports:
@@ -89,6 +92,9 @@ services:
     environment:
       DB_HOST: database
       NODE_ENV: ${NODE_ENV:-development}
+      BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID: ${CLIENT_ID:-enter_your_b24_app_client_id}
+      BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET: ${CLIENT_SECRET:-enter_your_b24_app_secret}
+      BITRIX24_PHP_SDK_APPLICATION_SCOPE: ${SCOPE:-enter_your_b24_app_scope}
     volumes:
       - ./backends/php/:/var/www
       - ./logs/php:/var/log/php
