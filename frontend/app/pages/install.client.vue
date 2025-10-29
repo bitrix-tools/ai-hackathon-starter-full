@@ -180,6 +180,7 @@ const steps = ref<Record<string, IStep>>({
         AUTH_ID: authData.access_token,
         AUTH_EXPIRES: authData.expires_in,
         REFRESH_ID: authData.refresh_token,
+        REFRESH_TOKEN: authData.refresh_token,
         member_id: authData.member_id,
         user_id: Number(steps.value.init?.data?.profile.ID),
         status: steps.value.init?.data?.appInfo.STATUS,
