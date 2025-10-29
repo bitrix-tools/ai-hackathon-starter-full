@@ -61,7 +61,8 @@ services:
     profiles: ["php"]
     build:
       context: ./backends/php
-      dockerfile: docker/php-fpm/Dockerfile
+      # dockerfile: docker/php-fpm/Dockerfile
+      dockerfile: docker/php-cli/Dockerfile
     container_name: api
     env_file: .env
     environment:
@@ -72,17 +73,18 @@ services:
     ports:
       - "8000:8000"
     volumes:
-#      - ./backends/php/api:/var/www/api
-#      - ./backends/php/shared:/var/www/shared
       - ./backends/php/:/var/www
       - ./logs/php:/var/log/php
     depends_on:
       - database
     networks:
       - internal-net
+    stdin_open: true
+    tty: true
 
   php-cli:
-    profiles: ["php", "php-cli"]
+    # profiles: ["php", "php-cli"]
+    profiles: ["php-cli"]
     build:
       context: ./backends/php
       dockerfile: docker/php-cli/Dockerfile

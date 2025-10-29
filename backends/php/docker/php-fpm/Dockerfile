@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
       bcmath \
       sockets \
       pdo_pgsql \
-      pgsql \
+      pgsql
 
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
