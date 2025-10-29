@@ -91,16 +91,30 @@ const steps = ref<Record<string, IStep>>({
       }
       const exists = (steps.value.init?.data?.placementList as { placement: string, handler: string }[]).some(item => item.placement === key.placement && item.handler === key.handler )
       if (exists) {
+        await $b24.callBatch([
+          {
+            method: 'placement.unbind',
+            params: {
+              PLACEMENT: key.placement
+            }
+          },
+          {
+            method: 'placement.bind',
+            params: {
+              PLACEMENT: key.placement,
+              HANDLER: key.handler,
+              TITLE: '[demo] Some Tab',
+              OPTIONS: {
+                errorHandlerUrl: `${appUrl}/handler/background-some-problem`
+              }
+            }
+          }
+        ])
+
         return
       }
 
       await $b24.callBatch([
-        // {
-        //   method: 'placement.unbind',
-        //   params: {
-        //     PLACEMENT: key.placement
-        //   }
-        // },
         {
           method: 'placement.bind',
           params: {
@@ -122,16 +136,25 @@ const steps = ref<Record<string, IStep>>({
 
       const exists = (steps.value.init?.data?.userFieldTypeList as { USER_TYPE_ID: string }[]).some(item => item.USER_TYPE_ID === typeId)
       if (exists) {
+        await $b24.callBatch([
+          {
+            method: 'userfieldtype.update',
+            params: {
+              USER_TYPE_ID: typeId,
+              HANDLER: `${appUrl}/handler/uf.demo`,
+              TITLE: `[${import.meta.dev ? 'dev' : 'prod'}] Some Type`,
+              DESCRIPTION: `Some Description`,
+              OPTIONS: {
+                height: 105
+              }
+            }
+          }
+        ], false)
+
         return
       }
 
       await $b24.callBatch([
-        // {
-        //   method: 'userfieldtype.delete',
-        //   params: {
-        //     USER_TYPE_ID: typeId
-        //   }
-        // },
         {
           method: 'userfieldtype.add',
           params: {
