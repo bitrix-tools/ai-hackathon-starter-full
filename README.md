@@ -102,7 +102,7 @@ Parameters:
 - Assign permissions (scope): `crm, user_brief, placement`, its minimum permissions for work demo application
 
 
-### Work with PHP backend on macOS
+### Detailed step-by-step instruction if You work with PHP backend on macOS
 1. Go to `docker-compose.yml` and change `image: cloudpub/cloudpub:latest` to `image: cloudpub/cloudpub:latest-arm64`
 in containers:
 - `cloudpub-php`
@@ -117,6 +117,47 @@ in containers:
 ```bash
 make dev-php
 ```
+4. Update backend dependencies and check if everything works fine
+```bash
+make composer-update
+```
+5. Found your **public** cloudpub or ngrok URL from tunneling app
+
+Example output in console for cloudpub:
+
+```bash
+
+...
+cloudpubApi  | http://frontend:3000 -> https://inanely-muscular-wagtail.cloudpub.com:443
+...
+
+```
+Remember it.
+
+6. Set this public URL in root `.env` file for key `VIRTUAL_HOST`
+
+```dotenv
+NUXT_PUBLIC_API_URL=https://inanely-muscular-wagtail.cloudpub.com
+```
+
+7. Enter them in local application parameters in Bitrix24 portal
+
+
+Get this frontend url and enter it in local application parameters in Bitrix24 portal:
+
+- Your handler path: `https://inanely-muscular-wagtail.cloudpub.com`
+- Initial Installation path: `https://inanely-muscular-wagtail.cloudpub.com/install`
+
+after You click on save button in local application parameters in Bitrix24 portal, You will see your local application parameters:
+
+
+**Attention! Your parameters will be different**
+
+example:
+- Application ID (client_id): `local.6901c_xxxxxxx`
+- Application key (client_secret): `vXpv64o_xxxxxxx`
+
+
 ## API endpoints
 
 ### General principles

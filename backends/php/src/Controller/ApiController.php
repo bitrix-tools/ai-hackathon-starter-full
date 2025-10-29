@@ -90,6 +90,33 @@ class ApiController extends AbstractController
         }
     }
 
+    #[Route('/', name: 'default_route', methods: ['GET'])]
+    public function getDefaultRoute(Request $request): JsonResponse
+    {
+        $this->logger->debug('ApiController.getDefaultRoute.start', [
+            'request' => $request->request->all(),
+            'baseUrl' => $request->getBaseUrl(),
+        ]);
+
+        try {
+            $response = new JsonResponse([
+                'default route for index page, please use /api/* routes',
+            ], 200);
+
+            $this->logger->debug('ApiController.getDefaultRoute.finish', [
+                'response' => $response->getContent(),
+                'statusCode' => $response->getStatusCode(),
+            ]);
+            return $response;
+        } catch (Throwable $throwable) {
+            $this->logger->error('ApiController.getDefaultRoute.error', [
+                'message' => $throwable->getMessage(),
+                'trace' => $throwable->getTraceAsString(),
+            ]);
+            return new JsonResponse(['error' => $throwable->getMessage(),], 500);
+        }
+    }
+
     #[Route('/api/enum', name: 'api_enum', methods: ['GET'])]
     public function getEnum(Request $request): JsonResponse
     {
