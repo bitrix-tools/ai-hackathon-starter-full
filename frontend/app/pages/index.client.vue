@@ -13,6 +13,22 @@ useHead({
 const { $logger, initApp, processErrorGlobal } = useAppInit('IndexPage')
 const { $initializeB24Frame } = useNuxtApp()
 let $b24: null | B24Frame = null
+
+const apiStore = useApiStore()
+// endregion ////
+
+// region Actions ////
+async function getEnums() {
+  const enums = await apiStore.getEnum()
+
+  $logger.info(enums)
+}
+
+async function getItems() {
+  const items = await apiStore.getList()
+
+  $logger.info(items)
+}
 // endregion ////
 
 const { contextId, isLoading: isLoadingState, load } = useDashboard({ isLoading: ref(false), load: () => {} })
@@ -48,12 +64,23 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col items-center justify-center gap-16 h-[calc(100vh-200px)]">
-    <B24Card v-if="isInit">
+    <B24Card
+      v-if="isInit"
+      :b24ui="{
+        footer: 'flex flex-row flex-wrap items-center justify-start gap-2'
+      }"
+    >
       <template #header>
         <ProseH2>{{ $t('page.index.message.title') }}</ProseH2>
         <ProseP>{{ $t('page.index.message.line1') }}</ProseP>
       </template>
+
       <BackendStatus />
+
+      <template #footer>
+        <B24Button label="getEnums" loading-auto @click="getEnums" />
+        <B24Button label="getItems" loading-auto @click="getItems" />
+      </template>
     </B24Card>
   </div>
 </template>
