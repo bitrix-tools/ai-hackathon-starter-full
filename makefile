@@ -42,15 +42,30 @@ php-cli-app-example:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli bin/console app:example
 
 # Doctrine/Symfony database commands
-.PHONY: dev-php-db-create dev-php-db-migrate dev-php-db-migrate-create dev-php-db-schema-update dev-php-db-schema-validate
+
+# ATTENTION!
+# This command drop database and create new database with empty structure with default tables
+# You must call this command only for new project!
+.PHONY: dev-php-init-database
+dev-php-init-database: dev-php-db-drop dev-php-db-create dev-php-db-migrate
+
+.PHONY: dev-php-db-create dev-php-db-drop dev-php-db-migrate dev-php-db-migrate-create dev-php-db-schema-update dev-php-db-schema-validate
 dev-php-db-create:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:database:create --if-not-exists
+
+dev-php-db-drop:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:database:drop --force --if-exists
 
 dev-php-db-migrate:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:migrations:migrate --no-interaction
 
 dev-php-db-migrate-create:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console make:migration --no-interaction
+
+dev-php-db-migrate-status:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:migrations:status
+
+
 
 dev-php-db-schema-update:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:schema:update --force

@@ -18,9 +18,9 @@ Developers can easily add their own backends by simply creating a folder in back
 **Required scopes**: `crm, user_brief, pull, placement, userfieldconfig`
 
 Path for install:
+
 * **app:** https://amply-awake-dace.cloudpub.ru/
 * **install:** https://amply-awake-dace.cloudpub.ru/install
-
 
 ## Structure
 
@@ -80,31 +80,36 @@ COMPOSE_PROFILES=php,worker docker-compose up -d
 ## Getting started
 
 ### Prerequirements
+
 1. Copy .env file from example file
+
 ```bash
 cp -pv .env.example .env
 ```
+
 2. Start ngrok or other tunneling service, it should provide you with a publicly accessible URL running over HTTPS
 
 In this starter we use cloudpub (ngrok like) for backend and frontend development.
- 
-3. Create new Bitrix24 portal and create new local application 
+
+3. Create new Bitrix24 portal and create new local application
 
 You can create new application in Bitrix24 portal → Left menu → Developer Resources → Other → Local Applications
 
 4. Fill local applicaiton parameters in «new local application page» on your Bitrix24 portal
 
 Parameters:
+
 - Server (yes)
 - Your handler path (enter your tunneling service url)
 - Initial Installation path (enter your tunneling service url + `/install`)
 - Menu item text (your application name)
 - Assign permissions (scope): `crm, user_brief, placement`, its minimum permissions for work demo application
 
-
 ### Detailed step-by-step instruction if You work with PHP backend on macOS
+
 1. Go to `docker-compose.yml` and change `image: cloudpub/cloudpub:latest` to `image: cloudpub/cloudpub:latest-arm64`
-in containers:
+   in containers:
+
 - `cloudpub-php`
 - `cloudpub-front`
 
@@ -117,31 +122,42 @@ in containers:
 ```bash
 make dev-php
 ```
+
 4. Update backend dependencies and check if everything works fine
+
 ```bash
 make composer-update
 ```
-5. Found your **public** cloudpub or ngrok URL from tunneling app
+
+5. Found URLs for frontend and backend applications from your cloudpub or ngrok tunneling app
 
 Example output in console for cloudpub:
 
 ```bash
 
 ...
-cloudpubApi  | http://frontend:3000 -> https://inanely-muscular-wagtail.cloudpub.com:443
+cloudpubApiPhp  | http://frontend:3000 -> https://inanely-muscular-wagtail.cloudpub.com:443
+cloudpubApiPhp  | http://api-php:8000 -> https://furtively-awake-rhea.cloudpub.com:443
 ...
 
 ```
+
 Remember it.
 
-6. Set this public URL in root `.env` file for key `VIRTUAL_HOST`
+6. Set this URL in root `.env` file
+   This URLs are used in your frontend and backend applications:
+
+- VIRTUAL_HOST - this is Your FRONTEND application, it should be a URL that you enter in the application settings in Bitrix24
+- NUXT_PUBLIC_API_URL - this is Your BACKEND application, Bitrix24 should not send requests to it directly, all events and requests from Bitrix24 go to
+  VIRTUAL_HOST
 
 ```dotenv
-NUXT_PUBLIC_API_URL=https://inanely-muscular-wagtail.cloudpub.com
+VIRTUAL_HOST=https://inanely-muscular-wagtail.cloudpub.com
+
+NUXT_PUBLIC_API_URL=https://furtively-awake-rhea.cloudpub.com
 ```
 
 7. Enter them in local application parameters in Bitrix24 portal
-
 
 Get this frontend url and enter it in local application parameters in Bitrix24 portal:
 
@@ -150,22 +166,32 @@ Get this frontend url and enter it in local application parameters in Bitrix24 p
 
 after You click on save button in local application parameters in Bitrix24 portal, You will see your local application parameters:
 
-
 **Attention! Your parameters will be different**
 
 example:
+
 - Application ID (client_id): `local.6901c_xxxxxxx`
 - Application key (client_secret): `vXpv64o_xxxxxxx`
 
+8. Init database structure
+
+```bash
+make dev-php-init-database
+```
+9. Restart dev-containers
+
+10. Install your application in Bitrix24 portal
 
 ## API endpoints
 
 ### General principles
+
 All requests (except `/api/install`, `/api/getToken`) pass JWT in the headers.
 
 Example:
+
 ```javascript
-const { data, error } = await $fetch('/api/protected-route', {
+const {data, error} = await $fetch('/api/protected-route', {
   method: 'GET',
   headers: {
     Authorization: `Bearer ${soneJWT}`
@@ -178,9 +204,11 @@ The server checks every request (except `/api/install`, `/api/getToken`) for a v
 The server returns a response in `json` format.
 
 If an error occurs, the server sets the response code to `401` or `404` or `500` and returns an error description in the following format:
-  - error: `string`
+
+- error: `string`
 
 Return example:
+
 ```json
 {
   error: 'Internal server error'
@@ -199,15 +227,17 @@ Specifies the status of the backend.
   - timestamp: `number`
 
 Return example:
+
 ```json
 {
   status: 'healthy',
   backend: 'php',
-  timestamp: 1760611967,
+  timestamp: 1760611967
 }
 ```
 
 Test
+
 ```bash
 curl http://localhost:8000/api/health
 ```
@@ -221,6 +251,7 @@ Returns an enumeration of options.
 - response: `string[]`
 
 Return example:
+
 ```json
 [
   'option 1',
@@ -230,6 +261,7 @@ Return example:
 ```
 
 Test
+
 ```bash
 curl http://localhost:8000/api/list
 ```
@@ -243,6 +275,7 @@ Returns a list of elements.
 - response: `string[]`
 
 Return example:
+
 ```json
 [
   'element 1',
@@ -252,6 +285,7 @@ Return example:
 ```
 
 Test
+
 ```bash
 curl http://localhost:8000/api/list
 ```
@@ -279,6 +313,7 @@ JWT token is not transferred.
   - message: `string`
 
 Return example:
+
 ```json
 {
   message: 'All success'
@@ -286,6 +321,7 @@ Return example:
 ```
 
 Test
+
 ```bash
 curl -X POST http://localhost:8000/api/install \
   -H "Content-Type: application/json" \
@@ -317,6 +353,7 @@ The token lifetime is `1 hour`.
   - token: `string`
 
 Return example:
+
 ```json
 {
   token: 'AIHBdxxxLLL'
@@ -324,6 +361,7 @@ Return example:
 ```
 
 Test
+
 ```bash
 curl -X POST http://localhost:8000/api/getToken \
   -H "Content-Type: application/json" \
