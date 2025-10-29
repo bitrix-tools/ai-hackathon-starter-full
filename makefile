@@ -3,20 +3,12 @@
 # Variables
 DOCKER_COMPOSE = docker compose
 
-# Init
-#init-network:
-#	@echo "Starting network"
-#	docker network create proxy-net
-#
-#init-nginxproxy:
-#	@echo "Starting nginx proxy"
-#	docker compose -f docker-compose.server.yml up -d
-
 # Development
 dev-front:
 	@echo "Starting frontend"
 	COMPOSE_PROFILES=frontend,cloudpub-front docker compose --env-file .env up --build
 
+## PHP
 dev-php:
 	@echo "Starting dev php"
 	COMPOSE_PROFILES=frontend,php,cloudpub-php docker compose --env-file .env up --build
@@ -49,7 +41,6 @@ php-cli-sh:
 php-cli-app-example:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli bin/console app:example
 
-
 # Doctrine/Symfony database commands
 .PHONY: dev-php-db-create dev-php-db-migrate dev-php-db-migrate-create dev-php-db-schema-update dev-php-db-schema-validate
 dev-php-db-create:
@@ -67,13 +58,12 @@ dev-php-db-schema-update:
 dev-php-db-schema-validate:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:schema:validate
 
-
-
-
+## Python
 dev-python:
 	@echo "Starting dev python"
 	COMPOSE_PROFILES=frontend,python,cloudpub-python docker compose --env-file .env up --build
 
+## NodeJs
 dev-node:
 	@echo "Starting dev node"
 	COMPOSE_PROFILES=frontend,node,cloudpub-node docker compose --env-file .env up --build
@@ -90,8 +80,6 @@ prod-python:
 prod-node:
 	@echo "Starting prod node environment"
 	COMPOSE_PROFILES=node FRONTEND_TARGET=production docker compose up --build -d
-
-
 
 # Utils
 status:
