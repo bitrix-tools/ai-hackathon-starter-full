@@ -78,22 +78,45 @@ COMPOSE_PROFILES=php,worker docker-compose up -d
 ```
 
 ## Getting started
-1. Create .env file from example file 
+
+### Prerequirements
+1. Copy .env file from example file
 ```bash
 cp -pv .env.example .env
-
 ```
-2. Register on ngrok or other tunneling service
-If you use cloudpub - enter api key in .env file
-If you use mackbook add `-arm64` prefix to the `image: cloudpub/cloudpub:latest`
+2. Start ngrok or other tunneling service, it should provide you with a publicly accessible URL running over HTTPS
+
+In this starter we use cloudpub (ngrok like) for backend and frontend development.
+ 
+3. Create new Bitrix24 portal and create new local application 
+
+You can create new application in Bitrix24 portal → Left menu → Developer Resources → Other → Local Applications
+
+4. Fill local applicaiton parameters in «new local application page» on your Bitrix24 portal
+
+Parameters:
+- Server (yes)
+- Your handler path (enter your tunneling service url)
+- Initial Installation path (enter your tunneling service url + `/install`)
+- Menu item text (your application name)
+- Assign permissions (scope): `crm, user_brief, placement`, its minimum permissions for work demo application
 
 
-3. Register local application in your Bitrix24 portal
+### Work with PHP backend on macOS
+1. Go to `docker-compose.yml` and change `image: cloudpub/cloudpub:latest` to `image: cloudpub/cloudpub:latest-arm64`
+in containers:
+- `cloudpub-php`
+- `cloudpub-front`
 
-4. Fill in .env file application parameters
+2. Enter your cloudpub api-key in `.env` file
 
-5. Install application
+`CLOUDPUB_TOKEN`
 
+3. Start dev-containers
+
+```bash
+make dev-php
+```
 ## API endpoints
 
 ### General principles
