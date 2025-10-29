@@ -173,6 +173,15 @@ example:
 - Application ID (client_id): `local.6901c_xxxxxxx`
 - Application key (client_secret): `vXpv64o_xxxxxxx`
 
+8. Init database structure
+
+```bash
+make dev-php-init-database
+```
+9. Restart dev-containers
+
+10. Install your application in Bitrix24 portal
+
 ## API endpoints
 
 ### General principles
