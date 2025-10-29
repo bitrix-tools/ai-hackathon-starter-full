@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { NuxtError } from '#app'
+import { createError as createH3Error } from "h3"
 
-defineProps<{
+const props = defineProps<{
   error: NuxtError
 }>()
 
@@ -12,6 +13,21 @@ useHead({
   link: [],
   htmlAttrs: { lang: 'en' }
 })
+
+const getError = computed(() => {
+  if (props?.error?.message === 'Unable to initialize Bitrix24Frame library!') {
+    return createH3Error({
+      statusCode: 500,
+      statusMessage: 'Well done!',
+      message: 'Now paste this URL into the B24 app settings',
+      cause: props?.error
+    })
+  }
+
+  return props?.error
+})
+
+console.log(props?.error.message)
 </script>
 
 <template>
@@ -21,7 +37,7 @@ useHead({
     <B24SidebarLayout :use-light-content="false">
       <B24Card class="mt-[2px]">
         <B24Error
-          :error="error"
+          :error="getError"
           :clear="false"
         />
       </B24Card>
