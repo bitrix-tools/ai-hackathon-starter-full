@@ -202,7 +202,7 @@ const steps = ref<Record<string, IStep>>({
         LANG: $b24.getLang(),
         APP_SID: $b24.getAppSid(),
         AUTH_ID: authData.access_token,
-        AUTH_EXPIRES: 3600, // authData.expires_delta,
+        AUTH_EXPIRES: authData.expires_in,
         REFRESH_ID: authData.refresh_token,
         REFRESH_TOKEN: authData.refresh_token,
         member_id: authData.member_id,
