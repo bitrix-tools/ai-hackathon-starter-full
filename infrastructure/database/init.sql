@@ -22,12 +22,17 @@ CREATE TABLE bitrix24account (
     comment TEXT,
 
     -- Embedded AuthToken fields
+    auth_token_access_token VARCHAR,
+    auth_token_refresh_token VARCHAR,
+    auth_token_expires BIGINT,
+    auth_token_expires_in BIGINT,
     access_token VARCHAR,
     refresh_token VARCHAR,
     expires INTEGER,
     expires_in INTEGER,
 
     -- Embedded Scope field
+    application_scope_current_scope JSON,
     current_scope JSON,
 
     -- Unique constraint for combination of b24_user_id and domain_url
@@ -54,6 +59,7 @@ CREATE TABLE application_installation (
 
     -- Embedded ApplicationStatus field
     status_code JSON,
+    application_status_status_code JSON,
 
     CONSTRAINT fk_application_installation_account
         FOREIGN KEY (bitrix_24_account_id)

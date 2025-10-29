@@ -197,7 +197,8 @@ const steps = ref<Record<string, IStep>>({
       await apiStore.postInstall({
         DOMAIN: withoutTrailingSlash(authData.domain).replace('https://', '').replace('http://', ''),
         PROTOCOL: authData.domain.includes('https://') ? 1 : 0,
-        license: steps.value.init?.data?.appInfo.LICENSE,
+        LICENSE: steps.value.init?.data?.appInfo.LICENSE,
+        LICENSE_FAMILY: steps.value.init?.data?.appInfo.LICENSE_FAMILY,
         LANG: $b24.getLang(),
         APP_SID: $b24.getAppSid(),
         AUTH_ID: authData.access_token,
@@ -240,6 +241,7 @@ async function makeInit(): Promise<void> {
         VERSION: string
         STATUS: string
         LICENSE: string
+        LICENSE_FAMILY: string
         INSTALLED: boolean
       },
       profile: {

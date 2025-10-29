@@ -38,7 +38,10 @@ readonly class FrontendPayload
      */
     public static function initFromArray(array $payload): self
     {
-        if ($payload['PLACEMENT_OPTIONS'] !== '') {
+        if (
+            $payload['PLACEMENT_OPTIONS'] !== ''
+            && !is_array($payload['PLACEMENT_OPTIONS'])
+        ) {
             $placementOptions = json_decode($payload['PLACEMENT_OPTIONS'], true, 512, JSON_THROW_ON_ERROR);
             if (!is_array($placementOptions)) {
                 throw new InvalidArgumentException('Invalid placement options');

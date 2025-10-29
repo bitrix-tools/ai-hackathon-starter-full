@@ -1,9 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 echo "Starting Symfony application..."
 
 cd /var/www
+
+cat > /var/www/.env << EOF
+DEFAULT_URI=
+DATABASE_URL=postgresql://${DB_USER:-appuser}:${DB_PASSWORD:-apppass}@database:5432/${DB_NAME:-appdb}?serverVersion=17&charset=utf8
+BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID=${CLIENT_ID:-bitrix_application_client_id}
+BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET=${CLIENT_SECRET:-bitrix_application_client_secret}
+BITRIX24_PHP_SDK_APPLICATION_SCOPE=${SCOPE:-bitrix_application_scope}
+EOF
 
 if [ -f "composer.json" ]; then
     echo "Found composer.json, checking dependencies..."
@@ -30,6 +38,15 @@ echo "Symfony application ready"
 mkdir -p /var/log/php/nginx
 mkdir -p /var/log/php/phpfpm
 mkdir -p /var/log/php/symfony
+
+mkdir -p /var/www/var
+chmod -R 755 /var/www
+chmod -R 777 /var/www/var
+
+chmod -R 777 /var/log/php/nginx
+chmod -R 777 /var/log/php/phpfpm
+chmod -R 777 /var/log/php/symfony
+
 
 echo "Starting PHP-FPM..."
 php-fpm -D

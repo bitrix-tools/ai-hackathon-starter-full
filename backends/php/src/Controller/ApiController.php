@@ -70,11 +70,9 @@ class ApiController extends AbstractController
 
         try {
             $response = new JsonResponse([
-                'one',
-                'two',
-                'three',
-                'four',
-                'five',
+                'element 1',
+                'element 2',
+                'element 3'
             ], 200);
 
 
@@ -102,9 +100,9 @@ class ApiController extends AbstractController
 
         try {
             $response = new JsonResponse([
-                'enum one',
-                'enum two',
-                'enum three',
+                'option 1',
+                'option 2',
+                'option 3',
             ], 200);
 
 
