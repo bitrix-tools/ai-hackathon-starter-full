@@ -1,12 +1,11 @@
 import logging
 from functools import wraps
-from typing import Text
+from http import HTTPStatus
 
-from rest_framework.response import Response
-from rest_framework import status
+from django.http import JsonResponse
 
 
-def log_errors(message: Text):
+def log_errors(message: str):
     def inner(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -14,7 +13,7 @@ def log_errors(message: Text):
                 response = func(*args, **kwargs)
             except Exception as exc:
                 logging.error(message + f", args={args}, kwargs={kwargs}" + ": " + str(exc))
-                return Response({"error": str(exc)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return JsonResponse({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
             else:
                 return response
         return wrapper

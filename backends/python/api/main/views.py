@@ -1,10 +1,14 @@
-from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.clickjacking import xframe_options_exempt
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from .utils.decorators import auth_required, log_errors
+from .utils import AuthorizedRequest
+from .models import ApplicationInstallation
 
-from .utils import AuthorizedRequest, auth_required, log_errors
+from config import load_config
 
 __all__ = [
     "root",
@@ -15,54 +19,71 @@ __all__ = [
     "get_token",
 ]
 
+config = load_config()
 
-@api_view(["GET"])
+
+@xframe_options_exempt
+@require_GET
 @log_errors("root")
 @auth_required
 def root(request: AuthorizedRequest):
-    return Response({"message": "Python Backend is running"})
+    return JsonResponse({"message": "Python Backend is running"})
 
 
-@api_view(["GET"])
+@xframe_options_exempt
+@require_GET
 @log_errors("health")
 @auth_required
 def health(request: AuthorizedRequest):
-    return Response({
+    return JsonResponse({
         "status": "healthy",
         "backend": "python",
         "timestamp": timezone.now().timestamp(),
     })
 
 
-@api_view(["GET"])
+@xframe_options_exempt
+@require_GET
 @log_errors("get_enum")
 @auth_required
 def get_enum(request: AuthorizedRequest):
     options = ["option 1", "option 2", "option 3"]
-    return Response(options)
+    return JsonResponse(options, safe=False)
 
 
-@api_view(["GET"])
+@xframe_options_exempt
+@require_GET
 @log_errors("get_list")
 @auth_required
 def get_list(request: AuthorizedRequest):
     elements = ["element 1", "element 2", "element 3"]
-    return Response(elements)
+    return JsonResponse(elements, safe=False)
 
 
+@xframe_options_exempt
 @csrf_exempt
-@api_view(["POST"])
+@require_POST
 @log_errors("install")
 @auth_required
 def install(request: AuthorizedRequest):
-    # Installation code
-    ...
-    return Response({"message": "Installation successful"})
+    bitrix24_account = request.bitrix24_account
+
+    ApplicationInstallation.objects.update_or_create(
+        bitrix_24_account=bitrix24_account,
+        defaults={
+            "status": bitrix24_account.status,
+            "portal_license_family": "",
+            "application_token": bitrix24_account.application_token,
+        },
+    )
+
+    return JsonResponse({"message": "Installation successful"})
 
 
+@xframe_options_exempt
 @csrf_exempt
-@api_view(["POST"])
+@require_POST
 @log_errors("get_token")
 @auth_required
 def get_token(request: AuthorizedRequest):
-    return Response({"token": request.bitrix24_account.create_jwt_token()})
+    return JsonResponse({"token": request.bitrix24_account.create_jwt_token()})

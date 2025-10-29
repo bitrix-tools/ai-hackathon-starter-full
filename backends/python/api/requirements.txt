@@ -1,7 +1,7 @@
 Django
 psycopg2-binary
-djangorestframework
 django-cors-headers
 PyJWT
 gunicorn
 environs
+b24pysdk==0.2.3a1
