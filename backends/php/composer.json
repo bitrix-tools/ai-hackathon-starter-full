@@ -13,6 +13,7 @@
     "doctrine/doctrine-bundle": "^2.19.0",
     "doctrine/doctrine-migrations-bundle": "^3.5.0",
     "doctrine/orm": "^3.6.0",
+    "firebase/php-jwt": "dev-main",
     "giggsey/libphonenumber-for-php": "^8.13.55",
     "mesilov/bitrix24-php-lib": "dev-dev",
     "nelmio/cors-bundle": "^2.0@dev",
