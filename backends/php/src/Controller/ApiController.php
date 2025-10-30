@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Bitrix24Core\Bitrix24ServiceBuilderFactory;
+use App\Service\JwtService;
 use Bitrix24\Lib\ApplicationInstallations;
 use Bitrix24\Lib\Bitrix24Accounts;
 use Psr\Log\LoggerInterface;
@@ -27,6 +28,7 @@ class ApiController extends AbstractController
 {
     public function __construct(
         private readonly Bitrix24ServiceBuilderFactory $bitrix24ServiceBuilderFactory,
+        private readonly JwtService $jwtService,
         private readonly LoggerInterface $logger
     ) {
     }
@@ -40,16 +42,29 @@ class ApiController extends AbstractController
         ]);
 
         try {
+            // Parse JSON request body
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+            if (!isset($data['DOMAIN'])) {
+                return new JsonResponse([
+                    'error' => 'Missing required parameter: domain',
+                ], 400);
+            }
+
+            $domain = $data['DOMAIN'];
+            $memberId = $data['member_id'] ?? null;
+
+            // Generate JWT token
             $response = new JsonResponse([
-                //todo add token storage and rotation
-                'token' => 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30',
+                'token' => $this->jwtService->generateToken($domain, $memberId)
             ], 200);
 
-
             $this->logger->debug('ApiController.getToken.finish', [
-                'response' => $response->getContent(),
-                'statusCode' => $response->getStatusCode(),
+                'domain' => $domain,
+                'member_id' => $memberId,
+                'expires_in' => $this->jwtService->getTtl(),
             ]);
+
             return $response;
         } catch (Throwable $throwable) {
             $this->logger->error('ApiController.getToken.error', [
@@ -67,7 +82,11 @@ class ApiController extends AbstractController
             'request' => $request->request->all(),
             'baseUrl' => $request->getBaseUrl(),
         ]);
-
+        // JWT payload is stored in request attributes by JwtAuthenticationListener
+        $jwtPayload = $request->attributes->get('jwt_payload');
+        $this->logger->debug('ApiController.getEnum.jwtPayload', [
+            'jwtPayload' => $jwtPayload,
+        ]);
         try {
             $response = new JsonResponse([
                 'element 1',
@@ -126,6 +145,12 @@ class ApiController extends AbstractController
         ]);
 
         try {
+            // JWT payload is stored in request attributes by JwtAuthenticationListener
+            $jwtPayload = $request->attributes->get('jwt_payload');
+            $this->logger->debug('ApiController.getEnum.jwtPayload', [
+                'jwtPayload' => $jwtPayload,
+            ]);
+
             $response = new JsonResponse([
                 'option 1',
                 'option 2',

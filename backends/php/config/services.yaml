@@ -8,6 +8,11 @@ parameters:
     bitrix24sdk.app.client_secret: '%env(BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET)%'
     bitrix24sdk.app.scope: '%env(BITRIX24_PHP_SDK_APPLICATION_SCOPE)%'
     bitrix24sdk.app.local.domain: '%env(BITRIX24_PHP_SDK_LOCAL_APPLICATION_DOMAIN)%'
+
+    # JWT Authentication parameters
+    jwt.secret: '%env(JWT_SECRET)%'
+    jwt.ttl: 3600
+    jwt.algorithm: '%env(JWT_ALGORITHM)%'
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -40,6 +45,17 @@ services:
     App\Bitrix24Core\Bitrix24SdkEventListener:
         tags:
             - { name: kernel.event_listener, event: Bitrix24\SDK\Events\AuthTokenRenewedEvent, method: onAuthTokenRenewedEventListener }
+
+    # JWT Authentication services
+    App\Service\JwtService:
+        arguments:
+            $secret: '%jwt.secret%'
+            $ttl: '%jwt.ttl%'
+            $algorithm: '%jwt.algorithm%'
+
+    App\EventListener\JwtAuthenticationListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, priority: 10 }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
