@@ -68,20 +68,19 @@ readonly class Bitrix24ServiceBuilderFactory
      * @throws InvalidArgumentException
      * @throws Bitrix24AccountNotFoundException
      */
-    public function createFromStoredToken(): ServiceBuilder
+    public function createFromStoredTokenForDomain(string $b24Domain): ServiceBuilder
     {
-        $localAppDomain = $this->parameterBag->get('bitrix24sdk.app.local.domain');
-        if (empty($localAppDomain)) {
-            throw new InvalidArgumentException('localAppDomain is empty');
+        if (empty($b24Domain)) {
+            throw new InvalidArgumentException('domain is empty');
         }
 
         $b24Accounts = $this->bitrix24AccountRepository->findByDomain(
-            $localAppDomain,
+            $b24Domain,
             Bitrix24AccountStatus::active,
             true
         );
         if (count($b24Accounts) === 0) {
-            throw new Bitrix24AccountNotFoundException(sprintf('b24 account %s not found', $localAppDomain));
+            throw new Bitrix24AccountNotFoundException(sprintf('b24 account %s not found', $b24Domain));
         }
         $b24Account = $b24Accounts[0];
 
