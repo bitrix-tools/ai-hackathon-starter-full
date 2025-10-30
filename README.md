@@ -179,6 +179,80 @@ make dev-php-init-database
 
 10. Install your application in Bitrix24 portal
 
+### Detailed step-by-step instruction if You work with Python backend on macOS
+
+1. Go to `docker-compose.yml` and change `image: cloudpub/cloudpub:latest` to `image: cloudpub/cloudpub:latest-arm64`
+   in containers:
+
+- `cloudpub-python`
+- `cloudpub-front`
+
+2. Enter your cloudpub api-key and set Django superuser credentials in `.env` file 
+
+`CLOUDPUB_TOKEN`
+`DJANGO_SUPERUSER_USERNAME`
+`DJANGO_SUPERUSER_EMAIL`
+`DJANGO_SUPERUSER_PASSWORD`
+
+3. Start dev-containers
+
+```bash
+make dev-python
+```
+
+4. Database migration and Django superuser creation happen automatically after container startup.
+
+5. Found URLs for frontend and backend applications from your cloudpub or ngrok tunneling app
+
+Example output in console for cloudpub:
+
+```bash
+
+...
+cloudpubApiPython  | http://frontend:3000 -> https://inanely-muscular-wagtail.cloudpub.com:443
+cloudpubApiPython  | http://api-python:8000 -> https://furtively-awake-rhea.cloudpub.com:443
+...
+
+```
+Remember it.
+
+6. Set this URL in root `.env` file
+   This URLs are used in your frontend and backend applications:
+
+- VIRTUAL_HOST - this is Your FRONTEND application, it should be a URL that you enter in the application settings in Bitrix24
+- NUXT_PUBLIC_API_URL - this is Your BACKEND application, Bitrix24 should not send requests to it directly, all events and requests from Bitrix24 go to
+  VIRTUAL_HOST
+
+```dotenv
+VIRTUAL_HOST=https://inanely-muscular-wagtail.cloudpub.com
+
+NUXT_PUBLIC_API_URL=https://furtively-awake-rhea.cloudpub.com
+```
+
+7. Enter them in local application parameters in Bitrix24 portal
+
+Get this frontend url and enter it in local application parameters in Bitrix24 portal:
+
+- Your handler path: `https://inanely-muscular-wagtail.cloudpub.com`
+- Initial Installation path: `https://inanely-muscular-wagtail.cloudpub.com/install`
+- Assign permissions - Only necessary scopes
+
+after You click on save button in local application parameters in Bitrix24 portal, You will see your local application parameters:
+
+**Attention! Your parameters will be different**
+
+example:
+
+- Application ID (client_id): `local.6901c_xxxxxxx`
+- Application key (client_secret): `vXpv64o_xxxxxxx`
+
+9. Restart dev-containers
+
+10. Install your application in Bitrix24 portal
+
+11. Django admin will be at: `https://<NUXT_PUBLIC_API_URL>/api/admin` 
+ (login: `<DJANGO_SUPERUSER_USERNAME>`, password:`<DJANGO_SUPERUSER_PASSWORD>`). 
+
 ## API endpoints
 
 ### General principles
