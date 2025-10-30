@@ -10,6 +10,9 @@ ALLOWED_HOSTS = ["*"]
 
 NUXT_PUBLIC_API_URL = config.app_base_url
 
+if not NUXT_PUBLIC_API_URL.startswith(("http://", "https://")):
+    NUXT_PUBLIC_API_URL = f"https://{NUXT_PUBLIC_API_URL}"
+
 if NUXT_PUBLIC_API_URL:
     CSRF_TRUSTED_ORIGINS = [NUXT_PUBLIC_API_URL]
 

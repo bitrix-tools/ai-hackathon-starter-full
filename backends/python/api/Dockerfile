@@ -18,7 +18,8 @@ FROM base AS dev
 ENV DJANGO_ENV=development \
     PYTHONUNBUFFERED=1
 EXPOSE 8000
-CMD ["sh", "-c", "python manage.py migrate --noinput \
+CMD ["sh", "-c", "python manage.py makemigrations \
+  && python manage.py migrate --noinput \
   && python manage.py createsuperuser --noinput || true \
   && python manage.py runserver 0.0.0.0:8000"]
 
@@ -27,6 +28,7 @@ FROM base AS prod
 ENV DJANGO_ENV=production \
     PYTHONUNBUFFERED=1
 EXPOSE 8000
-CMD ["sh", "-c", "python manage.py migrate --noinput \
+CMD ["sh", "-c", "python manage.py makemigrations \
+  && python manage.py migrate --noinput \
   && python manage.py createsuperuser --noinput || true \
   && gunicorn wsgi:application --bind 0.0.0.0:8000"]
