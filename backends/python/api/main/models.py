@@ -1,25 +1,29 @@
 from datetime import timedelta
-from typing import TYPE_CHECKING, Tuple
+from typing import Tuple
 
 import jwt
 import uuid
+
+from b24pysdk import AbstractBitrixToken, BitrixApp, BitrixToken, Client
+from b24pysdk.bitrix_api.credentials import OAuthPlacementData
+from b24pysdk.bitrix_api.events import PortalDomainChangedEvent, OAuthTokenRenewedEvent
+from b24pysdk.error import BitrixAPIError, BitrixValidationError
+from b24pysdk.utils.functional import Classproperty
+
 from django.db import models
 from django.utils import timezone
 
 from config import config
 
-if TYPE_CHECKING:
-    from .utils import OAuthData
 
-
-class Bitrix24Account(models.Model):
+class Bitrix24Account(models.Model, AbstractBitrixToken):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     b24_user_id = models.IntegerField()
     is_b24_user_admin = models.BooleanField(default=False)
     member_id = models.CharField(max_length=255)
     is_master_account = models.BooleanField(null=True)
-    domain_url = models.CharField(max_length=255, default="example.bitrix24.ru")
-    status = models.CharField(max_length=50, default="P")
+    domain_url = models.CharField(max_length=255)
+    status = models.CharField(max_length=50)
     application_token = models.CharField(max_length=255, null=True)
     created_at_utc = models.DateTimeField(auto_now_add=True)
     updated_at_utc = models.DateTimeField(auto_now=True)
@@ -36,13 +40,50 @@ class Bitrix24Account(models.Model):
         db_table = "bitrix24account"
         unique_together = ("b24_user_id", "domain_url")
 
-    def create_jwt_token(self) -> str:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.portal_domain_changed_signal.connect(self.on_portal_domain_changed_event)
+        self.oauth_token_renewed_signal.connect(self.on_oauth_token_renewed_event)
+
+    @property
+    def domain(self) -> str:
+        return self.domain_url
+
+    @domain.setter
+    def domain(self, domain: str):
+        self.domain_url = domain
+
+    @property
+    def auth_token(self) -> str:
+        return self.access_token
+
+    @auth_token.setter
+    def auth_token(self, auth_token: str):
+        self.access_token = auth_token
+
+    @Classproperty
+    def bitrix_app(cls) -> BitrixApp:
+        return BitrixApp(client_id=config.client_id, client_secret=config.client_secret)
+
+    @property
+    def client(self) -> Client:
+        return Client(self)
+
+    def on_portal_domain_changed_event(self, _: PortalDomainChangedEvent):
+        self.save(update_fields=["portal_url"])
+
+    def on_oauth_token_renewed_event(self, event: OAuthTokenRenewedEvent):
+        self.expires = event.renewed_oauth_token.oauth_token.expires
+        self.expires_in = event.renewed_oauth_token.oauth_token.expires_in
+        self.save(update_fields=["access_token", "refresh_token", "expires", "expires_in"])
+
+    def create_jwt_token(self, minutes: int = 60) -> str:
         now_dt = timezone.now()
 
         payload = {
             "account_id": str(self.pk),
-            "exp": now_dt + timedelta(hours=1),
             "iat": now_dt,
+            "exp": now_dt + timedelta(minutes=minutes),
         }
 
         return jwt.encode(payload, config.jwt_secret, algorithm=config.jwt_algorithm)
@@ -53,7 +94,7 @@ class Bitrix24Account(models.Model):
 
         for key in ("account_id", "exp", "iat"):
             if key not in payload:
-                raise ValueError("Invalid JWT token")
+                raise BitrixValidationError("Invalid JWT token")
 
         return uuid.UUID(payload["account_id"])
 
@@ -63,21 +104,27 @@ class Bitrix24Account(models.Model):
         return cls.objects.get(pk=account_uuid)
 
     @classmethod
-    def update_or_create_from_auth_data(cls, oauth_data: "OAuthData") -> Tuple["Bitrix24Account", bool]:
+    def update_or_create_from_oauth_placement_data(cls, oauth_placement_data: "OAuthPlacementData") -> Tuple["Bitrix24Account", bool]:
         """Create or update Bitrix24Account"""
 
+        try:
+            bitrix_token = BitrixToken.from_oauth_placement_data(oauth_placement_data, bitrix_app=cls.bitrix_app)
+            app_info = bitrix_token.get_app_info().result
+        except BitrixAPIError as error:
+            raise BitrixValidationError(error.message) from error
+
         defaults = {
-            "member_id": oauth_data.member_id,
-            "status": oauth_data.status,
-            "access_token": oauth_data.auth_id,
-            "refresh_token": oauth_data.refresh_token,
-            # "expires": oauth_data.auth_expires,
-            "application_version": 1,
+            "member_id": oauth_placement_data.member_id,
+            "status": oauth_placement_data.status,
+            "access_token": oauth_placement_data.oauth_token.access_token,
+            "refresh_token": oauth_placement_data.oauth_token.refresh_token,
+            "expires": int(oauth_placement_data.oauth_token.expires.timestamp()),
+            "application_version": app_info.install.version,
         }
 
         bitrix24_account, is_created = cls.objects.update_or_create(
-            domain_url=oauth_data.domain,
-            b24_user_id=oauth_data.user_id,
+            domain_url=oauth_placement_data.domain,
+            b24_user_id=app_info.user_id,
             defaults=defaults,
         )
 
@@ -85,7 +132,7 @@ class Bitrix24Account(models.Model):
 
 
 class ApplicationInstallation(models.Model):
-    id = models.UUIDField(primary_key=True, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     status = models.CharField(max_length=50)
     created_at_utc = models.DateTimeField(auto_now_add=True)
     update_at_utc = models.DateTimeField(auto_now=True)

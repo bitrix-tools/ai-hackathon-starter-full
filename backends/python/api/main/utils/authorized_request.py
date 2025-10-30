@@ -1,7 +1,10 @@
+from typing import TYPE_CHECKING
+
 from django.http import HttpRequest
 
-from .auth_required import Bitrix24Account
+if TYPE_CHECKING:
+    from ..models import Bitrix24Account
 
 
 class AuthorizedRequest(HttpRequest):
-    bitrix24_account: Bitrix24Account
+    bitrix24_account: "Bitrix24Account"

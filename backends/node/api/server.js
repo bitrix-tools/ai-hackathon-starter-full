@@ -16,6 +16,12 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD || 'apppass'
 });
 
+app.get('/', (req, res) => {
+  res.json([
+    '!default route for index page, please use /api/* routes'
+  ]);
+});
+
 app.get('/api/health', verifyToken, (req, res) => {
   res.json({
     status: 'healthy',

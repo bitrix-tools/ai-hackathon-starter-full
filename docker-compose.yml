@@ -36,8 +36,6 @@ services:
       - '3000'
     volumes:
       - ./frontend:/app
-      - /app/node_modules
-      - /app/.nuxt
     networks:
       - internal-net
 
@@ -150,7 +148,6 @@ services:
       - "8000:8000"
     volumes:
       - ./backends/python/api:/var/www/api
-      - ./backends/python/shared:/var/www/shared
       - ./logs/python:/var/log/python
     depends_on:
       - database
@@ -195,10 +192,8 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backends/node/api:/var/www/api
-      - ./backends/node/shared:/var/www/shared
+      - ./backends/node/api:/app
       - ./logs/node:/var/log/node
-      - /app/node_modules
     depends_on:
       - database
     networks:

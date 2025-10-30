@@ -1,4 +1,5 @@
 from pathlib import Path
+from urllib.parse import urlparse
 
 from config import config
 
@@ -8,6 +9,20 @@ SECRET_KEY = config.jwt_secret
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
+NUXT_PUBLIC_API_URL = config.app_base_url
+
+if not NUXT_PUBLIC_API_URL.startswith(("http://", "https://")):
+    NUXT_PUBLIC_API_URL = f"https://{NUXT_PUBLIC_API_URL}"
+
+if NUXT_PUBLIC_API_URL:
+    CSRF_TRUSTED_ORIGINS = [NUXT_PUBLIC_API_URL]
+
+    domain = urlparse(NUXT_PUBLIC_API_URL).hostname
+    ALLOWED_HOSTS = [domain, "localhost", "127.0.0.1"]
+else:
+    CSRF_TRUSTED_ORIGINS = []
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -15,7 +30,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework",
     "corsheaders",
     "main",
 ]

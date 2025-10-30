@@ -74,5 +74,5 @@ php-fpm -D
 echo "Starting Nginx on 0.0.0.0:8000..."
 echo "Document root: /var/www/public"
 
-# Start nginx in foreground
+# Start nginx in foreground.
 exec nginx -g 'daemon off;'
