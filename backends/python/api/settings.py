@@ -1,4 +1,5 @@
 from pathlib import Path
+from urllib.parse import urlparse
 
 from config import config
 
@@ -16,7 +17,7 @@ if not NUXT_PUBLIC_API_URL.startswith(("http://", "https://")):
 if NUXT_PUBLIC_API_URL:
     CSRF_TRUSTED_ORIGINS = [NUXT_PUBLIC_API_URL]
 
-    domain = NUXT_PUBLIC_API_URL.replace("https://", '').replace("http://", '')
+    domain = urlparse(NUXT_PUBLIC_API_URL).hostname
     ALLOWED_HOSTS = [domain, "localhost", "127.0.0.1"]
 else:
     CSRF_TRUSTED_ORIGINS = []
