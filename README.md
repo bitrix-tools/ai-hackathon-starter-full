@@ -15,7 +15,7 @@ Developers can easily add their own backends by simply creating a folder in back
 
 ## Core Components
 
-**Required scopes**: `crm, user_brief, pull, placement, userfieldconfig`
+**Required scopes**: `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig`
 
 Path for install:
 
@@ -29,16 +29,9 @@ starter-kit/
 ├── frontend/               # Nuxt frontend
 ├── backends/               # All backends
 │   ├── php/
-│   │   ├── api/            # API server
-│   │   └── shared/         # Common code
 │   ├── python/
-│   │   ├── api/
-│   │   └── shared/
 │   └── node/
-│       ├── api/
-│       └── shared/
 ├── infrastructure/
-│   ├── nginx/
 │   └── database/
 └── logs/                    # Logs outside containers
 ```
@@ -62,7 +55,7 @@ make dev-node
 make down
 
 # Production with PHP
-make prod-PHP
+make prod-php
 
 # Production with Python
 make prod-python
@@ -103,7 +96,7 @@ Parameters:
 - Your handler path (enter your tunneling service url)
 - Initial Installation path (enter your tunneling service url + `/install`)
 - Menu item text (your application name)
-- Assign permissions (scope): `crm, user_brief, placement`, its minimum permissions for work demo application
+- Assign permissions (scope): `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig`, its minimum permissions for work demo application
 
 ### Detailed step-by-step instruction if You work with PHP backend on macOS
 
@@ -163,6 +156,7 @@ Get this frontend url and enter it in local application parameters in Bitrix24 p
 
 - Your handler path: `https://inanely-muscular-wagtail.cloudpub.com`
 - Initial Installation path: `https://inanely-muscular-wagtail.cloudpub.com/install`
+- Assign permissions: `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig`
 
 after You click on save button in local application parameters in Bitrix24 portal, You will see your local application parameters:
 
