@@ -135,6 +135,9 @@ cloudpubApiPhp  | http://api-php:8000 -> https://furtively-awake-rhea.cloudpub.c
 
 ```
 
+> [!NOTE]
+> If you are on Windows and api-php does not start, try re-saving the file `backends/php/docker/php-fpm/docker-entrypoint.sh`
+
 Remember it.
 
 6. Set this URL in root `.env` file
