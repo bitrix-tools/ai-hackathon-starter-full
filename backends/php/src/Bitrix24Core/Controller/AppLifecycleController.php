@@ -39,6 +39,7 @@ use Bitrix24\Lib\Bitrix24Accounts\ValueObjects\Domain;
 class AppLifecycleController extends AbstractController
 {
     public function __construct(
+        private readonly ParameterBagInterface $parameterBag,
         private readonly ApplicationInstallations\UseCase\Install\Handler $installStartHandler,
         private readonly Bitrix24ServiceBuilderFactory $bitrix24ServiceBuilderFactory,
         private readonly LoggerInterface $logger
@@ -113,14 +114,14 @@ class AppLifecycleController extends AbstractController
                 )
             );
 
-            // @todo fix this
             // step 2
             // register application lifecycle event handlers
-            $eventHandlerUrl = $this->generateUrl(
-                'b24_events',
-                [],
-                UrlGeneratorInterface::ABSOLUTE_URL
-            );
+
+            // unbind all event handlers
+            $b24ServiceBuilder->getMainScope()->eventManager()->unbindAllEventHandlers();
+
+            // generate event handler url for application lifecycle events
+            $eventHandlerUrl = sprintf('%s/api/app-events/', $this->parameterBag->get('APPLICATION_HOST'));
             $this->logger->debug('LocalAppLifecycleController.installWithoutUi.startBindEventHandlers', [
                 'eventHandlerUrl' => $eventHandlerUrl
             ]);

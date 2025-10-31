@@ -8,6 +8,8 @@ parameters:
     bitrix24sdk.app.client_secret: '%env(BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET)%'
     bitrix24sdk.app.scope: '%env(BITRIX24_PHP_SDK_APPLICATION_SCOPE)%'
     bitrix24sdk.app.local.domain: '%env(BITRIX24_PHP_SDK_LOCAL_APPLICATION_DOMAIN)%'
+    # pass dev host to the application
+    APPLICATION_HOST: '%env(NUXT_PUBLIC_API_URL)%'
 
     # JWT Authentication parameters
     jwt.secret: '%env(JWT_SECRET)%'
@@ -30,10 +32,16 @@ services:
     # Bitrix24 SDK services
     Bitrix24\Lib\ApplicationInstallations\UseCase\Install\Handler:
         autowire: true
+    Bitrix24\Lib\ApplicationInstallations\UseCase\OnAppInstall\Handler:
+        autowire: true
     Bitrix24\Lib\Bitrix24Accounts\UseCase\RenewAuthToken\Handler:
         autowire: true
     Bitrix24\Lib\Services\Flusher:
         autowire: true
+
+    Bitrix24\SDK\Services\RemoteEventsFactory:
+        autowire: true
+        factory: [ null, 'init' ]
 
     # Bitrix24 SDK repository bindings
     Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterface:
