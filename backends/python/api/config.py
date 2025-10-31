@@ -27,7 +27,7 @@ class Config:
     client_id: str
     client_secret: str
 
-    #NUXT_PUBLIC_API_URL
+    # VIRTUAL_HOST
     app_base_url: str
 
 
@@ -45,7 +45,7 @@ def load_config() -> Config:
         jwt_algorithm=env.str("JWT_ALGORITHM", "HS256"),
         client_id=env.str("CLIENT_ID", "client_id"),
         client_secret=env.str("CLIENT_SECRET", "client_secret"),
-        app_base_url=env.str("NUXT_PUBLIC_API_URL", "app_base_url")
+        app_base_url=env.str("VIRTUAL_HOST", "app_base_url")
     )
 
 

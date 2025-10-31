@@ -9,15 +9,15 @@ SECRET_KEY = config.jwt_secret
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
-NUXT_PUBLIC_API_URL = config.app_base_url
+VIRTUAL_HOST = config.app_base_url
 
-if not NUXT_PUBLIC_API_URL.startswith(("http://", "https://")):
-    NUXT_PUBLIC_API_URL = f"https://{NUXT_PUBLIC_API_URL}"
+if not VIRTUAL_HOST.startswith(("http://", "https://")):
+    VIRTUAL_HOST = f"https://{VIRTUAL_HOST}"
 
-if NUXT_PUBLIC_API_URL:
-    CSRF_TRUSTED_ORIGINS = [NUXT_PUBLIC_API_URL]
+if VIRTUAL_HOST:
+    CSRF_TRUSTED_ORIGINS = [VIRTUAL_HOST]
 
-    domain = urlparse(NUXT_PUBLIC_API_URL).hostname
+    domain = urlparse(VIRTUAL_HOST).hostname
     ALLOWED_HOSTS = [domain, "localhost", "127.0.0.1", "api-python"]
 else:
     CSRF_TRUSTED_ORIGINS = []
