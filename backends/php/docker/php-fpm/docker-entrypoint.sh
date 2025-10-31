@@ -32,15 +32,8 @@ wait_for_db() {
 }
 
 if [ -f "composer.json" ]; then
-    echo "Found composer.json, checking dependencies..."
-
-    if [ ! -d "vendor" ] || [ ! -f "vendor/autoload.php" ]; then
-        echo "Installing composer dependencies..."
-        composer install --optimize-autoloader
-    else
-        echo "Vendor directory exists, skipping composer install"
-        echo "To reinstall dependencies, delete the vendor directory and restart the container"
-    fi
+    echo "Found composer.json, install dependencies..."
+    composer install --optimize-autoloader
 else
     echo "Warning: composer.json not found in /var/www"
 fi
