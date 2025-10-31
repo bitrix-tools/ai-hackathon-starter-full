@@ -21,9 +21,14 @@ class JwtAuthenticationListener
      * List of routes that don't require JWT authentication
      */
     private const array PUBLIC_ROUTES = [
+        // renew auth token route, you need chech auth data from bitrix24 and get new token
         '/api/getToken',
+        // health check route from monitoring
         '/api/health',
+        // install application route, you need check auth data from bitrix24 and install application
         '/api/install',
+        // server side events from bitrix24
+        '/api/app-events',
     ];
 
     public function __construct(
