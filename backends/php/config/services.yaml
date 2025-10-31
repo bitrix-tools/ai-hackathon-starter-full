@@ -32,10 +32,16 @@ services:
     # Bitrix24 SDK services
     Bitrix24\Lib\ApplicationInstallations\UseCase\Install\Handler:
         autowire: true
+    Bitrix24\Lib\ApplicationInstallations\UseCase\OnAppInstall\Handler:
+        autowire: true
     Bitrix24\Lib\Bitrix24Accounts\UseCase\RenewAuthToken\Handler:
         autowire: true
     Bitrix24\Lib\Services\Flusher:
         autowire: true
+
+    Bitrix24\SDK\Services\RemoteEventsFactory:
+        autowire: true
+        factory: [ null, 'init' ]
 
     # Bitrix24 SDK repository bindings
     Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterface:

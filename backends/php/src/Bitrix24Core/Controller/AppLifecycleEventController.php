@@ -14,6 +14,9 @@ declare(strict_types=1);
 namespace App\Bitrix24Core\Controller;
 
 use App\Bitrix24Core\Bitrix24ServiceBuilderFactory;
+use Bitrix24\Lib\Bitrix24Accounts\ValueObjects\Domain;
+use Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\OnApplicationInstall;
+use Bitrix24\SDK\Application\Requests\Events\OnApplicationUninstall\OnApplicationUninstall;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Services\RemoteEventsFactory;
 use Psr\Log\LoggerInterface;
@@ -21,12 +24,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
+use Bitrix24\Lib\ApplicationInstallations;
 
 final readonly class AppLifecycleEventController
 {
     public function __construct(
-        private readonly Bitrix24ServiceBuilderFactory $bitrix24ServiceBuilderFactory,
-        private readonly LoggerInterface $logger
+        private ApplicationInstallations\UseCase\OnAppInstall\Handler $onAppInstallHandler,
+        private Bitrix24ServiceBuilderFactory $bitrix24ServiceBuilderFactory,
+        private RemoteEventsFactory $remoteEventsFactory,
+        private LoggerInterface $logger
     ) {
     }
 
@@ -49,9 +55,34 @@ final readonly class AppLifecycleEventController
                 );
             }
 
-            // todo process incoming events
-            // OnApplicationInstall
-            // OnApplicationUninstall
+            // for lifecycle event OnApplicationInstall we dont have stored application token
+            $b24Event = $this->remoteEventsFactory->createEvent($incomingRequest, null);
+            switch ($b24Event->getEventCode()) {
+                case OnApplicationInstall::CODE:
+                    // finish installation process
+                    // store application token
+                    $this->onAppInstallHandler->handle(
+                        new ApplicationInstallations\UseCase\OnAppInstall\Command(
+                            $b24Event->getAuth()->member_id,
+                            new Domain($b24Event->getAuth()->domain),
+                            $b24Event->getAuth()->application_token,
+                            // todo fix command arguments
+                            'L'
+                        )
+                    );
+
+                    break;
+                case OnApplicationUninstall::CODE:
+                    $this->logger->debug('AppLifecycleEventController.process.uninstall', [
+                        'status' => 'processed'
+                    ]);
+                    break;
+                default:
+                    $this->logger->warning('AppLifecycleEventController.process.unknownEvent', [
+                        'code' => $b24Event->getEventCode()
+                    ]);
+                    break;
+            }
 
             $response = new Response('OK', 200);
             $this->logger->debug('AppLifecycleEventController.process.finish', [
