@@ -30,7 +30,7 @@ final readonly class AppLifecycleEventController
     ) {
     }
 
-    #[Route('/api/app-events', name: 'b24_events', methods: ['POST'])]
+    #[Route('/api/app-events/', name: 'b24_events', methods: ['POST'])]
     public function process(Request $incomingRequest): Response
     {
         $this->logger->debug('AppLifecycleEventController.process.start', [

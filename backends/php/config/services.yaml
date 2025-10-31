@@ -8,6 +8,8 @@ parameters:
     bitrix24sdk.app.client_secret: '%env(BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET)%'
     bitrix24sdk.app.scope: '%env(BITRIX24_PHP_SDK_APPLICATION_SCOPE)%'
     bitrix24sdk.app.local.domain: '%env(BITRIX24_PHP_SDK_LOCAL_APPLICATION_DOMAIN)%'
+    # pass dev host to the application
+    APPLICATION_HOST: '%env(NUXT_PUBLIC_API_URL)%'
 
     # JWT Authentication parameters
     jwt.secret: '%env(JWT_SECRET)%'
