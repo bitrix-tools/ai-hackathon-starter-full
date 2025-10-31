@@ -113,6 +113,7 @@ class AppLifecycleController extends AbstractController
                 )
             );
 
+            // @todo fix this
             // step 2
             // register application lifecycle event handlers
             $eventHandlerUrl = $this->generateUrl(

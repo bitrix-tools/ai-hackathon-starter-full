@@ -46,7 +46,18 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       tailwindcss()
-    ]
+    ],
+    server: {
+      proxy: {
+        '/api': { target: process.env.SERVER_HOST || 'http://api-need_set:8000', changeOrigin: true }
+      }
+    }
+  },
+
+  nitro: {
+    devProxy: {
+      '/api': { target: process.env.SERVER_HOST || 'http://api-need_set:8000', changeOrigin: true }
+    },
   },
 
   i18n: {

@@ -18,10 +18,10 @@ if NUXT_PUBLIC_API_URL:
     CSRF_TRUSTED_ORIGINS = [NUXT_PUBLIC_API_URL]
 
     domain = urlparse(NUXT_PUBLIC_API_URL).hostname
-    ALLOWED_HOSTS = [domain, "localhost", "127.0.0.1"]
+    ALLOWED_HOSTS = [domain, "localhost", "127.0.0.1", "api-python"]
 else:
     CSRF_TRUSTED_ORIGINS = []
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1", "api-python"]
 
 INSTALLED_APPS = [
     "django.contrib.admin",

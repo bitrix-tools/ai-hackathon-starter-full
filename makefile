@@ -6,12 +6,12 @@ DOCKER_COMPOSE = docker compose
 # Development
 dev-front:
 	@echo "Starting frontend"
-	COMPOSE_PROFILES=frontend,cloudpub-front docker compose --env-file .env up --build
+	COMPOSE_PROFILES=frontend,cloudpub docker compose --env-file .env up --build
 
 ## PHP
 dev-php:
 	@echo "Starting dev php"
-	COMPOSE_PROFILES=frontend,php,cloudpub-php docker compose --env-file .env up --build
+	COMPOSE_PROFILES=frontend,php,cloudpub docker compose --env-file .env up --build
 
 # work with composer
 .PHONY: composer-install
@@ -65,8 +65,6 @@ dev-php-db-migrate-create:
 dev-php-db-migrate-status:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:migrations:status
 
-
-
 dev-php-db-schema-update:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli php bin/console doctrine:schema:update --force
 
@@ -76,12 +74,12 @@ dev-php-db-schema-validate:
 ## Python
 dev-python:
 	@echo "Starting dev python"
-	COMPOSE_PROFILES=frontend,python,cloudpub-python docker compose --env-file .env up --build
+	COMPOSE_PROFILES=frontend,python,cloudpub docker compose --env-file .env up --build
 
 ## NodeJs
 dev-node:
 	@echo "Starting dev node"
-	COMPOSE_PROFILES=frontend,node,cloudpub-node docker compose --env-file .env up --build
+	COMPOSE_PROFILES=frontend,node,cloudpub docker compose --env-file .env up --build
 
 # Production
 prod-php:

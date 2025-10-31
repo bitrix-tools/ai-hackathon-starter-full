@@ -30,8 +30,9 @@ services:
       target: ${BUILD_TARGET:-dev}
     env_file: .env
     environment:
-      - NUXT_PUBLIC_APP_URL=${VIRTUAL_HOST}
-      - HTTP=frontend:3000
+      NUXT_PUBLIC_APP_URL: ${VIRTUAL_HOST}
+      NUXT_PUBLIC_API_URL: ${VIRTUAL_HOST}
+      HTTP: frontend:3000
     expose:
       - '3000'
     volumes:
@@ -40,8 +41,8 @@ services:
       - internal-net
 
   # (~) Cloudpub - for frontend
-  cloudpub-front:
-    profiles: ["cloudpub-front"]
+  cloudpub:
+    profiles: ["cloudpub"]
     container_name: cloudpubFront
     image: cloudpub/cloudpub:latest
     # for arm64 proc
@@ -49,8 +50,8 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      - TOKEN=${CLOUDPUB_TOKEN}
-      - HTTP=frontend:3000
+      TOKEN: ${CLOUDPUB_TOKEN}
+      HTTP: frontend:3000
     command: run
     depends_on:
       - frontend
@@ -70,6 +71,7 @@ services:
     environment:
       DB_HOST: database
       NODE_ENV: ${NODE_ENV:-development}
+      NUXT_PUBLIC_API_URL: ${VIRTUAL_HOST}
       BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID: ${CLIENT_ID:-enter_your_b24_app_client_id}
       BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET: ${CLIENT_SECRET:-enter_your_b24_app_secret}
       BITRIX24_PHP_SDK_APPLICATION_SCOPE: ${SCOPE:-enter_your_b24_app_scope}
@@ -111,25 +113,25 @@ services:
     tty: true
 
   # (~) Cloudpub - for php
-  cloudpub-php:
-    profiles: ["cloudpub-php"]
-    container_name: cloudpubApiPhp
-    image: cloudpub/cloudpub:latest
-    # for arm64 proc
-    # image: cloudpub/cloudpub:latest-arm64
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      - TOKEN=${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
-      - HTTP=frontend:3000,api-php:8000
-    command: run
-    depends_on:
-      - frontend
-      - api-php
-    volumes:
-      - cloudpub-config:/home/cloudpub
-    networks:
-      - internal-net
+#  cloudpub-php:
+#    profiles: ["cloudpub-php"]
+#    container_name: cloudpubApiPhp
+#    image: cloudpub/cloudpub:latest
+#    # for arm64 proc
+#    # image: cloudpub/cloudpub:latest-arm64
+#    restart: unless-stopped
+#    env_file: .env
+#    environment:
+#      TOKEN: ${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
+#      HTTP: frontend:3000,api-php:8000
+#    command: run
+#    depends_on:
+#      - frontend
+#      - api-php
+#    volumes:
+#      - cloudpub-config:/home/cloudpub
+#    networks:
+#      - internal-net
 
   api-python:
     profiles: ["python"]
@@ -140,8 +142,9 @@ services:
     container_name: api
     env_file: .env
     environment:
-      - DB_HOST=database
-      - PORT=8000
+      DB_HOST: database
+      PORT: 8000
+      NUXT_PUBLIC_API_URL: ${VIRTUAL_HOST}
     expose:
       - "8000"
     ports:
@@ -155,25 +158,25 @@ services:
       - internal-net
 
   # (~) Cloudpub - for python
-  cloudpub-python:
-    profiles: ["cloudpub-python"]
-    container_name: cloudpubApiPython
-    image: cloudpub/cloudpub:latest
-    # for arm64 proc
-    # image: cloudpub/cloudpub:latest-arm64
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      - TOKEN=${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
-      - HTTP=frontend:3000,api-python:8000
-    command: run
-    depends_on:
-      - frontend
-      - api-python
-    volumes:
-      - cloudpub-config:/home/cloudpub
-    networks:
-      - internal-net
+#  cloudpub-python:
+#    profiles: ["cloudpub-python"]
+#    container_name: cloudpubApiPython
+#    image: cloudpub/cloudpub:latest
+#    # for arm64 proc
+#    # image: cloudpub/cloudpub:latest-arm64
+#    restart: unless-stopped
+#    env_file: .env
+#    environment:
+#      TOKEN: ${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
+#      HTTP: frontend:3000,api-python:8000
+#    command: run
+#    depends_on:
+#      - frontend
+#      - api-python
+#    volumes:
+#      - cloudpub-config:/home/cloudpub
+#    networks:
+#      - internal-net
 
   api-node:
     profiles: ["node"]
@@ -184,9 +187,10 @@ services:
       target: ${BUILD_TARGET:-dev}
     env_file: .env
     environment:
-      - DB_HOST=database
-      - NODE_ENV=${NODE_ENV:-development}
-      - PORT=8000
+      DB_HOST: database
+      NODE_ENV: ${NODE_ENV:-development}
+      NUXT_PUBLIC_API_URL: ${VIRTUAL_HOST}
+      PORT: 8000
     expose:
       - "8000"
     ports:
@@ -200,25 +204,25 @@ services:
       - internal-net
 
   # (~) Cloudpub - for php
-  cloudpub-node:
-    profiles: [ "cloudpub-node" ]
-    container_name: cloudpubApiNode
-    image: cloudpub/cloudpub:latest
-    # for arm64 proc
-    # image: cloudpub/cloudpub:latest-arm64
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      - TOKEN=${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
-      - HTTP=frontend:3000,api-node:8000
-    command: run
-    depends_on:
-      - frontend
-      - api-node
-    volumes:
-      - cloudpub-config:/home/cloudpub
-    networks:
-      - internal-net
+#  cloudpub-node:
+#    profiles: [ "cloudpub-node" ]
+#    container_name: cloudpubApiNode
+#    image: cloudpub/cloudpub:latest
+#    # for arm64 proc
+#    # image: cloudpub/cloudpub:latest-arm64
+#    restart: unless-stopped
+#    env_file: .env
+#    environment:
+#      TOKEN: ${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
+#      HTTP: frontend:3000,api-node:8000
+#    command: run
+#    depends_on:
+#      - frontend
+#      - api-node
+#    volumes:
+#      - cloudpub-config:/home/cloudpub
+#    networks:
+#      - internal-net
 
 networks:
   internal-net:
