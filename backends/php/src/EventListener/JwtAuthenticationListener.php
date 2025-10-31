@@ -23,6 +23,7 @@ class JwtAuthenticationListener
     private const array PUBLIC_ROUTES = [
         '/api/getToken',
         '/api/health',
+        '/api/install',
     ];
 
     public function __construct(
