@@ -112,26 +112,6 @@ services:
     stdin_open: true
     tty: true
 
-  # (~) Cloudpub - for php
-#  cloudpub-php:
-#    profiles: ["cloudpub-php"]
-#    container_name: cloudpubApiPhp
-#    image: cloudpub/cloudpub:latest
-#    # for arm64 proc
-#    # image: cloudpub/cloudpub:latest-arm64
-#    restart: unless-stopped
-#    env_file: .env
-#    environment:
-#      TOKEN: ${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
-#      HTTP: frontend:3000,api-php:8000
-#    command: run
-#    depends_on:
-#      - frontend
-#      - api-php
-#    volumes:
-#      - cloudpub-config:/home/cloudpub
-#    networks:
-#      - internal-net
 
   api-python:
     profiles: ["python"]
@@ -157,27 +137,6 @@ services:
     networks:
       - internal-net
 
-  # (~) Cloudpub - for python
-#  cloudpub-python:
-#    profiles: ["cloudpub-python"]
-#    container_name: cloudpubApiPython
-#    image: cloudpub/cloudpub:latest
-#    # for arm64 proc
-#    # image: cloudpub/cloudpub:latest-arm64
-#    restart: unless-stopped
-#    env_file: .env
-#    environment:
-#      TOKEN: ${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
-#      HTTP: frontend:3000,api-python:8000
-#    command: run
-#    depends_on:
-#      - frontend
-#      - api-python
-#    volumes:
-#      - cloudpub-config:/home/cloudpub
-#    networks:
-#      - internal-net
-
   api-node:
     profiles: ["node"]
     container_name: api
@@ -202,27 +161,6 @@ services:
       - database
     networks:
       - internal-net
-
-  # (~) Cloudpub - for php
-#  cloudpub-node:
-#    profiles: [ "cloudpub-node" ]
-#    container_name: cloudpubApiNode
-#    image: cloudpub/cloudpub:latest
-#    # for arm64 proc
-#    # image: cloudpub/cloudpub:latest-arm64
-#    restart: unless-stopped
-#    env_file: .env
-#    environment:
-#      TOKEN: ${CLOUDPUB_TOKEN:-your_cloudpub_token_here}
-#      HTTP: frontend:3000,api-node:8000
-#    command: run
-#    depends_on:
-#      - frontend
-#      - api-node
-#    volumes:
-#      - cloudpub-config:/home/cloudpub
-#    networks:
-#      - internal-net
 
 networks:
   internal-net:
