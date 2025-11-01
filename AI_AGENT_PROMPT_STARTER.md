@@ -1084,7 +1084,41 @@ def robot_handler(request):
             pass
     
     # 5. Создаем OAuthPlacementData (аналогично app_events)
-    # См. примеры в backends/python/api/main/views.py (функция robot_handler)
+    from b24pysdk.bitrix_api.credentials import OAuthPlacementData
+    from .models import Bitrix24Account
+    from datetime import timedelta, datetime
+    from django.utils import timezone
+    
+    # Обрабатываем expires
+    auth_expires = auth_data.get('expires_in', 3600)
+    if isinstance(auth_expires, (int, str)):
+        try:
+            auth_expires_int = int(auth_expires)
+            if auth_expires_int < 1000000000:
+                expires_dt = timezone.now() + timedelta(seconds=auth_expires_int)
+            else:
+                expires_dt = datetime.fromtimestamp(auth_expires_int, tz=timezone.utc)
+        except:
+            expires_dt = timezone.now() + timedelta(seconds=3600)
+    else:
+        expires_dt = timezone.now() + timedelta(seconds=3600)
+    
+    # Формируем структуру для OAuthPlacementData
+    oauth_dict = {
+        'DOMAIN': auth_data.get('domain', ''),
+        'PROTOCOL': 1,
+        'LANG': 'ru',
+        'APP_SID': auth_data.get('application_token', '') or '',
+        'AUTH_ID': auth_data.get('access_token', ''),
+        'REFRESH_ID': auth_data.get('refresh_token', '') or '',
+        'AUTH_EXPIRES': int(expires_dt.timestamp()) if hasattr(expires_dt, 'timestamp') else expires_dt,
+        'member_id': auth_data.get('member_id', ''),
+        'status': auth_data.get('status', 'free') or 'free'
+    }
+    
+    oauth_placement_data = OAuthPlacementData.from_dict(oauth_dict)
+    bitrix24_account, _ = Bitrix24Account.update_or_create_from_oauth_placement_data(oauth_placement_data)
+    client = bitrix24_account.client
     
     # 6. Выполняем бизнес-логику робота
     # Например, создание задачи:
@@ -1094,12 +1128,217 @@ def robot_handler(request):
             'fields': {
                 'TITLE': 'TEST APP ROBOT',
                 'RESPONSIBLE_ID': str(bitrix24_account.b24_user_id),
-                'CREATED_BY': str(bitrix24_account.b24_user_id)
+                'CREATED_BY': str(bitrix24_account.b24_user_id),
+                'DESCRIPTION': 'Задача создана автоматически роботом'
             }
         }
     )
     
+    task_id = task_response.get('result', {}).get('task', {}).get('id') if task_response else None
+    
     return JsonResponse({'status': 'OK', 'task_id': task_id}, status=200)
+```
+
+**PHP бэкенд:**
+```php
+use Bitrix24\SDK\Services\ServiceBuilderFactory;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Throwable;
+
+#[Route('/api/robot-handler', name: 'b24_robot_handler', methods: ['POST'])]
+public function robotHandler(Request $incomingRequest): JsonResponse
+{
+    $this->logger->debug('RobotHandler.process.start', [
+        'request' => $incomingRequest->request->all(),
+        'contentType' => $incomingRequest->headers->get('Content-Type'),
+    ]);
+    
+    try {
+        // Bitrix24 может отправлять данные как JSON или form-urlencoded
+        // 1. Пробуем получить из request (form-urlencoded)
+        $robotData = $incomingRequest->request->all();
+        
+        // 2. Если нет данных в request, парсим body как JSON
+        if (empty($robotData) && $incomingRequest->getContent()) {
+            $content = json_decode($incomingRequest->getContent(), true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $robotData = $content;
+            } else {
+                // Пробуем как form-urlencoded
+                parse_str($incomingRequest->getContent(), $robotData);
+            }
+        }
+        
+        // 3. Обрабатываем вложенные ключи auth[...], properties[...]
+        // Преобразуем auth[access_token] -> auth.access_token
+        $processedData = [];
+        foreach ($robotData as $key => $value) {
+            if (str_contains($key, '[') && str_contains($key, ']')) {
+                $parts = explode('[', rtrim($key, ']'));
+                $current = &$processedData;
+                foreach ($parts as $i => $part) {
+                    if ($i === count($parts) - 1) {
+                        $current[$part] = $value;
+                    } else {
+                        if (!isset($current[$part])) {
+                            $current[$part] = [];
+                        }
+                        $current = &$current[$part];
+                    }
+                }
+            } else {
+                $processedData[$key] = $value;
+            }
+        }
+        $robotData = array_merge($robotData, $processedData);
+        
+        // 4. Извлекаем данные авторизации
+        $authData = $robotData['auth'] ?? [];
+        if (is_string($authData)) {
+            $authData = json_decode($authData, true) ?? [];
+        }
+        
+        if (empty($authData['domain']) || empty($authData['access_token'])) {
+            return new JsonResponse(['error' => 'Missing required OAuth data'], 400);
+        }
+        
+        // 5. Создаем ServiceBuilder из данных робота
+        // Используем ServiceBuilderFactory для создания клиента
+        $serviceBuilder = (new ServiceBuilderFactory($this->eventDispatcher, $this->logger))->init(
+            $this->bitrix24ServiceBuilderFactory->getApplicationProfile(),
+            $authData['access_token'],
+            $authData['domain']
+        );
+        
+        // 6. Выполняем бизнес-логику робота
+        // Например, создание задачи:
+        $taskService = $serviceBuilder->getTaskScope();
+        $result = $taskService->task()->add([
+            'fields' => [
+                'TITLE' => 'TEST APP ROBOT',
+                'RESPONSIBLE_ID' => $authData['member_id'] ?? 1,
+                'CREATED_BY' => $authData['member_id'] ?? 1,
+                'DESCRIPTION' => 'Задача создана автоматически роботом'
+            ]
+        ]);
+        
+        $taskId = $result->getResult()->getTaskData()->getId();
+        
+        return new JsonResponse([
+            'status' => 'OK',
+            'task_id' => $taskId
+        ], 200);
+        
+    } catch (Throwable $throwable) {
+        $this->logger->error('RobotHandler.error', [
+            'message' => $throwable->getMessage(),
+            'trace' => $throwable->getTraceAsString(),
+        ]);
+        return new JsonResponse([
+            'error' => sprintf('Error processing robot: %s', $throwable->getMessage())
+        ], 500);
+    }
+}
+```
+
+**Node.js бэкенд:**
+```javascript
+// В server.js нужно добавить middleware для парсинга form-urlencoded
+import express from 'express';
+app.use(express.json());
+app.use(express.urlencoded({ extended: true })); // Для form-urlencoded
+
+app.post('/api/robot-handler', async (req, res) => {
+  try {
+    // Bitrix24 может отправлять данные как JSON или form-urlencoded
+    let robotData = {};
+    
+    // 1. Проверяем Content-Type
+    const contentType = req.headers['content-type'] || '';
+    
+    if (contentType.includes('application/x-www-form-urlencoded')) {
+      // 2. Парсим form-urlencoded
+      robotData = req.body;
+      
+      // Обрабатываем вложенные ключи auth[...], properties[...]
+      const processedData = {};
+      for (const [key, value] of Object.entries(robotData)) {
+        if (key.includes('[') && key.includes(']')) {
+          const parts = key.replace(']', '').split('[');
+          let current = processedData;
+          for (let i = 0; i < parts.length; i++) {
+            if (i === parts.length - 1) {
+              current[parts[i]] = value;
+            } else {
+              if (!current[parts[i]]) {
+                current[parts[i]] = {};
+              }
+              current = current[parts[i]];
+            }
+          }
+        } else {
+          processedData[key] = value;
+        }
+      }
+      robotData = { ...robotData, ...processedData };
+    } else {
+      // 3. Парсим как JSON
+      robotData = req.body;
+    }
+    
+    // 4. Извлекаем данные авторизации
+    let authData = robotData.auth || {};
+    if (typeof authData === 'string') {
+      try {
+        authData = JSON.parse(authData);
+      } catch (e) {
+        // Не JSON строка
+      }
+    }
+    
+    if (!authData.domain || !authData.access_token) {
+      return res.status(400).json({ error: 'Missing required OAuth data' });
+    }
+    
+    // 5. Создаем клиент Bitrix24 REST API
+    // Используем SDK для Node.js (например, @bitrix24/rest-node или axios)
+    const axios = require('axios');
+    
+    // 6. Выполняем бизнес-логику робота
+    // Например, создание задачи:
+    // В Bitrix24 REST API токен передается как параметр auth в URL
+    const taskResponse = await axios.post(
+      `https://${authData.domain}/rest/tasks.task.add?auth=${authData.access_token}`,
+      {
+        fields: {
+          TITLE: 'TEST APP ROBOT',
+          RESPONSIBLE_ID: authData.member_id || 1,
+          CREATED_BY: authData.member_id || 1,
+          DESCRIPTION: 'Задача создана автоматически роботом'
+        }
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    
+    const taskId = taskResponse.data.result?.task?.id || null;
+    
+    return res.status(200).json({
+      status: 'OK',
+      task_id: taskId
+    });
+    
+  } catch (error) {
+    console.error('Robot handler error:', error);
+    return res.status(500).json({
+      error: `Error processing robot: ${error.message}`
+    });
+  }
+});
 ```
 
 ⚠️ **Критически важно - формат данных робота:**
@@ -1112,7 +1351,7 @@ def robot_handler(request):
 
 4. **Публичный endpoint:** Endpoint для обработки робота (`/api/robot-handler`) должен быть публичным (без JWT), так как Bitrix24 отправляет запросы напрямую.
 
-5. **Изучи существующий код:** В стартере уже есть рабочая реализация обработчика робота в `backends/python/api/main/views.py` (функция `robot_handler`) - используй её как образец.
+5. **Структура OAuthPlacementData:** Для работы с REST API нужно создать `OAuthPlacementData` из данных авторизации робота. Формат данных аналогичен обработке событий - см. пример выше в разделе обработки событий для правильной структуры.
 
 **3. Важные моменты:**
 
