@@ -71,7 +71,7 @@ onMounted(async () => {
       }"
     >
       <template #header>
-        <ProseH2>!{{ $t('page.index.message.title') }}</ProseH2>
+        <ProseH2>{{ $t('page.index.message.title') }}</ProseH2>
         <ProseP>{{ $t('page.index.message.line1') }}</ProseP>
       </template>
 
