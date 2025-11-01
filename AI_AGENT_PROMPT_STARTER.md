@@ -857,7 +857,7 @@ public function process(Request $incomingRequest): Response
 ```
 
 **Python бэкенд:**
-Создай endpoint для обработки событий аналогично PHP:
+Создай endpoint для обработки событий. Пример с правильной структурой OAuth данных:
 
 ```python
 @xframe_options_exempt
@@ -868,12 +868,49 @@ def app_events(request):
     """
     Обработчик событий от Bitrix24
     Endpoint: /api/app-events
+    
+    Bitrix24 отправляет события как application/x-www-form-urlencoded
+    с вложенными ключами: auth[access_token], data[FIELDS][ID] и т.д.
     """
-    # Проверка и обработка события
-    # Например, OnApplicationInstall, OnApplicationUninstall
-    # или другие события, которые зарегистрированы
+    from b24pysdk.bitrix_api.credentials import OAuthPlacementData
+    from .models import Bitrix24Account
+    
+    # Извлекаем данные из request.POST (Django автоматически парсит form-data)
+    event_name = request.POST.get('event', '')
+    auth_data = {}  # Нужно обработать auth[access_token], auth[domain] и т.д.
+    
+    # Формируем структуру для OAuthPlacementData
+    # ⚠️ ВАЖНО: Проверь структуру в существующих файлах стартера!
+    oauth_dict = {
+        'DOMAIN': auth_data.get('domain', ''),
+        'PROTOCOL': 1,  # HTTPS
+        'LANG': 'ru',
+        'APP_SID': auth_data.get('application_token', ''),
+        'AUTH_ID': auth_data.get('access_token', ''),
+        'REFRESH_ID': auth_data.get('refresh_token', ''),
+        'AUTH_EXPIRES': int(expires_timestamp),
+        'member_id': auth_data.get('member_id', ''),
+        'status': auth_data.get('status', 'free')
+    }
+    
+    # Создаем OAuthPlacementData и получаем Bitrix24Account
+    oauth_placement_data = OAuthPlacementData.from_dict(oauth_dict)
+    bitrix24_account, _ = Bitrix24Account.update_or_create_from_oauth_placement_data(oauth_placement_data)
+    
+    # Обработка конкретного события
+    if event_name == 'ONCRMDEALADD':
+        # Извлекаем ID сделки из data[FIELDS][ID]
+        deal_id = ...
+        # Создаем задачу с правильным форматом UF_CRM_TASK (массив!)
+        task_fields = {
+            'UF_CRM_TASK': [f'D_{deal_id}'],  # ⚠️ МАССИВ, а не строка!
+            ...
+        }
+    
     return JsonResponse({'status': 'OK'}, status=200)
 ```
+
+⚠️ **Обязательно изучи существующий код:** Смотри примеры в `backends/python/api/main/views.py` (функция `app_events`) - там уже есть рабочая реализация с правильной структурой данных.
 
 **Node.js бэкенд:**
 ```javascript
@@ -893,6 +930,16 @@ app.post('/api/app-events', async (req, res) => {
 - **Идемпотентность:** События могут прийти несколько раз, обработка должна быть идемпотентной
 - **Список событий:** Изучи доступные события в [документации REST API Events](https://github.com/bitrix-tools/b24-rest-docs/tree/main/api-reference/events)
 
+⚠️ **Критически важно - структура данных SDK:**
+
+При обработке событий Bitrix24 передает данные в формате `application/x-www-form-urlencoded` с вложенными ключами вида `auth[access_token]`, `data[FIELDS][ID]` и т.д. Для создания `OAuthPlacementData` (Python) или аналогичных структур в других языках:
+
+1. **Обязательно проверь структуру данных SDK:** Изучи исходный код SDK стартера для выбранного языка (Python/PHP/Node.js) в файлах обработки событий - там уже есть рабочие примеры правильной структуры
+2. **Python (b24pysdk):** `OAuthPlacementData.from_dict()` требует плоскую структуру с полями: `DOMAIN`, `PROTOCOL` (1 для HTTPS), `LANG`, `APP_SID`, `AUTH_ID`, `REFRESH_ID`, `AUTH_EXPIRES` (timestamp), `member_id`, `status`
+3. **Типы данных:** Убедись, что используешь правильные типы (например, `expires` должен быть `BIGINT`, а не `INTEGER` для больших timestamp значений)
+4. **Форматы полей API:** Проверь документацию Bitrix24 REST API - некоторые поля требуют массивы (например, `UF_CRM_TASK` для связи задачи со сделкой должно быть `['D_123']`, а не `'D_123'`)
+5. **Логирование:** Добавь детальное логирование для отладки - логируй входящие данные события, структуру данных перед созданием OAuth объекта, ответы API
+
 **4. Примеры событий для регистрации:**
 
 - `ONAPPINSTALL` — установка приложения
@@ -909,13 +956,186 @@ app.post('/api/app-events', async (req, res) => {
 - "placement", "placement-опции"
 - "интеграция в интерфейс Bitrix24"
 - "webhook", "callback"
+- "робот", "robot", "бизнес-процесс", "bizproc"
 
 То обязательно изучи указанные выше инструкции и документацию перед реализацией функционала.
+
+### Роботы (Robots) для бизнес-процессов
+
+⚠️ **ВАЖНО:** Если в описании приложения пользователя упоминаются **роботы**, **автоматизация бизнес-процессов** или **bizproc**, обязательно изучи следующую документацию:
+
+**Расширенная документация по роботам:**
+- **Онлайн:** [Инструкция по созданию роботов](https://github.com/bitrix-tools/ai-hackathon-starter-full/blob/main/instructions/ai-instructions-robot.md)
+- Полное описание создания и регистрации роботов для бизнес-процессов Bitrix24
+- Примеры различных типов роботов
+- Инструкции по обработке данных роботов
+
+#### Краткая инструкция по регистрации роботов
+
+Роботы позволяют создавать автоматизированные действия в бизнес-процессах Bitrix24 (CRM, задачи, смарт-процессы).
+
+**1. Регистрация робота на фронтенде (во время установки):**
+
+Робот регистрируется в процессе установки приложения через метод `bizproc.robot.add` в Bitrix24 JS SDK. Пример (из `frontend/app/pages/install.client.vue`):
+
+```typescript
+// В функции установки (install.client.vue)
+const handlerUrl = `${appUrl}/api/robot-handler`
+const userId = userInfo?.ID || 1
+
+// Сначала удаляем робота, если он уже существует
+try {
+  await $b24.callMethod('bizproc.robot.delete', {
+    CODE: 'test_app_robot'
+  })
+} catch (e) {
+  // Робот не существует, это нормально
+}
+
+// Регистрируем робота
+const response = await $b24.callMethod('bizproc.robot.add', {
+  CODE: 'test_app_robot',  // Уникальный код робота (a-z, 0-9, _, -, .)
+  HANDLER: handlerUrl,      // URL обработчика на бэкенде
+  AUTH_USER_ID: userId,     // ID пользователя для авторизации
+  USE_SUBSCRIPTION: 'N',    // N - не ожидаем ответ, Y - ожидаем (используем bizproc.event.send)
+  NAME: {
+    ru: 'Создать тестовую задачу',
+    en: 'Create test task'
+  },
+  DESCRIPTION: {
+    ru: 'Создает задачу с названием "TEST APP ROBOT"',
+    en: 'Creates a task with title "TEST APP ROBOT"'
+  }
+  // Опционально: PROPERTIES, RETURN_PROPERTIES, FILTER, DOCUMENT_TYPE
+})
+```
+
+**2. Обработка робота на бэкенде:**
+
+Создай публичный endpoint для обработки запросов от робота. Bitrix24 отправляет данные робота в формате JSON или `application/x-www-form-urlencoded`.
+
+**Python бэкенд:**
+```python
+@xframe_options_exempt
+@csrf_exempt
+@require_POST
+@log_errors("robot_handler")
+def robot_handler(request):
+    """
+    Обработчик робота для бизнес-процессов Bitrix24
+    Endpoint: /api/robot-handler
+    
+    ⚠️ ВАЖНО: Bitrix24 может отправлять данные как JSON или form-urlencoded!
+    Нужно поддерживать оба формата.
+    """
+    import json
+    from urllib.parse import parse_qs
+    
+    robot_data = {}
+    
+    # 1. Проверяем request.POST (form-urlencoded)
+    if hasattr(request, 'POST') and request.POST:
+        for key in request.POST:
+            value = request.POST.get(key)
+            robot_data[key] = value[0] if isinstance(value, list) else value
+    
+    # 2. Если нет данных в POST, парсим body
+    if not robot_data and request.body:
+        body_str = request.body.decode('utf-8', errors='ignore')
+        
+        # Пробуем как form-urlencoded
+        try:
+            parsed = parse_qs(body_str, keep_blank_values=True)
+            if parsed:
+                for key, value_list in parsed.items():
+                    robot_data[key] = value_list[0] if value_list else ''
+        except:
+            # Пробуем как JSON
+            try:
+                robot_data = json.loads(body_str)
+            except json.JSONDecodeError:
+                return JsonResponse({'error': 'Invalid data format'}, status=400)
+    
+    # 3. Обрабатываем вложенные ключи auth[...], properties[...]
+    # Преобразуем auth[access_token] -> auth.access_token
+    processed_data = {}
+    for key, value in robot_data.items():
+        if '[' in key and ']' in key:
+            parts = key.replace(']', '').split('[')
+            current = processed_data
+            for i, part in enumerate(parts):
+                if i == len(parts) - 1:
+                    current[part] = value
+                else:
+                    if part not in current:
+                        current[part] = {}
+                    current = current[part]
+        else:
+            processed_data[key] = value
+    
+    robot_data.update(processed_data)
+    
+    # 4. Извлекаем данные авторизации
+    auth_data = robot_data.get('auth', {})
+    if isinstance(auth_data, str):
+        try:
+            auth_data = json.loads(auth_data)
+        except:
+            pass
+    
+    # 5. Создаем OAuthPlacementData (аналогично app_events)
+    # См. примеры в backends/python/api/main/views.py (функция robot_handler)
+    
+    # 6. Выполняем бизнес-логику робота
+    # Например, создание задачи:
+    task_response = client._bitrix_token.call_method(
+        api_method='tasks.task.add',
+        params={
+            'fields': {
+                'TITLE': 'TEST APP ROBOT',
+                'RESPONSIBLE_ID': str(bitrix24_account.b24_user_id),
+                'CREATED_BY': str(bitrix24_account.b24_user_id)
+            }
+        }
+    )
+    
+    return JsonResponse({'status': 'OK', 'task_id': task_id}, status=200)
+```
+
+⚠️ **Критически важно - формат данных робота:**
+
+1. **Поддержка разных форматов:** Bitrix24 может отправлять данные роботов как JSON или `application/x-www-form-urlencoded`. Обработчик должен поддерживать оба формата (см. пример выше).
+
+2. **Обработка вложенных ключей:** Данные могут приходить с плоскими ключами вида `auth[access_token]`, `properties[field_name]`. Нужно преобразовывать их в вложенную структуру `auth.access_token`.
+
+3. **OAuth данные:** Робот передает данные авторизации в объекте `auth` для создания `OAuthPlacementData` и последующих вызовов REST API.
+
+4. **Публичный endpoint:** Endpoint для обработки робота (`/api/robot-handler`) должен быть публичным (без JWT), так как Bitrix24 отправляет запросы напрямую.
+
+5. **Изучи существующий код:** В стартере уже есть рабочая реализация обработчика робота в `backends/python/api/main/views.py` (функция `robot_handler`) - используй её как образец.
+
+**3. Важные моменты:**
+
+- **Права доступа:** В настройках приложения в Bitrix24 должно быть включено право **bizproc** (бизнес-процессы)
+- **URL handler:** Handler URL должен быть доступен извне (через Cloudpub или публичный домен)
+- **Параметры робота:** Робот может иметь входные параметры (`PROPERTIES`) и возвращаемые значения (`RETURN_PROPERTIES`)
+- **USE_SUBSCRIPTION:** Если `USE_SUBSCRIPTION = 'Y'`, нужно вернуть результат через `bizproc.event.send`
+- **Фильтрация:** Используй `FILTER` для ограничения доступности робота по типам документов
+
+**4. Примеры использования роботов:**
+
+- Создание задач автоматически
+- Отправка данных во внешние системы
+- Получение данных из внешних API
+- Интеграция с другими сервисами
+- Выполнение сложных бизнес-операций
+
+⚠️ **Обязательно изучи:** Полную документацию по роботам: [Инструкция по созданию роботов](https://github.com/bitrix-tools/ai-hackathon-starter-full/blob/main/instructions/ai-instructions-robot.md)
 
 ### Важные замечания
 
 ⚠️ **Перед реализацией функционала:**
-1. **Проверь описание приложения пользователя** — если упоминаются встройки (widgets) или события (events), обязательно изучи инструкции из раздела "Встройки (Widgets) и события (Events)" выше
+1. **Проверь описание приложения пользователя** — если упоминаются встройки (widgets), события (events) или роботы (robots), обязательно изучи инструкции из разделов "Встройки (Widgets) и события (Events)" и "Роботы (Robots) для бизнес-процессов" выше
 2. Изучи соответствующие примеры SDK для выбранного языка
 3. Проверь существующие паттерны в проекте
 4. Убедись, что используешь правильные методы и компоненты
