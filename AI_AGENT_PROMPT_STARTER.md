@@ -46,7 +46,7 @@ starter-kit/
 
 **Backend (на выбор):**
 - **PHP**: Symfony 7, Doctrine ORM, PHP SDK для Bitrix24
-- **Python**: Django, b24pysdk, SQLAlchemy/ORM
+- **Python**: Django, b24pysdk
 - **Node.js**: Express, pg (PostgreSQL), JWT
 
 **Infrastructure:**
@@ -119,12 +119,18 @@ make dev-node
    DJANGO_SUPERUSER_USERNAME=admin
    DJANGO_SUPERUSER_EMAIL=admin@example.com
    DJANGO_SUPERUSER_PASSWORD=admin123
+   CLIENT_ID=local.xxx  # Получите после регистрации приложения в Bitrix24
+   CLIENT_SECRET=xxx    # Получите после регистрации приложения в Bitrix24
+   SCOPE=crm,user_brief,pull,placement,userfieldconfig
    ```
 
    **Для Node.js бэкенда:**
    ```env
    SERVER_HOST=http://api-node:8000
    CLOUDPUB_TOKEN=ваш_токен_cloudpub
+   CLIENT_ID=local.xxx  # Получите после регистрации приложения в Bitrix24
+   CLIENT_SECRET=xxx    # Получите после регистрации приложения в Bitrix24
+   SCOPE=crm,user_brief,pull,placement,userfieldconfig
    ```
 
    **Общие настройки:**
