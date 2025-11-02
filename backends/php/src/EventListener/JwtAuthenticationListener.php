@@ -27,8 +27,10 @@ class JwtAuthenticationListener
         '/api/health',
         // install application route, you need check auth data from bitrix24 and install application
         '/api/install',
-        // server side events from bitrix24
+        // server side application lifecycle events from bitrix24
         '/api/app-events',
+        // server side events from bitrix24
+        '/api/custom-b24-events',
     ];
 
     public function __construct(

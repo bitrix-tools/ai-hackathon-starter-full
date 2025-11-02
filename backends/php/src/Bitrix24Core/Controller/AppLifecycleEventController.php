@@ -66,7 +66,7 @@ final readonly class AppLifecycleEventController
                             $b24Event->getAuth()->member_id,
                             new Domain($b24Event->getAuth()->domain),
                             $b24Event->getAuth()->application_token,
-                            // todo fix command arguments
+                            // todo fix command arguments, see https://github.com/mesilov/bitrix24-php-lib/issues/64
                             'L'
                         )
                     );
