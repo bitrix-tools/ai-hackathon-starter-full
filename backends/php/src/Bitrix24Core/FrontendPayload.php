@@ -15,7 +15,6 @@ namespace App\Bitrix24Core;
 
 use Bitrix24\SDK\Core\Credentials\AuthToken;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
-use JsonException;
 
 readonly class FrontendPayload
 {
@@ -28,18 +27,21 @@ readonly class FrontendPayload
         public string $memberId,
         public int $b24UserId,
         public string $placementCode,
-        public array $placementOptions
+        /** @var array<string, mixed> */
+        public array $placementOptions,
     ) {
     }
 
     /**
+     * @param array<string, mixed> $payload
+     *
      * @throws InvalidArgumentException
-     * @throws JsonException
+     * @throws \JsonException
      */
     public static function initFromArray(array $payload): self
     {
         if (
-            $payload['PLACEMENT_OPTIONS'] !== ''
+            '' !== $payload['PLACEMENT_OPTIONS']
             && !is_array($payload['PLACEMENT_OPTIONS'])
         ) {
             $placementOptions = json_decode($payload['PLACEMENT_OPTIONS'], true, 512, JSON_THROW_ON_ERROR);
@@ -51,21 +53,21 @@ readonly class FrontendPayload
         }
 
         return new self(
-            (string)$payload['DOMAIN'],
-            $payload['PROTOCOL'] === 1,
-            (string)$payload['LANG'],
-            (string)$payload['APP_SID'],
+            (string) $payload['DOMAIN'],
+            1 === $payload['PROTOCOL'],
+            (string) $payload['LANG'],
+            (string) $payload['APP_SID'],
             AuthToken::initFromArray(
                 [
-                    'access_token' => (string)$payload['AUTH_ID'],
-                    'refresh_token' => (string)$payload['REFRESH_TOKEN'],
-                    'expires' => (string)$payload['AUTH_EXPIRES'],
-                ]
+                    'access_token' => (string) $payload['AUTH_ID'],
+                    'refresh_token' => (string) $payload['REFRESH_TOKEN'],
+                    'expires' => (string) $payload['AUTH_EXPIRES'],
+                ],
             ),
-            (string)$payload['member_id'],
-            (int)$payload['user_id'],
-            (string)$payload['PLACEMENT'],
-            $placementOptions
+            (string) $payload['member_id'],
+            (int) $payload['user_id'],
+            (string) $payload['PLACEMENT'],
+            $placementOptions,
         );
     }
 }

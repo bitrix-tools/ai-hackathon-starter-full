@@ -13,12 +13,12 @@ declare(strict_types=1);
 
 namespace App\Bitrix24Core;
 
+use Bitrix24\Lib\Bitrix24Accounts;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Exceptions\MultipleBitrix24AccountsFoundException;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Core\Exceptions\WrongConfigurationException;
 use Bitrix24\SDK\Events\AuthTokenRenewedEvent;
 use Psr\Log\LoggerInterface;
-use Bitrix24\Lib\Bitrix24Accounts;
 
 readonly class Bitrix24SdkEventListener
 {
@@ -35,9 +35,11 @@ readonly class Bitrix24SdkEventListener
      */
     public function onAuthTokenRenewedEventListener(AuthTokenRenewedEvent $authTokenRenewedEvent): void
     {
-        $this->logger->info('onAuthTokenRenewedEventListener.start', [
-                'member_id' => $authTokenRenewedEvent->getRenewedToken()->memberId
-            ]
+        $this->logger->info(
+            'onAuthTokenRenewedEventListener.start',
+            [
+                'member_id' => $authTokenRenewedEvent->getRenewedToken()->memberId,
+            ],
         );
 
         // in this example we just renew auth token for one account per portal

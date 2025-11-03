@@ -6,11 +6,10 @@ namespace App\Service;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
-use Exception;
 use Psr\Log\LoggerInterface;
 
 /**
- * JWT Service for token generation and validation
+ * JWT Service for token generation and validation.
  *
  * This service provides stateless JWT authentication using HMAC (HS256) algorithm.
  * Tokens contain Bitrix24 domain information and have a configurable TTL.
@@ -21,15 +20,16 @@ class JwtService
         private readonly string $secret,
         private readonly int $ttl,
         private readonly string $algorithm,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
     ) {
     }
 
     /**
-     * Generate JWT token with Bitrix24 domain information
+     * Generate JWT token with Bitrix24 domain information.
      *
-     * @param string $domain Bitrix24 domain (e.g., "company.bitrix24.com")
+     * @param string      $domain   Bitrix24 domain (e.g., "company.bitrix24.com")
      * @param string|null $memberId Bitrix24 member ID (optional)
+     *
      * @return string JWT token
      */
     public function generateToken(string $domain, ?string $memberId = null): string
@@ -46,7 +46,7 @@ class JwtService
         ];
 
         // Add member_id if provided
-        if ($memberId !== null) {
+        if (null !== $memberId) {
             $payload['member_id'] = $memberId;
         }
 
@@ -60,9 +60,10 @@ class JwtService
     }
 
     /**
-     * Validate JWT token signature and expiration
+     * Validate JWT token signature and expiration.
      *
      * @param string $token JWT token to validate
+     *
      * @return bool True if token is valid, false otherwise
      */
     public function validateToken(string $token): bool
@@ -73,10 +74,10 @@ class JwtService
             $this->logger->debug('JWT token validated successfully');
 
             return true;
-        } catch (Exception $e) {
+        } catch (\Exception $exception) {
             $this->logger->warning('JWT token validation failed', [
-                'error' => $e->getMessage(),
-                'exception' => get_class($e),
+                'error' => $exception->getMessage(),
+                'exception' => get_class($exception),
             ]);
 
             return false;
@@ -84,9 +85,10 @@ class JwtService
     }
 
     /**
-     * Decode JWT token and return payload
+     * Decode JWT token and return payload.
      *
      * @param string $token JWT token to decode
+     *
      * @return array<string, mixed>|null Decoded payload or null if invalid
      */
     public function decodeToken(string $token): ?array
@@ -103,10 +105,10 @@ class JwtService
             ]);
 
             return $payload;
-        } catch (Exception $e) {
+        } catch (\Exception $exception) {
             $this->logger->warning('JWT token decoding failed', [
-                'error' => $e->getMessage(),
-                'exception' => get_class($e),
+                'error' => $exception->getMessage(),
+                'exception' => get_class($exception),
             ]);
 
             return null;
@@ -114,7 +116,7 @@ class JwtService
     }
 
     /**
-     * Generate unique JWT ID (jti claim)
+     * Generate unique JWT ID (jti claim).
      *
      * @return string Unique identifier
      */
@@ -124,7 +126,7 @@ class JwtService
     }
 
     /**
-     * Get configured TTL in seconds
+     * Get configured TTL in seconds.
      *
      * @return int Time to live in seconds
      */

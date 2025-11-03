@@ -41,6 +41,26 @@ php-cli-sh:
 php-cli-app-example:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli bin/console app:example
 
+# linters
+php-cli-lint-phpstan:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli vendor/bin/phpstan --memory-limit=2G analyse -vvv
+
+.PHONY: lint-rector
+lint-rector:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli vendor/bin/rector process --dry-run
+
+.PHONY: lint-rector-fix
+lint-rector-fix:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli vendor/bin/rector process
+
+.PHONY: lint-cs-fixer
+lint-cs-fixer:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli vendor/bin/php-cs-fixer check --verbose --diff
+
+.PHONY: lint-cs-fixer-fix
+lint-cs-fixer-fix:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli vendor/bin/php-cs-fixer fix --verbose --diff
+
 # Doctrine/Symfony database commands
 
 # ATTENTION!

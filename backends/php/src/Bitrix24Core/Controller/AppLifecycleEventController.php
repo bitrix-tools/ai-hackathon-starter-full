@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace App\Bitrix24Core\Controller;
 
-use App\Bitrix24Core\Bitrix24ServiceBuilderFactory;
+use Bitrix24\Lib\ApplicationInstallations;
 use Bitrix24\Lib\Bitrix24Accounts\ValueObjects\Domain;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\OnApplicationInstall;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationUninstall\OnApplicationUninstall;
@@ -24,15 +24,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Throwable;
-use Bitrix24\Lib\ApplicationInstallations;
 
 final readonly class AppLifecycleEventController
 {
     public function __construct(
         private ApplicationInstallations\UseCase\OnAppInstall\Handler $onAppInstallHandler,
-        private Bitrix24ServiceBuilderFactory $bitrix24ServiceBuilderFactory,
         private RemoteEventsFactory $remoteEventsFactory,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -48,11 +46,10 @@ final readonly class AppLifecycleEventController
             // check is this request are valid bitrix24 event request?
             if (!RemoteEventsFactory::isCanProcess($incomingRequest)) {
                 $this->logger->error('AppLifecycleEventController.process.unknownRequest', [
-                    'request' => $incomingRequest->request->all()
+                    'request' => $incomingRequest->request->all(),
                 ]);
-                throw new InvalidArgumentException(
-                    'AppLifecycleEventController controller can process only install or uninstall event requests from bitrix24'
-                );
+
+                throw new InvalidArgumentException('AppLifecycleEventController controller can process only install or uninstall event requests from bitrix24');
             }
 
             // for lifecycle event OnApplicationInstall we dont have stored application token
@@ -66,21 +63,23 @@ final readonly class AppLifecycleEventController
                             $b24Event->getAuth()->member_id,
                             new Domain($b24Event->getAuth()->domain),
                             $b24Event->getAuth()->application_token,
-                            // todo fix command arguments
-                            'L'
-                        )
+                            // todo fix command arguments, see https://github.com/mesilov/bitrix24-php-lib/issues/64
+                            'L',
+                        ),
                     );
 
                     break;
                 case OnApplicationUninstall::CODE:
                     $this->logger->debug('AppLifecycleEventController.process.uninstall', [
-                        'status' => 'processed'
+                        'status' => 'processed',
                     ]);
+
                     break;
                 default:
                     $this->logger->warning('AppLifecycleEventController.process.unknownEvent', [
-                        'code' => $b24Event->getEventCode()
+                        'code' => $b24Event->getEventCode(),
                     ]);
+
                     break;
             }
 
@@ -89,12 +88,14 @@ final readonly class AppLifecycleEventController
                 'response' => $response->getContent(),
                 'statusCode' => $response->getStatusCode(),
             ]);
+
             return $response;
         } catch (Throwable $throwable) {
             $this->logger->error('AppLifecycleEventController.error', [
                 'message' => $throwable->getMessage(),
                 'trace' => $throwable->getTraceAsString(),
             ]);
+
             return new Response(sprintf('error on bitrix24 event processing: %s', $throwable->getMessage()), 500);
         }
     }

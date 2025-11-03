@@ -29,9 +29,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 readonly class Bitrix24ServiceBuilderFactory
 {
-    //todo create custom logger for sdk
-    private const string LOGGER_NAME = 'b24-php-sdk';
-
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
         private ParameterBagInterface $parameterBag,
@@ -40,12 +37,12 @@ readonly class Bitrix24ServiceBuilderFactory
     ) {
     }
 
-    public function createFromFrontendPayload(FrontendPayload $payload): ServiceBuilder
+    public function createFromFrontendPayload(FrontendPayload $frontendPayload): ServiceBuilder
     {
         return new ServiceBuilderFactory($this->eventDispatcher, $this->logger)->init(
             $this->getApplicationProfile(),
-            $payload->authToken,
-            $payload->domain
+            $frontendPayload->authToken,
+            $frontendPayload->domain,
         );
     }
 
@@ -58,7 +55,7 @@ readonly class Bitrix24ServiceBuilderFactory
         return new ServiceBuilderFactory($this->eventDispatcher, $this->logger)->init(
             $this->getApplicationProfile(),
             $b24Event->getAuth()->authToken,
-            $b24Event->getAuth()->domain
+            $b24Event->getAuth()->domain,
         );
     }
 
@@ -70,18 +67,19 @@ readonly class Bitrix24ServiceBuilderFactory
      */
     public function createFromStoredTokenForDomain(string $b24Domain): ServiceBuilder
     {
-        if (empty($b24Domain)) {
+        if ('' === $b24Domain || '0' === $b24Domain) {
             throw new InvalidArgumentException('domain is empty');
         }
 
         $b24Accounts = $this->bitrix24AccountRepository->findByDomain(
             $b24Domain,
             Bitrix24AccountStatus::active,
-            true
+            true,
         );
-        if (count($b24Accounts) === 0) {
+        if ([] === $b24Accounts) {
             throw new Bitrix24AccountNotFoundException(sprintf('b24 account %s not found', $b24Domain));
         }
+
         $b24Account = $b24Accounts[0];
 
         return new ServiceBuilderFactory(
@@ -91,7 +89,7 @@ readonly class Bitrix24ServiceBuilderFactory
             $this->getApplicationProfile(),
             // load auth tokens from a database
             $b24Account->getAuthToken(),
-            $b24Account->getDomainUrl()
+            $b24Account->getDomainUrl(),
         );
     }
 
@@ -103,20 +101,21 @@ readonly class Bitrix24ServiceBuilderFactory
     public function getApplicationProfile(): ApplicationProfile
     {
         try {
-            //todo add validation
+            // todo add validation
             return ApplicationProfile::initFromArray([
                 'BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID' => $this->parameterBag->get('bitrix24sdk.app.client_id'),
                 'BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET' => $this->parameterBag->get('bitrix24sdk.app.client_secret'),
-                'BITRIX24_PHP_SDK_APPLICATION_SCOPE' => $this->parameterBag->get('bitrix24sdk.app.scope')
+                'BITRIX24_PHP_SDK_APPLICATION_SCOPE' => $this->parameterBag->get('bitrix24sdk.app.scope'),
             ]);
         } catch (InvalidArgumentException $invalidArgumentException) {
             $this->logger->error(
                 'Bitrix24ServiceBuilderFactory.getApplicationProfile.error',
                 [
                     'message' => sprintf('cannot read config from $_ENV: %s', $invalidArgumentException->getMessage()),
-                    'trace' => $invalidArgumentException->getTraceAsString()
-                ]
+                    'trace' => $invalidArgumentException->getTraceAsString(),
+                ],
             );
+
             throw $invalidArgumentException;
         }
     }

@@ -44,9 +44,9 @@ services:
   cloudpub:
     profiles: ["cloudpub"]
     container_name: cloudpubFront
-    image: cloudpub/cloudpub:latest
+    #image: cloudpub/cloudpub:latest
     # for arm64 proc
-    # image: cloudpub/cloudpub:latest-arm64
+    image: cloudpub/cloudpub:latest-arm64
     restart: unless-stopped
     env_file: .env
     environment:
@@ -98,6 +98,7 @@ services:
     environment:
       DB_HOST: database
       NODE_ENV: ${NODE_ENV:-development}
+      NUXT_PUBLIC_API_URL: ${VIRTUAL_HOST}
       BITRIX24_PHP_SDK_APPLICATION_CLIENT_ID: ${CLIENT_ID:-enter_your_b24_app_client_id}
       BITRIX24_PHP_SDK_APPLICATION_CLIENT_SECRET: ${CLIENT_SECRET:-enter_your_b24_app_secret}
       BITRIX24_PHP_SDK_APPLICATION_SCOPE: ${SCOPE:-enter_your_b24_app_scope}

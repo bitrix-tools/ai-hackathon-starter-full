@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
- * JWT Authentication Event Listener
+ * JWT Authentication Event Listener.
  *
  * This listener intercepts all incoming requests and validates JWT tokens
  * from the Authorization header. Protected endpoints require a valid JWT token.
@@ -18,7 +18,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 class JwtAuthenticationListener
 {
     /**
-     * List of routes that don't require JWT authentication
+     * List of routes that don't require JWT authentication.
      */
     private const array PUBLIC_ROUTES = [
         // renew auth token route, you need chech auth data from bitrix24 and get new token
@@ -27,24 +27,24 @@ class JwtAuthenticationListener
         '/api/health',
         // install application route, you need check auth data from bitrix24 and install application
         '/api/install',
-        // server side events from bitrix24
+        // server side application lifecycle events from bitrix24
         '/api/app-events',
+        // server side events from bitrix24
+        '/api/custom-b24-events',
     ];
 
     public function __construct(
         private readonly JwtService $jwtService,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
     ) {
     }
 
     /**
-     * Handle request event and validate JWT token
-     *
-     * @param RequestEvent $event
+     * Handle request event and validate JWT token.
      */
-    public function onKernelRequest(RequestEvent $event): void
+    public function onKernelRequest(RequestEvent $requestEvent): void
     {
-        $request = $event->getRequest();
+        $request = $requestEvent->getRequest();
         $path = $request->getPathInfo();
 
         // Skip authentication for public routes
@@ -52,18 +52,19 @@ class JwtAuthenticationListener
             $this->logger->debug('JwtAuthenticationListener: Public route, skipping authentication', [
                 'path' => $path,
             ]);
+
             return;
         }
 
         // Extract token from Authorization header
         $authHeader = $request->headers->get('Authorization');
 
-        if ($authHeader === null) {
+        if (null === $authHeader) {
             $this->logger->warning('JwtAuthenticationListener: Missing Authorization header', [
                 'path' => $path,
             ]);
 
-            $event->setResponse(new JsonResponse([
+            $requestEvent->setResponse(new JsonResponse([
                 'error' => 'Missing Authorization header',
                 'message' => 'Please provide a valid JWT token in the Authorization header',
             ], 401));
@@ -78,7 +79,7 @@ class JwtAuthenticationListener
                 'header' => $authHeader,
             ]);
 
-            $event->setResponse(new JsonResponse([
+            $requestEvent->setResponse(new JsonResponse([
                 'error' => 'Invalid Authorization header format',
                 'message' => 'Authorization header must start with "Bearer "',
             ], 401));
@@ -94,7 +95,7 @@ class JwtAuthenticationListener
                 'path' => $path,
             ]);
 
-            $event->setResponse(new JsonResponse([
+            $requestEvent->setResponse(new JsonResponse([
                 'error' => 'Invalid or expired token',
                 'message' => 'Please obtain a new token via POST /api/getToken',
             ], 401));
@@ -105,7 +106,7 @@ class JwtAuthenticationListener
         // Decode token and store payload in request attributes
         $payload = $this->jwtService->decodeToken($token);
 
-        if ($payload !== null) {
+        if (null !== $payload) {
             $request->attributes->set('jwt_payload', $payload);
             $request->attributes->set('jwt_domain', $payload['domain'] ?? null);
             $request->attributes->set('jwt_member_id', $payload['member_id'] ?? null);
@@ -119,9 +120,10 @@ class JwtAuthenticationListener
     }
 
     /**
-     * Check if route is public (doesn't require authentication)
+     * Check if route is public (doesn't require authentication).
      *
      * @param string $path Request path
+     *
      * @return bool True if route is public
      */
     private function isPublicRoute(string $path): bool
