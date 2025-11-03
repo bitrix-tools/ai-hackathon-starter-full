@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "344f4d885adbfbe618abf918d5ee4feb",
+    "content-hash": "eec89fcb11da9c7654f49f4b155b7876",
     "packages": [
         {
             "name": "bitrix24/b24phpsdk",
@@ -485,12 +485,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/deprecations.git",
-                "reference": "4206996012bf464dd90f918de55ab10dacc1772c"
+                "reference": "8dfcd6625820194ff0e4de93663fb3199d28b60a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/4206996012bf464dd90f918de55ab10dacc1772c",
-                "reference": "4206996012bf464dd90f918de55ab10dacc1772c",
+                "url": "https://api.github.com/repos/doctrine/deprecations/zipball/8dfcd6625820194ff0e4de93663fb3199d28b60a",
+                "reference": "8dfcd6625820194ff0e4de93663fb3199d28b60a",
                 "shasum": ""
             },
             "require": {
@@ -526,7 +526,7 @@
                 "issues": "https://github.com/doctrine/deprecations/issues",
                 "source": "https://github.com/doctrine/deprecations/tree/1.1.x"
             },
-            "time": "2025-10-27T19:01:00+00:00"
+            "time": "2025-11-03T13:53:48+00:00"
         },
         {
             "name": "doctrine/doctrine-bundle",
@@ -1355,12 +1355,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/sql-formatter.git",
-                "reference": "a30c92f02258d299f0b3b1ccb9f841e58692a285"
+                "reference": "2afff1839907465581fa064e221a1c4e22538560"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/a30c92f02258d299f0b3b1ccb9f841e58692a285",
-                "reference": "a30c92f02258d299f0b3b1ccb9f841e58692a285",
+                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/2afff1839907465581fa064e221a1c4e22538560",
+                "reference": "2afff1839907465581fa064e221a1c4e22538560",
                 "shasum": ""
             },
             "require": {
@@ -1403,7 +1403,7 @@
                 "issues": "https://github.com/doctrine/sql-formatter/issues",
                 "source": "https://github.com/doctrine/sql-formatter/tree/1.5.x"
             },
-            "time": "2025-10-27T21:41:15+00:00"
+            "time": "2025-11-03T16:31:23+00:00"
         },
         {
             "name": "fig/http-message-util",
@@ -6490,17 +6490,71 @@
             "time": "2025-10-26T16:58:55+00:00"
         },
         {
+            "name": "phpstan/phpstan",
+            "version": "2.1.x-dev",
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/99020f8fa5c7447fd27ab97632a7ce46099445a8",
+                "reference": "99020f8fa5c7447fd27ab97632a7ce46099445a8",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0"
+            },
+            "conflict": {
+                "phpstan/phpstan-shim": "*"
+            },
+            "default-branch": true,
+            "bin": [
+                "phpstan",
+                "phpstan.phar"
+            ],
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPStan - PHP Static Analysis Tool",
+            "keywords": [
+                "dev",
+                "static analysis"
+            ],
+            "support": {
+                "docs": "https://phpstan.org/user-guide/getting-started",
+                "forum": "https://github.com/phpstan/phpstan/discussions",
+                "issues": "https://github.com/phpstan/phpstan/issues",
+                "security": "https://github.com/phpstan/phpstan/security/policy",
+                "source": "https://github.com/phpstan/phpstan-src"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ondrejmirtes",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/phpstan",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-11-03T10:43:50+00:00"
+        },
+        {
             "name": "roave/security-advisories",
             "version": "dev-latest",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "d2e1583e5f89f53f7882861c1639c14c9a154585"
+                "reference": "a9c2212e5dd9e6ad9aba0413e53484f49284e4b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/d2e1583e5f89f53f7882861c1639c14c9a154585",
-                "reference": "d2e1583e5f89f53f7882861c1639c14c9a154585",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/a9c2212e5dd9e6ad9aba0413e53484f49284e4b3",
+                "reference": "a9c2212e5dd9e6ad9aba0413e53484f49284e4b3",
                 "shasum": ""
             },
             "conflict": {
@@ -6935,7 +6989,7 @@
                 "maikuolan/phpmussel": ">=1,<1.6",
                 "mainwp/mainwp": "<=4.4.3.3",
                 "manogi/nova-tiptap": "<=3.2.6",
-                "mantisbt/mantisbt": "<=2.26.3",
+                "mantisbt/mantisbt": "<2.27.2",
                 "marcwillmann/turn": "<0.3.3",
                 "marshmallow/nova-tiptap": "<5.7",
                 "matomo/matomo": "<1.11",
@@ -7478,7 +7532,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-30T18:07:16+00:00"
+            "time": "2025-11-03T18:07:28+00:00"
         },
         {
             "name": "symfony/maker-bundle",

@@ -27,7 +27,6 @@ use Throwable;
 class ApiController extends AbstractController
 {
     public function __construct(
-        private readonly Bitrix24ServiceBuilderFactory $bitrix24ServiceBuilderFactory,
         private readonly JwtService $jwtService,
         private readonly LoggerInterface $logger
     ) {

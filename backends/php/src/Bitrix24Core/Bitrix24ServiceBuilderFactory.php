@@ -29,9 +29,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 readonly class Bitrix24ServiceBuilderFactory
 {
-    //todo create custom logger for sdk
-    private const string LOGGER_NAME = 'b24-php-sdk';
-
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
         private ParameterBagInterface $parameterBag,

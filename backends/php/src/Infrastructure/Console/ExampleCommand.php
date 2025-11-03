@@ -60,6 +60,9 @@ class ExampleCommand extends Command
         return $input;
     }
 
+    /**
+     * @return array<int,int>
+     */
     #[\Override]
     public function getSubscribedSignals(): array
     {
@@ -132,7 +135,6 @@ class ExampleCommand extends Command
                  * method «setCode» override «execute» method for object Command
                  * we use SingleCommandApplication for reduce code in this example
                  */
-                // @phpstan-ignore-next-line
                 $helper = $this->getHelper('question');
                 $question = new ChoiceQuestion(
                     'Please select command',

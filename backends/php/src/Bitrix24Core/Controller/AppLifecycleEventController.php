@@ -30,7 +30,6 @@ final readonly class AppLifecycleEventController
 {
     public function __construct(
         private ApplicationInstallations\UseCase\OnAppInstall\Handler $onAppInstallHandler,
-        private Bitrix24ServiceBuilderFactory $bitrix24ServiceBuilderFactory,
         private RemoteEventsFactory $remoteEventsFactory,
         private LoggerInterface $logger
     ) {

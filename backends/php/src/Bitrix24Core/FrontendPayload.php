@@ -28,11 +28,13 @@ readonly class FrontendPayload
         public string $memberId,
         public int $b24UserId,
         public string $placementCode,
+        /** @var array<string, mixed> */
         public array $placementOptions
     ) {
     }
 
     /**
+     * @param array<string, mixed> $payload
      * @throws InvalidArgumentException
      * @throws JsonException
      */

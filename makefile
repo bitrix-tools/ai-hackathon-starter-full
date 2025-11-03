@@ -41,6 +41,10 @@ php-cli-sh:
 php-cli-app-example:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli bin/console app:example
 
+php-cli-lint-phpstan:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli vendor/bin/phpstan --memory-limit=2G analyse -vvv
+
+
 # Doctrine/Symfony database commands
 
 # ATTENTION!
