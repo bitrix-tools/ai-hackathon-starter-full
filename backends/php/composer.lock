@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/bitrix24/b24phpsdk.git",
-                "reference": "a48aba97fa339a6f8d497c4c6dfcaf66c24dfecc"
+                "reference": "0a3477af8a8b180d316af8136ecf31f624d3867d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bitrix24/b24phpsdk/zipball/a48aba97fa339a6f8d497c4c6dfcaf66c24dfecc",
-                "reference": "a48aba97fa339a6f8d497c4c6dfcaf66c24dfecc",
+                "url": "https://api.github.com/repos/bitrix24/b24phpsdk/zipball/0a3477af8a8b180d316af8136ecf31f624d3867d",
+                "reference": "0a3477af8a8b180d316af8136ecf31f624d3867d",
                 "shasum": ""
             },
             "require": {
@@ -90,7 +90,7 @@
                 "issues": "https://github.com/bitrix24/b24phpsdk/issues",
                 "source": "https://github.com/bitrix24/b24phpsdk/tree/dev"
             },
-            "time": "2025-11-02T12:35:21+00:00"
+            "time": "2025-11-03T13:03:05+00:00"
         },
         {
             "name": "carbonphp/carbon-doctrine-types",
@@ -655,12 +655,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "881dff95f381a7df96e40acd3aade39730983399"
+                "reference": "233eedb0bd8697e5690f1d2e624da776ef68efef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/881dff95f381a7df96e40acd3aade39730983399",
-                "reference": "881dff95f381a7df96e40acd3aade39730983399",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/233eedb0bd8697e5690f1d2e624da776ef68efef",
+                "reference": "233eedb0bd8697e5690f1d2e624da776ef68efef",
                 "shasum": ""
             },
             "require": {
@@ -733,7 +733,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-27T07:41:28+00:00"
+            "time": "2025-11-03T08:23:12+00:00"
         },
         {
             "name": "doctrine/event-manager",
@@ -1261,12 +1261,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "82a57588010244c42bf4dce2fcf216c4c8748e4b"
+                "reference": "ae937ca93cd06c9bf42f8b3aa2115c41dcf758a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/82a57588010244c42bf4dce2fcf216c4c8748e4b",
-                "reference": "82a57588010244c42bf4dce2fcf216c4c8748e4b",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/ae937ca93cd06c9bf42f8b3aa2115c41dcf758a5",
+                "reference": "ae937ca93cd06c9bf42f8b3aa2115c41dcf758a5",
                 "shasum": ""
             },
             "require": {
@@ -1347,7 +1347,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-01T23:50:46+00:00"
+            "time": "2025-11-03T08:19:42+00:00"
         },
         {
             "name": "doctrine/sql-formatter",
@@ -3465,12 +3465,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/error-handler.git",
-                "reference": "99f81bc944ab8e5dae4f21b4ca9972698bbad0e4"
+                "reference": "bbe40bfab84323d99dab491b716ff142410a92a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/error-handler/zipball/99f81bc944ab8e5dae4f21b4ca9972698bbad0e4",
-                "reference": "99f81bc944ab8e5dae4f21b4ca9972698bbad0e4",
+                "url": "https://api.github.com/repos/symfony/error-handler/zipball/bbe40bfab84323d99dab491b716ff142410a92a8",
+                "reference": "bbe40bfab84323d99dab491b716ff142410a92a8",
                 "shasum": ""
             },
             "require": {
@@ -3539,7 +3539,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-09-11T10:12:26+00:00"
+            "time": "2025-10-31T19:12:50+00:00"
         },
         {
             "name": "symfony/event-dispatcher",

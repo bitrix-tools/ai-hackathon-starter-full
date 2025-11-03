@@ -167,7 +167,7 @@ class ExampleCommand extends Command
                         break;
                     case 'events: bind OnCrmContactAdd event handler':
                         // generate event handler url for events
-                        $eventHandlerUrl = sprintf('%s/api/custom-b24-events/', $this->parameterBag->get('APPLICATION_HOST'));
+                        $eventHandlerUrl = sprintf('%s/api/custom-b24-events', $this->parameterBag->get('APPLICATION_HOST'));
                         $this->logger->debug('ExampleCommand.execute.startBindEventHandlers', [
                             'eventHandlerUrl' => $eventHandlerUrl
                         ]);
