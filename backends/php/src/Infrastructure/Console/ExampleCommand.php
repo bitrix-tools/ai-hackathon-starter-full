@@ -17,20 +17,14 @@ use Bitrix24\SDK\Services\Main\Common\EventHandlerMetadata;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Throwable;
-
-use function Symfony\Component\String\b;
-
-use const SIGINT;
-use const SIGTERM;
 
 #[AsCommand(name: 'app:example', description: 'Example CLI command')]
 class ExampleCommand extends Command
@@ -47,13 +41,14 @@ class ExampleCommand extends Command
 
     private function parseDomain(?string $input): ?string
     {
-        if ($input === null) {
+        if (null === $input) {
             return null;
         }
 
         $input = strtolower($input);
         if (str_starts_with($input, 'http://') || str_starts_with($input, 'https://')) {
             $parsed = parse_url($input);
+
             return $parsed['host'] ?? null;
         }
 
@@ -67,8 +62,8 @@ class ExampleCommand extends Command
     public function getSubscribedSignals(): array
     {
         return [
-            SIGINT, // Interrupt
-            SIGTERM // Terminate
+            \SIGINT, // Interrupt
+            \SIGTERM, // Terminate
         ];
     }
 
@@ -102,25 +97,27 @@ class ExampleCommand extends Command
             $helper = $this->getHelper('question');
             $question = new Question('Please, enter your Bitrix24 domain: ');
             $rawB24Domain = $helper->ask($input, $output, $question);
-            if ($rawB24Domain === null) {
+            if (null === $rawB24Domain) {
                 $symfonyStyle->caution('error: no domain provided');
+
                 return Command::FAILURE;
             }
 
             $b24Domain = $this->parseDomain(trim($rawB24Domain));
-            if ($b24Domain === null) {
+            if (null === $b24Domain) {
                 $symfonyStyle->caution('error: no domain provided');
+
                 return Command::FAILURE;
             }
 
-            $symfonyStyle->info(['', 'Loading Bitrix24 SDK for domain: ' . $b24Domain]);
+            $symfonyStyle->info(['', 'Loading Bitrix24 SDK for domain: '.$b24Domain]);
             $sb = $this->bitrix24ServiceBuilderFactory->createFromStoredTokenForDomain($b24Domain);
 
             $profile = $sb->getMainScope()->main()->getCurrentUserProfile()->getUserProfile();
             $symfonyStyle->writeln([
                 '',
                 sprintf('Hello,  %s %s (%s)', $profile->NAME, $profile->LAST_NAME, $profile->ID),
-                'now, you can use this app to work with Bitrix24 portal'
+                'now, you can use this app to work with Bitrix24 portal',
             ]);
 
             while (true) {
@@ -145,8 +142,8 @@ class ExampleCommand extends Command
                         2 => 'events: bind OnCrmContactAdd event handler',
                         3 => 'events: unbind all event handlers',
                         4 => 'add new contact',
-                        0 => 'exit🚪'
-                    ]
+                        0 => 'exit🚪',
+                    ],
                 );
                 $question->setErrorMessage('Menu item «%s» is invalid.');
                 $menuItem = $helper->ask($input, $output, $question);
@@ -173,27 +170,28 @@ class ExampleCommand extends Command
                         // generate event handler url for events
                         $eventHandlerUrl = sprintf('%s/api/custom-b24-events', $this->parameterBag->get('APPLICATION_HOST'));
                         $this->logger->debug('ExampleCommand.execute.startBindEventHandlers', [
-                            'eventHandlerUrl' => $eventHandlerUrl
+                            'eventHandlerUrl' => $eventHandlerUrl,
                         ]);
 
                         $sb->getMainScope()->eventManager()->bindEventHandlers([
                             new EventHandlerMetadata(
                                 OnCrmContactAdd::CODE,
                                 $eventHandlerUrl,
-                                $profile->ID
-                            )
+                                $profile->ID,
+                            ),
                         ]);
 
                         break;
                     case 'events: unbind all event handlers':
                         $sb->getMainScope()->eventManager()->unbindAllEventHandlers();
+
                         break;
                     case 'add new contact':
                         $symfonyStyle->writeln(['', 'add new contact']);
                         $addResult = $sb->getCRMScope()->contact()->add([
                             'NAME' => sprintf('test contact name %s', time()),
                         ]);
-                        $symfonyStyle->writeln(['', 'contact added, id: ' . $addResult->getId(), '']);
+                        $symfonyStyle->writeln(['', 'contact added, id: '.$addResult->getId(), '']);
 
                         break;
                     case 'exit🚪':
@@ -205,19 +203,20 @@ class ExampleCommand extends Command
             $symfonyStyle->text(
                 [
                     $exception->getMessage(),
-                ]
+                ],
             );
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             $symfonyStyle->caution('fatal error');
             $symfonyStyle->text(
                 [
                     $exception->getMessage(),
                     $exception->getTraceAsString(),
-                ]
+                ],
             );
         }
 
         $this->logger->info('ExampleCommand.execute.finish');
+
         return Command::SUCCESS;
     }
 }

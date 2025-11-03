@@ -15,26 +15,18 @@ namespace App\Bitrix24Core\Controller;
 
 use App\Bitrix24Core\Bitrix24ServiceBuilderFactory;
 use App\Bitrix24Core\FrontendPayload;
-use Bitrix24\SDK\Application\ApplicationStatus;
-use Bitrix24\SDK\Application\PortalLicenseFamily;
+use Bitrix24\Lib\ApplicationInstallations;
+use Bitrix24\Lib\Bitrix24Accounts\ValueObjects\Domain;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationInstall\OnApplicationInstall;
 use Bitrix24\SDK\Application\Requests\Events\OnApplicationUninstall\OnApplicationUninstall;
 use Bitrix24\SDK\Core\Exceptions\InvalidArgumentException;
 use Bitrix24\SDK\Services\Main\Common\EventHandlerMetadata;
-use Bitrix24\SDK\Services\RemoteEventsFactory;
-use JsonException;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Uid\Uuid;
-use Throwable;
-use Bitrix24\Lib\Bitrix24Accounts;
-use Bitrix24\Lib\ApplicationInstallations;
-use Bitrix24\Lib\Bitrix24Accounts\ValueObjects\Domain;
 
 class AppLifecycleController extends AbstractController
 {
@@ -42,13 +34,13 @@ class AppLifecycleController extends AbstractController
         private readonly ParameterBagInterface $parameterBag,
         private readonly ApplicationInstallations\UseCase\Install\Handler $installStartHandler,
         private readonly Bitrix24ServiceBuilderFactory $bitrix24ServiceBuilderFactory,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
     ) {
     }
 
     /**
      * @throws InvalidArgumentException
-     * @throws JsonException
+     * @throws \JsonException
      */
     #[Route('/api/install', name: 'b24_install', methods: ['POST', 'OPTIONS'])]
     public function install(Request $request): Response
@@ -65,12 +57,12 @@ class AppLifecycleController extends AbstractController
         }
 
         $this->logger->debug('AppLifecycleController.install.payload', [
-            'payload' => print_r($payload, true)
+            'payload' => print_r($payload, true),
         ]);
         $frontendPayload = FrontendPayload::initFromArray($payload);
 
         $this->logger->debug('AppLifecycleController.install.frontendPayload', [
-            'payload' => print_r($frontendPayload, true)
+            'payload' => print_r($frontendPayload, true),
         ]);
 
         try {
@@ -98,7 +90,7 @@ class AppLifecycleController extends AbstractController
                     $frontendPayload->memberId,
                     new Domain($frontendPayload->domain),
                     $frontendPayload->authToken,
-                    (int)$b24ApplicationInfo->VERSION,
+                    (int) $b24ApplicationInfo->VERSION,
                     $this->bitrix24ServiceBuilderFactory->getApplicationProfile()->scope,
                     $b24CurrentUserProfile->ID,
                     $b24CurrentUserProfile->ADMIN,
@@ -111,8 +103,8 @@ class AppLifecycleController extends AbstractController
                     $partnerContactPersonId,
                     $partnerId,
                     $externalId,
-                    $comment
-                )
+                    $comment,
+                ),
             );
 
             // step 2
@@ -124,7 +116,7 @@ class AppLifecycleController extends AbstractController
             // generate event handler url for application lifecycle events
             $eventHandlerUrl = sprintf('%s/api/app-events/', $this->parameterBag->get('APPLICATION_HOST'));
             $this->logger->debug('LocalAppLifecycleController.installWithoutUi.startBindEventHandlers', [
-                'eventHandlerUrl' => $eventHandlerUrl
+                'eventHandlerUrl' => $eventHandlerUrl,
             ]);
             $b24ServiceBuilder->getMainScope()->eventManager()->bindEventHandlers(
                 [
@@ -132,14 +124,14 @@ class AppLifecycleController extends AbstractController
                     new EventHandlerMetadata(
                         OnApplicationInstall::CODE,
                         $eventHandlerUrl,
-                        $b24CurrentUserProfile->ID
+                        $b24CurrentUserProfile->ID,
                     ),
                     new EventHandlerMetadata(
                         OnApplicationUninstall::CODE,
                         $eventHandlerUrl,
                         $b24CurrentUserProfile->ID,
                     ),
-                ]
+                ],
             );
             $this->logger->debug('InstallController.process.finishBindEventHandlers');
 
@@ -148,12 +140,14 @@ class AppLifecycleController extends AbstractController
                 'response' => $response->getContent(),
                 'statusCode' => $response->getStatusCode(),
             ]);
+
             return $response;
-        } catch (Throwable $throwable) {
+        } catch (\Throwable $throwable) {
             $this->logger->error('AppLifecycleController.install.error', [
                 'message' => $throwable->getMessage(),
                 'trace' => $throwable->getTraceAsString(),
             ]);
+
             return new Response(sprintf('error on placement request processing: %s', $throwable->getMessage()), 500);
         }
     }

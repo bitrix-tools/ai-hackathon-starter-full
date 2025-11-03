@@ -7,9 +7,9 @@ use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/config',
-        __DIR__ . '/public',
-        __DIR__ . '/src',
+        __DIR__.'/config',
+        __DIR__.'/public',
+        __DIR__.'/src',
     ])
     // uncomment to reach your current PHP version
     // ->withPhpSets()
@@ -24,5 +24,5 @@ return RectorConfig::configure()
         earlyReturn: true,
     )
     ->withSkip([
-        RenamePropertyToMatchTypeRector::class
+        RenamePropertyToMatchTypeRector::class,
     ]);

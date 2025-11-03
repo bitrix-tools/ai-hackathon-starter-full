@@ -14,11 +14,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Bitrix24Core\Bitrix24ServiceBuilderFactory;
-use App\Service\JwtService;
-use Bitrix24\Lib\ApplicationInstallations;
-use Bitrix24\Lib\Bitrix24Accounts;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface;
-use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountStatus;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Exceptions\Bitrix24AccountNotFoundException;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterface;
 use Bitrix24\SDK\Services\CRM\Contact\Events\OnCrmContactAdd\OnCrmContactAdd;
@@ -28,7 +24,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Throwable;
 
 class B24EventsController extends AbstractController
 {
@@ -36,7 +31,7 @@ class B24EventsController extends AbstractController
         private readonly RemoteEventsFactory $remoteEventsFactory,
         private readonly Bitrix24AccountRepositoryInterface $bitrix24AccountRepository,
         private readonly Bitrix24ServiceBuilderFactory $bitrix24ServiceBuilderFactory,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -63,7 +58,7 @@ class B24EventsController extends AbstractController
             if (!RemoteEventsFactory::isCanProcess($request)) {
                 $this->logger->error('B24EventsController.processEvent.unknownRequest', [
                     'request' => $request->request->all(),
-                    'payload' => $request->getContent()
+                    'payload' => $request->getContent(),
                 ]);
             }
 
@@ -74,8 +69,9 @@ class B24EventsController extends AbstractController
             $b24Account = $this->bitrix24AccountRepository->findOneAdminByMemberId($b24Event->getAuth()->member_id);
             if (!$b24Account instanceof Bitrix24AccountInterface) {
                 $this->logger->warning('B24EventsController.processEvent.unknownAccount', [
-                    'eventMemberId' => $b24Event->getAuth()->member_id
+                    'eventMemberId' => $b24Event->getAuth()->member_id,
                 ]);
+
                 throw new Bitrix24AccountNotFoundException(sprintf('b24 account %s not found', $b24Event->getAuth()->member_id));
             }
 
@@ -92,7 +88,7 @@ class B24EventsController extends AbstractController
                         'PAYLOAD' => $b24Event->getEventPayload(),
                     ]);
 
-                    $b24Contact = $sb->getCRMScope()->contact()->get((int)$b24Event->getEventPayload()['data']['FIELDS']['ID'])->contact();
+                    $b24Contact = $sb->getCRMScope()->contact()->get((int) $b24Event->getEventPayload()['data']['FIELDS']['ID'])->contact();
 
                     $this->logger->debug('B24EventsController.processEvent.OnCrmContactAdd.finish', [
                         'b24ContactId' => $b24Contact->ID,
@@ -104,16 +100,18 @@ class B24EventsController extends AbstractController
                     $this->logger->warning('B24EventsController.processEvent.unknownEvent', [
                         'eventCode' => $b24Event->getEventCode(),
                     ]);
+
                     break;
             }
 
             return new JsonResponse(['status' => 'ok'], 200);
-        } catch (Throwable $throwable) {
+        } catch (\Throwable $throwable) {
             $this->logger->error('B24EventsController.processEvent.error', [
                 'message' => $throwable->getMessage(),
                 'trace' => $throwable->getTraceAsString(),
             ]);
-            return new JsonResponse(['error' => $throwable->getMessage(),], 500);
+
+            return new JsonResponse(['error' => $throwable->getMessage()], 500);
         }
     }
 }

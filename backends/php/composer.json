@@ -31,7 +31,8 @@
         "roave/security-advisories": "dev-latest",
         "symfony/maker-bundle": "^1",
         "phpstan/phpstan": "2.1.*",
-        "rector/rector": "*"
+        "rector/rector": "*",
+        "friendsofphp/php-cs-fixer": "*"
     },
     "config": {
         "allow-plugins": {

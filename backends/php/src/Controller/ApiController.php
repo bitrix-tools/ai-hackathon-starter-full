@@ -13,22 +13,18 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Bitrix24Core\Bitrix24ServiceBuilderFactory;
 use App\Service\JwtService;
-use Bitrix24\Lib\ApplicationInstallations;
-use Bitrix24\Lib\Bitrix24Accounts;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Throwable;
 
 class ApiController extends AbstractController
 {
     public function __construct(
         private readonly JwtService $jwtService,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -55,7 +51,7 @@ class ApiController extends AbstractController
 
             // Generate JWT token
             $jsonResponse = new JsonResponse([
-                'token' => $this->jwtService->generateToken($domain, $memberId)
+                'token' => $this->jwtService->generateToken($domain, $memberId),
             ], 200);
 
             $this->logger->debug('ApiController.getToken.finish', [
@@ -65,12 +61,13 @@ class ApiController extends AbstractController
             ]);
 
             return $jsonResponse;
-        } catch (Throwable $throwable) {
+        } catch (\Throwable $throwable) {
             $this->logger->error('ApiController.getToken.error', [
                 'message' => $throwable->getMessage(),
                 'trace' => $throwable->getTraceAsString(),
             ]);
-            return new JsonResponse(['error' => $throwable->getMessage(),], 500);
+
+            return new JsonResponse(['error' => $throwable->getMessage()], 500);
         }
     }
 
@@ -86,11 +83,12 @@ class ApiController extends AbstractController
         $this->logger->debug('ApiController.getEnum.jwtPayload', [
             'jwtPayload' => $jwtPayload,
         ]);
+
         try {
             $jsonResponse = new JsonResponse([
                 'element 1',
                 'element 2',
-                'element 3'
+                'element 3',
             ], 200);
 
 
@@ -98,13 +96,15 @@ class ApiController extends AbstractController
                 'response' => $jsonResponse->getContent(),
                 'statusCode' => $jsonResponse->getStatusCode(),
             ]);
+
             return $jsonResponse;
-        } catch (Throwable $throwable) {
+        } catch (\Throwable $throwable) {
             $this->logger->error('ApiController.getList.error', [
                 'message' => $throwable->getMessage(),
                 'trace' => $throwable->getTraceAsString(),
             ]);
-            return new JsonResponse(['error' => $throwable->getMessage(),], 500);
+
+            return new JsonResponse(['error' => $throwable->getMessage()], 500);
         }
     }
 
@@ -125,13 +125,15 @@ class ApiController extends AbstractController
                 'response' => $jsonResponse->getContent(),
                 'statusCode' => $jsonResponse->getStatusCode(),
             ]);
+
             return $jsonResponse;
-        } catch (Throwable $throwable) {
+        } catch (\Throwable $throwable) {
             $this->logger->error('ApiController.getDefaultRoute.error', [
                 'message' => $throwable->getMessage(),
                 'trace' => $throwable->getTraceAsString(),
             ]);
-            return new JsonResponse(['error' => $throwable->getMessage(),], 500);
+
+            return new JsonResponse(['error' => $throwable->getMessage()], 500);
         }
     }
 
@@ -161,13 +163,15 @@ class ApiController extends AbstractController
                 'response' => $jsonResponse->getContent(),
                 'statusCode' => $jsonResponse->getStatusCode(),
             ]);
+
             return $jsonResponse;
-        } catch (Throwable $throwable) {
+        } catch (\Throwable $throwable) {
             $this->logger->error('ApiController.getEnum.error', [
                 'message' => $throwable->getMessage(),
                 'trace' => $throwable->getTraceAsString(),
             ]);
-            return new JsonResponse(['error' => $throwable->getMessage(),], 500);
+
+            return new JsonResponse(['error' => $throwable->getMessage()], 500);
         }
     }
 
@@ -191,12 +195,14 @@ class ApiController extends AbstractController
                 'response' => $jsonResponse->getContent(),
                 'statusCode' => $jsonResponse->getStatusCode(),
             ]);
+
             return $jsonResponse;
-        } catch (Throwable $throwable) {
+        } catch (\Throwable $throwable) {
             $this->logger->error('ApiController.health.error', [
                 'message' => $throwable->getMessage(),
                 'trace' => $throwable->getTraceAsString(),
             ]);
+
             return new JsonResponse([
                 'status' => 'failure',
                 'backend' => 'php',
