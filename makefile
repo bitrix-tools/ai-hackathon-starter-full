@@ -44,6 +44,14 @@ php-cli-app-example:
 php-cli-lint-phpstan:
 	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli vendor/bin/phpstan --memory-limit=2G analyse -vvv
 
+.PHONY: lint-rector
+lint-rector:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli vendor/bin/rector process --dry-run
+
+.PHONY: lint-rector-fix
+lint-rector-fix:
+	COMPOSE_PROFILES=php-cli $(DOCKER_COMPOSE) run --rm --workdir /var/www php-cli vendor/bin/rector process
+
 
 # Doctrine/Symfony database commands
 

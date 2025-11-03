@@ -30,7 +30,8 @@
     "require-dev": {
         "roave/security-advisories": "dev-latest",
         "symfony/maker-bundle": "^1",
-        "phpstan/phpstan": "2.1.*"
+        "phpstan/phpstan": "2.1.*",
+        "rector/rector": "*"
     },
     "config": {
         "allow-plugins": {

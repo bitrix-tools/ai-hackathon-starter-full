@@ -41,12 +41,10 @@ class JwtAuthenticationListener
 
     /**
      * Handle request event and validate JWT token
-     *
-     * @param RequestEvent $event
      */
-    public function onKernelRequest(RequestEvent $event): void
+    public function onKernelRequest(RequestEvent $requestEvent): void
     {
-        $request = $event->getRequest();
+        $request = $requestEvent->getRequest();
         $path = $request->getPathInfo();
 
         // Skip authentication for public routes
@@ -65,7 +63,7 @@ class JwtAuthenticationListener
                 'path' => $path,
             ]);
 
-            $event->setResponse(new JsonResponse([
+            $requestEvent->setResponse(new JsonResponse([
                 'error' => 'Missing Authorization header',
                 'message' => 'Please provide a valid JWT token in the Authorization header',
             ], 401));
@@ -80,7 +78,7 @@ class JwtAuthenticationListener
                 'header' => $authHeader,
             ]);
 
-            $event->setResponse(new JsonResponse([
+            $requestEvent->setResponse(new JsonResponse([
                 'error' => 'Invalid Authorization header format',
                 'message' => 'Authorization header must start with "Bearer "',
             ], 401));
@@ -96,7 +94,7 @@ class JwtAuthenticationListener
                 'path' => $path,
             ]);
 
-            $event->setResponse(new JsonResponse([
+            $requestEvent->setResponse(new JsonResponse([
                 'error' => 'Invalid or expired token',
                 'message' => 'Please obtain a new token via POST /api/getToken',
             ], 401));

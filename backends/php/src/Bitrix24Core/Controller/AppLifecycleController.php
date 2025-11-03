@@ -63,6 +63,7 @@ class AppLifecycleController extends AbstractController
         if (!$payload) {
             throw new InvalidArgumentException('Invalid JSON payload');
         }
+
         $this->logger->debug('AppLifecycleController.install.payload', [
             'payload' => print_r($payload, true)
         ]);

@@ -106,6 +106,7 @@ class ExampleCommand extends Command
                 $symfonyStyle->caution('error: no domain provided');
                 return Command::FAILURE;
             }
+
             $b24Domain = $this->parseDomain(trim($rawB24Domain));
             if ($b24Domain === null) {
                 $symfonyStyle->caution('error: no domain provided');
@@ -129,6 +130,7 @@ class ExampleCommand extends Command
 
                     return self::SUCCESS;
                 }
+
                 /**
                  * @var QuestionHelper $helper
                  *
@@ -144,8 +146,7 @@ class ExampleCommand extends Command
                         3 => 'events: unbind all event handlers',
                         4 => 'add new contact',
                         0 => 'exit🚪'
-                    ],
-                    null
+                    ]
                 );
                 $question->setErrorMessage('Menu item «%s» is invalid.');
                 $menuItem = $helper->ask($input, $output, $question);
@@ -164,6 +165,7 @@ class ExampleCommand extends Command
                                 $eventHandler->offline,
                             ]);
                         }
+
                         $table->render();
 
                         break;

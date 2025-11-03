@@ -17,6 +17,7 @@ use App\Bitrix24Core\Bitrix24ServiceBuilderFactory;
 use App\Service\JwtService;
 use Bitrix24\Lib\ApplicationInstallations;
 use Bitrix24\Lib\Bitrix24Accounts;
+use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountInterface;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Entity\Bitrix24AccountStatus;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Exceptions\Bitrix24AccountNotFoundException;
 use Bitrix24\SDK\Application\Contracts\Bitrix24Accounts\Repository\Bitrix24AccountRepositoryInterface;
@@ -71,7 +72,7 @@ class B24EventsController extends AbstractController
 
             // get local account by member id
             $b24Account = $this->bitrix24AccountRepository->findOneAdminByMemberId($b24Event->getAuth()->member_id);
-            if ($b24Account === null) {
+            if (!$b24Account instanceof Bitrix24AccountInterface) {
                 $this->logger->warning('B24EventsController.processEvent.unknownAccount', [
                     'eventMemberId' => $b24Event->getAuth()->member_id
                 ]);
@@ -105,6 +106,7 @@ class B24EventsController extends AbstractController
                     ]);
                     break;
             }
+
             return new JsonResponse(['status' => 'ok'], 200);
         } catch (Throwable $throwable) {
             $this->logger->error('B24EventsController.processEvent.error', [

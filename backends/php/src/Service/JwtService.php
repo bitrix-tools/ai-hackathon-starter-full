@@ -73,10 +73,10 @@ class JwtService
             $this->logger->debug('JWT token validated successfully');
 
             return true;
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->logger->warning('JWT token validation failed', [
-                'error' => $e->getMessage(),
-                'exception' => get_class($e),
+                'error' => $exception->getMessage(),
+                'exception' => get_class($exception),
             ]);
 
             return false;
@@ -103,10 +103,10 @@ class JwtService
             ]);
 
             return $payload;
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             $this->logger->warning('JWT token decoding failed', [
-                'error' => $e->getMessage(),
-                'exception' => get_class($e),
+                'error' => $exception->getMessage(),
+                'exception' => get_class($exception),
             ]);
 
             return null;

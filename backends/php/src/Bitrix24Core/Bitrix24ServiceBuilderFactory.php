@@ -37,12 +37,12 @@ readonly class Bitrix24ServiceBuilderFactory
     ) {
     }
 
-    public function createFromFrontendPayload(FrontendPayload $payload): ServiceBuilder
+    public function createFromFrontendPayload(FrontendPayload $frontendPayload): ServiceBuilder
     {
         return new ServiceBuilderFactory($this->eventDispatcher, $this->logger)->init(
             $this->getApplicationProfile(),
-            $payload->authToken,
-            $payload->domain
+            $frontendPayload->authToken,
+            $frontendPayload->domain
         );
     }
 
@@ -67,7 +67,7 @@ readonly class Bitrix24ServiceBuilderFactory
      */
     public function createFromStoredTokenForDomain(string $b24Domain): ServiceBuilder
     {
-        if (empty($b24Domain)) {
+        if ($b24Domain === '' || $b24Domain === '0') {
             throw new InvalidArgumentException('domain is empty');
         }
 
@@ -76,9 +76,10 @@ readonly class Bitrix24ServiceBuilderFactory
             Bitrix24AccountStatus::active,
             true
         );
-        if (count($b24Accounts) === 0) {
+        if ($b24Accounts === []) {
             throw new Bitrix24AccountNotFoundException(sprintf('b24 account %s not found', $b24Domain));
         }
+
         $b24Account = $b24Accounts[0];
 
         return new ServiceBuilderFactory(
