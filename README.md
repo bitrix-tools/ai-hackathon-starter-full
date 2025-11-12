@@ -1,312 +1,340 @@
-# @bitrix24/starter-kit
+# Bitrix24 AI Hackathon Starter Kit
 
-This starter provides:
+**🚀 Стартер-кит для разработки приложений Bitrix24 с помощью AI-агентов**
 
-- Three backend options via profiles
-- Workers for background tasks
-- RabbitMQ for asynchronous work
-- Nginx for production
-- External logs and volumes
-- Ready-to-use SDKs and common utilities
-- Makefile for convenience
-- Documented API endpoints
+Этот проект предназначен для помощи разработчикам в создании приложений для Bitrix24 с использованием AI-агентов. Он включает как готовую кодовую базу, так и набор подробных инструкций для AI-агентов.
 
-Developers can easily add their own backends by simply creating a folder in backends/ with the appropriate structure.
+## 🎯 Что предоставляет стартер-кит:
 
-## Core Components
+- **Три варианта бэкенда** на выбор (PHP, Python, Node.js)
+- **Готовый фронтенд** на Nuxt 3 с интеграцией Bitrix24 UI Kit
+- **Воркеры** для фоновых задач
+- **Docker-контейнеры** для быстрого развертывания
+- **Готовые SDK** и общие утилиты для работы с Bitrix24 API
+- **Makefile** для удобства разработки
+- **Документированные API endpoints**
+- **📋 AI Agent Prompt Starter** - подробный промпт для AI-агентов в файле `AI_AGENT_PROMPT_STARTER.md`
+- **📚 Набор инструкций** для AI-агентов в папке `instructions/`
 
-**Required scopes**: `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig`
+Разработчики могут легко добавлять собственные бэкенды, просто создав папку в `backends/` с соответствующей структурой.
 
-Path for install:
+## 🤖 Инструкции для AI-агентов
 
-* **app:** https://amply-awake-dace.cloudpub.ru/
-* **install:** https://amply-awake-dace.cloudpub.ru/install
+**⭐ Главный файл:** [`AI_AGENT_PROMPT_STARTER.md`](./AI_AGENT_PROMPT_STARTER.md) - комплексный промпт для AI-агентов с пошаговыми инструкциями по развертыванию и разработке.
 
-## Structure
+**📁 Папка инструкций:** [`instructions/`](./instructions/) содержит:
+- Руководства по использованию SDK (JS, PHP, Python)  
+- Инструкции по работе с Bitrix24 UI Kit
+- Примеры создания виджетов и роботов
+- Стандарты качества кода для всех языков
+- Подробные API-справочники
+
+## 🏗️ Основные компоненты
+
+**Обязательные права доступа**: `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig`
+
+**Для разработки используйте:**
+- Cloudpub или ngrok для публичного HTTPS доступа
+- Docker для контейнеризации
+
+## 📁 Структура проекта
 
 ```text
-starter-kit/
-├── frontend/               # Nuxt frontend
-├── backends/               # All backends
-│   ├── php/
-│   ├── python/
-│   └── node/
+ai-hackathon-starter-full/
+├── frontend/                    # Nuxt 3 фронтенд с Bitrix24 UI Kit
+├── backends/                    # Три варианта бэкенда на выбор
+│   ├── php/                    # Symfony + PHP SDK
+│   ├── python/                 # Django + b24pysdk
+│   └── node/                   # Express + Node.js
 ├── infrastructure/
-│   └── database/
-└── logs/                    # Logs outside containers
+│   └── database/               # PostgreSQL (init.sql)
+├── instructions/               # 📚 Инструкции для AI-агентов
+├── logs/                       # Логи вне контейнеров
+├── AI_AGENT_PROMPT_STARTER.md  # 🤖 Главный промпт для AI
+└── docker-compose.yml          # Docker конфигурация
 ```
 
-## Usage:
+## 🚀 Быстрый старт
 
 ```bash
-# Edit .env if necessary
+# Скопируйте и настройте переменные окружения
 cp .env.example .env
 
-# Development with PHP backend + worker
+# Разработка с PHP бэкендом
 make dev-php
 
-# Development with Python backend + worker
+# Разработка с Python бэкендом
 make dev-python
 
-# Development with Node.js backend + worker
+# Разработка с Node.js бэкендом
 make dev-node
 
-# Stop
+# Остановка всех сервисов
 make down
 
-# Production with PHP
+# Продакшн с PHP
 make prod-php
 
-# Production with Python
+# Продакшн с Python
 make prod-python
 
-# Production with Node.js
+# Продакшн с Node.js
 make prod-node
 
-# Only the db + frontend (without the backend - for testing)
+# Только база данных + фронтенд (для тестирования)
 COMPOSE_PROFILES= docker-compose up database frontend
 
-# Full stack
+# Полный стек
 COMPOSE_PROFILES=php,worker docker-compose up -d
 ```
 
-## Getting started
+## 🛠️ Технологический стек
 
-#### Prerequirements
+### Frontend
+- **Nuxt 3** (Vue 3, TypeScript)
+- **Bitrix24 UI Kit** (`@bitrix24/b24ui-nuxt`)
+- **Bitrix24 JS SDK** (`@bitrix24/b24jssdk-nuxt`)
+- **Pinia** (управление состоянием)
+- **i18n** (многоязычность)
+- **TailwindCSS**
 
-1. Copy .env file from example file
+### Backend (на выбор)
+- **PHP**: Symfony 7, Doctrine ORM, PHP SDK для Bitrix24
+- **Python**: Django, b24pysdk
+- **Node.js**: Express, pg (PostgreSQL), JWT
+
+### Infrastructure
+- **Docker & Docker Compose**
+- **PostgreSQL 17**
+- **Cloudpub** (ngrok-like) для туннелирования
+- **Nginx** (production)
+
+## 📋 Инструкция по развертыванию
+
+### Предварительные требования
+
+1. **Скопируйте файл переменных окружения**
 
 ```bash
 cp -pv .env.example .env
 ```
 
-2. Start ngrok or other tunneling service, it should provide you with a publicly accessible URL running over HTTPS
+2. **Запустите службу туннелирования**
 
-In this starter we use cloudpub (ngrok like) for backend and frontend development.
+Используйте ngrok, cloudpub или другой сервис для получения публичного HTTPS URL.
+В этом стартере мы используем cloudpub для разработки.
 
-3. Create new Bitrix24 portal and create new local application
+3. **Создайте портал Bitrix24 и локальное приложение**
 
-You can create new application in Bitrix24 portal → Left menu → Developer Resources → Other → Local Applications
+Создайте новое приложение: Битрикс24 → Левое меню → Developer Resources → Other → Local Applications
 
-4. Fill local applicaiton parameters in «new local application page» on your Bitrix24 portal
+4. **Заполните параметры локального приложения**
 
-Parameters:
+Параметры:
+- **Server** (да)
+- **Your handler path** (введите URL туннелирования)
+- **Initial Installation path** (введите URL туннелирования + `/install`)
+- **Menu item text** (название вашего приложения)
+- **Assign permissions (scope)**: `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig` - минимальные права для демо-приложения
 
-- Server (yes)
-- Your handler path (enter your tunneling service url)
-- Initial Installation path (enter your tunneling service url + `/install`)
-- Menu item text (your application name)
-- Assign permissions (scope): `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig`, its minimum permissions for work demo application
+## 🔧 Пошаговая настройка PHP бэкенда
 
---- 
+> **на macOS**
+> Перейдите в `docker-compose.yml` и измените `image: cloudpub/cloudpub:latest` на `image: cloudpub/cloudpub:latest-arm64`
+   в контейнере `cloudpub`
 
-### Detailed step-by-step instruction if You work with PHP backend
+1. **Введите ваш API-ключ cloudpub в файл `.env`**
 
-> **on macOS**
-> Go to `docker-compose.yml` and change `image: cloudpub/cloudpub:latest` to `image: cloudpub/cloudpub:latest-arm64`
-   in container `cloudpub`
+```env
+CLOUDPUB_TOKEN=ваш_токен_здесь
+```
 
-1. Enter your cloudpub api-key in `.env` file
+2. **Укажите бэкенд в файле `.env`**
 
-`CLOUDPUB_TOKEN`
+```env
+SERVER_HOST=http://api-php:8000
+```
 
-2. Enter your backend in `.env` file
-
-`SERVER_HOST='http://api-php:8000'`
-
-3. Start dev-containers
+3. **Запустите контейнеры разработки**
 
 ```bash
 make dev-php
 ```
 
-4. Update backend dependencies and check if everything works fine
+4. **Обновите зависимости бэкенда**
 
 ```bash
 make composer-update
 ```
 
-5. Found URLs for frontend and backend applications from your cloudpub or ngrok tunneling app
+5. **Найдите URL для фронтенда и бэкенда в логах cloudpub**
 
-Example output in console for cloudpub:
+Пример вывода в консоли для cloudpub:
 
 ```bash
-
 ...
 cloudpubApiPhp  | http://frontend:3000 -> https://inanely-muscular-wagtail.cloudpub.com:443
 ...
-
 ```
 
 > [!NOTE]
-> If you are on Windows and api-php does not start, try re-saving the file `backends/php/docker/php-fpm/docker-entrypoint.sh`
+> Если вы используете Windows и api-php не запускается, попробуйте пересохранить файл `backends/php/docker/php-fpm/docker-entrypoint.sh`
 
-Remember it.
+Запомните этот URL.
 
-6. Set this URL in root `.env` file
-   This URLs are used in your frontend and backend applications:
+6. **Установите URL в корневой файл `.env`**
 
-- VIRTUAL_HOST - this is Your FRONTEND & BACKEND application, it should be a URL that you enter in the application settings in Bitrix24
+Эти URL используются в вашем фронтенде и бэкенде:
 
 ```dotenv
 VIRTUAL_HOST=https://inanely-muscular-wagtail.cloudpub.com
 ```
 
-7. Enter them in local application parameters in Bitrix24 portal
+7. **Введите их в параметры локального приложения в портале Bitrix24**
 
-Get this frontend url and enter it in local application parameters in Bitrix24 portal:
+- **Your handler path**: `https://inanely-muscular-wagtail.cloudpub.com`
+- **Initial Installation path**: `https://inanely-muscular-wagtail.cloudpub.com/install`
+- **Assign permissions**: `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig`
 
-- Your handler path: `https://inanely-muscular-wagtail.cloudpub.com`
-- Initial Installation path: `https://inanely-muscular-wagtail.cloudpub.com/install`
-- Assign permissions: `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig`
+После нажатия кнопки сохранения вы увидите параметры локального приложения:
 
-after You click on save button in local application parameters in Bitrix24 portal, You will see your local application parameters:
+> **Внимание! Ваши параметры будут отличаться**
 
-**Attention! Your parameters will be different**
+Пример:
+- **Application ID (client_id)**: `local.6901c_xxxxxxx`
+- **Application key (client_secret)**: `vXpv64o_xxxxxxx`
 
-example:
-
-- Application ID (client_id): `local.6901c_xxxxxxx`
-- Application key (client_secret): `vXpv64o_xxxxxxx`
-
-8. Init database structure
+8. **Инициализируйте структуру базы данных**
 
 ```bash
 make dev-php-init-database
 ```
 
-9. Restart dev-containers
+9. **Перезапустите контейнеры разработки**
 
-10. Install your application in Bitrix24 portal
+10. **Установите ваше приложение в портале Bitrix24**
 
 ---
 
-### Detailed step-by-step instruction if You work with Python backend
+## 🐍 Пошаговая настройка Python бэкенда
 
-> **on macOS**
-> Go to `docker-compose.yml` and change `image: cloudpub/cloudpub:latest` to `image: cloudpub/cloudpub:latest-arm64`
-   in containers `cloudpub`
+> **на macOS**
+> Перейдите в `docker-compose.yml` и измените `image: cloudpub/cloudpub:latest` на `image: cloudpub/cloudpub:latest-arm64`
+   в контейнере `cloudpub`
 
-1. Enter your cloudpub api-key and set Django superuser credentials in `.env` file 
+1. **Введите API-ключ cloudpub и учетные данные Django superuser в файл `.env`**
 
-`CLOUDPUB_TOKEN`
-`DJANGO_SUPERUSER_USERNAME`
-`DJANGO_SUPERUSER_EMAIL`
-`DJANGO_SUPERUSER_PASSWORD`
+```env
+CLOUDPUB_TOKEN=ваш_токен_здесь
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@example.com
+DJANGO_SUPERUSER_PASSWORD=admin123
+```
 
-2. Enter your backend in `.env` file
+2. **Укажите бэкенд в файле `.env`**
 
-`SERVER_HOST='http://api-python:8000'`
+```env
+SERVER_HOST=http://api-python:8000
+```
 
-3. Start dev-containers
+3. **Запустите контейнеры разработки**
 
 ```bash
 make dev-python
 ```
 
-4. Database migration and Django superuser creation happen automatically after container startup.
+4. **Миграция базы данных и создание Django superuser происходят автоматически после запуска контейнера.**
 
-5. Found URLs for frontend and backend applications from your cloudpub or ngrok tunneling app
+5. **Найдите URL для фронтенда и бэкенда в логах cloudpub**
 
-Example output in console for cloudpub:
+Пример вывода в консоли для cloudpub:
 
 ```bash
-
 ...
 cloudpubApiPython  | http://frontend:3000 -> https://inanely-muscular-wagtail.cloudpub.com:443
 ...
-
 ```
-Remember it.
 
-6. Set this URL in root `.env` file
-   This URLs are used in your frontend and backend applications:
+Запомните этот URL.
 
-- VIRTUAL_HOST - this is Your FRONTEND & BACKEND application, it should be a URL that you enter in the application settings in Bitrix24
+6. **Установите URL в корневой файл `.env`**
 
 ```dotenv
 VIRTUAL_HOST=https://inanely-muscular-wagtail.cloudpub.com
 ```
 
-7. Enter them in local application parameters in Bitrix24 portal
+7. **Введите их в параметры локального приложения в портале Bitrix24**
 
-Get this frontend url and enter it in local application parameters in Bitrix24 portal:
+- **Your handler path**: `https://inanely-muscular-wagtail.cloudpub.com`
+- **Initial Installation path**: `https://inanely-muscular-wagtail.cloudpub.com/install`
+- **Assign permissions**: `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig`
 
-- Your handler path: `https://inanely-muscular-wagtail.cloudpub.com`
-- Initial Installation path: `https://inanely-muscular-wagtail.cloudpub.com/install`
-- Assign permissions: `crm`, `user_brief`, `pull`, `placement`, `userfieldconfig`
+После сохранения вы получите параметры приложения:
 
-after You click on save button in local application parameters in Bitrix24 portal, You will see your local application parameters:
+> **Внимание! Ваши параметры будут отличаться**
 
-**Attention! Your parameters will be different**
+Пример:
+- **Application ID (client_id)**: `local.6901c_xxxxxxx`
+- **Application key (client_secret)**: `vXpv64o_xxxxxxx`
 
-example:
+8. **Перезапустите контейнеры разработки**
 
-- Application ID (client_id): `local.6901c_xxxxxxx`
-- Application key (client_secret): `vXpv64o_xxxxxxx`
+9. **Установите ваше приложение в портале Bitrix24**
 
-8. Restart dev-containers
+10. **Django админ-панель будет доступна по адресу**: `https://<VIRTUAL_HOST>/api/admin`
+    (логин: `<DJANGO_SUPERUSER_USERNAME>`, пароль: `<DJANGO_SUPERUSER_PASSWORD>`)
 
-10. Install your application in Bitrix24 portal
+## 🔌 API Endpoints
 
-11. Django admin will be at: `https://<VIRTUAL_HOST>/api/admin` 
- (login: `<DJANGO_SUPERUSER_USERNAME>`, password:`<DJANGO_SUPERUSER_PASSWORD>`). 
+### Общие принципы
 
-## API endpoints
+Все запросы (кроме `/api/install`, `/api/getToken`) передают JWT в заголовках.
 
-### General principles
-
-All requests (except `/api/install`, `/api/getToken`) pass JWT in the headers.
-
-Example:
+Пример:
 
 ```javascript
 const {data, error} = await $fetch('/api/protected-route', {
   method: 'GET',
   headers: {
-    Authorization: `Bearer ${soneJWT}`
+    Authorization: `Bearer ${someJWT}`
   }
 });
 ```
 
-The server checks every request (except `/api/install`, `/api/getToken`) for a valid JWT token.
+Сервер проверяет каждый запрос (кроме `/api/install`, `/api/getToken`) на наличие действительного JWT токена.
 
-The server returns a response in `json` format.
+Сервер возвращает ответ в формате `JSON`.
 
-If an error occurs, the server sets the response code to `401` or `404` or `500` and returns an error description in the following format:
-
-- error: `string`
-
-Return example:
+При возникновении ошибки сервер устанавливает код ответа `401`, `404` или `500` и возвращает описание ошибки в следующем формате:
 
 ```json
 {
-  error: 'Internal server error'
+  "error": "Internal server error"
 }
 ```
 
 ### `/api/health`
 
-Specifies the status of the backend.
+Указывает статус бэкенда.
 
-- method `GET`
-- params: not
-- response:
-  - status: `string`
-  - backend: `string`
-  - timestamp: `number`
+- **Метод**: `GET`
+- **Параметры**: нет
+- **Ответ**:
+  - `status`: `string` - статус сервера
+  - `backend`: `string` - тип бэкенда (php/python/node)
+  - `timestamp`: `number` - временная метка
 
-Return example:
+Пример ответа:
 
 ```json
 {
-  status: 'healthy',
-  backend: 'php',
-  timestamp: 1760611967
+  "status": "healthy",
+  "backend": "php",
+  "timestamp": 1760611967
 }
 ```
 
-Test
+Тестирование:
 
 ```bash
 curl http://localhost:8000/api/health
@@ -314,47 +342,47 @@ curl http://localhost:8000/api/health
 
 ### `/api/enum`
 
-Returns an enumeration of options.
+Возвращает перечисление опций.
 
-- method `GET`
-- params: not
-- response: `string[]`
+- **Метод**: `GET`
+- **Параметры**: нет
+- **Ответ**: `string[]` - массив строк с опциями
 
-Return example:
+Пример ответа:
 
 ```json
 [
-  'option 1',
-  'option 2',
-  'option 3'
+  "option 1",
+  "option 2", 
+  "option 3"
 ]
 ```
 
-Test
+Тестирование:
 
 ```bash
-curl http://localhost:8000/api/list
+curl http://localhost:8000/api/enum
 ```
 
 ### `/api/list`
 
-Returns a list of elements.
+Возвращает список элементов.
 
-- method `GET`
-- params: not
-- response: `string[]`
+- **Метод**: `GET`
+- **Параметры**: нет
+- **Ответ**: `string[]` - массив строк с элементами
 
-Return example:
+Пример ответа:
 
 ```json
 [
-  'element 1',
-  'element 2',
-  'element 3'
+  "element 1",
+  "element 2",
+  "element 3"
 ]
 ```
 
-Test
+Тестирование:
 
 ```bash
 curl http://localhost:8000/api/list
@@ -362,78 +390,110 @@ curl http://localhost:8000/api/list
 
 ### `/api/install`
 
-Called from the frontend client when the application is installed.
+Вызывается из фронтенд клиента при установке приложения.
 
-JWT token is not transferred.
+**JWT токен не передается.**
 
-- method `POST`
-- params:
-  - DOMAIN': string
-  - PROTOCOL: number
-  - LANG: string
-  - APP_SID: string
-  - AUTH_ID: string
-  - AUTH_EXPIRES: number
-  - REFRESH_ID: string
-  - member_id: string
-  - user_id: number
-  - PLACEMENT: string
-  - PLACEMENT_OPTIONS: Record<string: any>
-- response:
-  - message: `string`
+- **Метод**: `POST`
+- **Параметры**:
+  - `DOMAIN`: `string` - домен портала Bitrix24
+  - `PROTOCOL`: `number` - протокол (0 - HTTP, 1 - HTTPS)
+  - `LANG`: `string` - язык интерфейса
+  - `APP_SID`: `string` - идентификатор сессии приложения
+  - `AUTH_ID`: `string` - токен авторизации
+  - `AUTH_EXPIRES`: `number` - время истечения токена
+  - `REFRESH_ID`: `string` - токен обновления
+  - `member_id`: `string` - ID участника
+  - `user_id`: `number` - ID пользователя
+  - `PLACEMENT`: `string` - размещение приложения
+  - `PLACEMENT_OPTIONS`: `object` - опции размещения
+- **Ответ**:
+  - `message`: `string` - сообщение о результате
 
-Return example:
+Пример ответа:
 
 ```json
 {
-  message: 'All success'
+  "message": "Installation successful"
 }
 ```
 
-Test
+Тестирование:
 
 ```bash
 curl -X POST http://localhost:8000/api/install \
   -H "Content-Type: application/json" \
-  -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_ID":"176xxxe","member_id":"a3xxx22","user_id":"1","PLACEMENT":"DEFAULT","PLACEMENT_OPTIONS":"{"any":"6\/"}"}'
+  -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_ID":"176xxxe","member_id":"a3xxx22","user_id":"1","PLACEMENT":"DEFAULT","PLACEMENT_OPTIONS":"{\"any\":\"6\/\"}"}'
 ```
 
 ### `/api/getToken`
 
-Called by the frontend to obtain a JWT token from the backend.
+Вызывается фронтендом для получения JWT токена от бэкенда.
 
-Authorization data from Bitrix24 is passed as input.
+На вход передаются данные авторизации от Bitrix24.
 
-The token lifetime is `1 hour`.
+Время жизни токена: **1 час**.
 
-**JWT token is not transferred.**
+**JWT токен не передается.**
 
-- method `POST`
-- params:
-  - DOMAIN': string
-  - PROTOCOL: number
-  - LANG: string
-  - APP_SID: string
-  - AUTH_ID: string
-  - AUTH_EXPIRES: number
-  - REFRESH_ID: string
-  - member_id: string
-  - user_id: number
-- response:
-  - token: `string`
+- **Метод**: `POST`
+- **Параметры**:
+  - `DOMAIN`: `string` - домен портала Bitrix24
+  - `PROTOCOL`: `number` - протокол (0 - HTTP, 1 - HTTPS)
+  - `LANG`: `string` - язык интерфейса
+  - `APP_SID`: `string` - идентификатор сессии приложения
+  - `AUTH_ID`: `string` - токен авторизации
+  - `AUTH_EXPIRES`: `number` - время истечения токена
+  - `REFRESH_ID`: `string` - токен обновления
+  - `member_id`: `string` - ID участника
+  - `user_id`: `number` - ID пользователя
+- **Ответ**:
+  - `token`: `string` - JWT токен для дальнейших запросов
 
-Return example:
+Пример ответа:
 
 ```json
 {
-  token: 'AIHBdxxxLLL'
+  "token": "AIHBdxxxLLL"
 }
 ```
 
-Test
+Тестирование:
 
 ```bash
 curl -X POST http://localhost:8000/api/getToken \
   -H "Content-Type: application/json" \
-  -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_ID":"176xxxe","member_id":"a3xxx22","member_id":1}'
+  -d '{"AUTH_ID":"27exx66815","AUTH_EXPIRES":3600,"REFRESH_ID":"176xxxe","member_id":"a3xxx22","user_id":1}'
 ```
+
+## 📚 Дополнительные ресурсы
+
+### AI-агенты и инструкции
+
+- **🤖 [AI Agent Prompt Starter](./AI_AGENT_PROMPT_STARTER.md)** - основной промпт для AI-агентов
+- **📁 [Папка инструкций](./instructions/)** - детальные руководства:
+  - [JS SDK инструкции](./instructions/AI-AGENT-GUIDE-JSSDK.md)
+  - [PHP SDK инструкции](./instructions/AI-AGENT-GUIDE-PHPSDK.md)
+  - [Python SDK инструкции](./instructions/AI_AGENT_GUIDE_PYSDK.md)
+  - [UI Kit инструкции](./instructions/AI-AGENT-GUIDE-UIKIT.md)
+  - [Создание роботов](./instructions/ai-instructions-robot.md)
+  - [Создание виджетов](./instructions/ai-instructions-widget-app.md)
+
+### Стандарты качества кода
+
+- [PHP Code Review](./instructions/PHP_CODE_REVIEW_INSTRUCTION.md)
+- [Python Code Review](./instructions/PYTHON_CODE_REVIEW_INSTRUCTION.md) 
+- [Node.js Code Review](./instructions/nodejs-code-review-instruction.md)
+
+## 🤝 Участие в разработке
+
+Этот стартер-кит создан для облегчения разработки приложений Bitrix24 с помощью AI-агентов. Вы можете:
+
+1. **Использовать готовые инструкции** для обучения AI-агентов
+2. **Дорабатывать существующие SDK** примеры
+3. **Добавлять новые бэкенды** в папку `backends/`
+4. **Улучшать документацию** и инструкции
+
+## 📄 Лицензия
+
+Этот проект распространяется под лицензией MIT. См. файл [LICENSE](./LICENSE) для подробностей.
